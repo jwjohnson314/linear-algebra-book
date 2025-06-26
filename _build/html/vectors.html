@@ -1,0 +1,841 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Vectors &#8212; My sample book</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'vectors';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Motivation" href="motivation.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">My sample book</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Welcome to your Jupyter Book
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="motivation.html">Motivation</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Vectors</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fvectors.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/vectors.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Vectors</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vector-arithmetic">Vector Arithmetic</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-dot-product">The Dot Product</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="vectors">
+<h1>Vectors<a class="headerlink" href="#vectors" title="Link to this heading">#</a></h1>
+<p><strong>Definition:</strong> A (<em>Euclidean</em>) <em>vector</em> is a finite ordered set of real numbers.</p>
+<p>For the time being we will only work with Euclidean vectors, so for now we will drop the term Euclidean and just refer to these objects as vectors. Later on, we will be talking about other types of vectors and then the distinction will be useful again. And yes, infinite vectors can be considered too, but that topic falls outside the scope of what will be covered here.</p>
+<p>We write vectors using rectangular brackets and organize their data into vertical columns (<em>column vectors</em>), unless told to do otherwise (we will work with <em>row vectors</em> later on). Typically, when typing we represent vectors with bolded lower-case letters from the end of the alphabet; when writing by hand we add a small arrow atop the letter. For example,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\mathbf{v} = \begin{bmatrix}
+                    1 \\
+                    2 \\
+                    3
+             \end{bmatrix},
+\mathbf{u} = \begin{bmatrix}
+                    -1 \\
+                    \hfill 0 \\
+                    \hfill 1
+                \end{bmatrix}
+\end{split}\]</div>
+<p>are vectors with three entries, and if I was writing this by hand instead of typing it I would have written <span class="math notranslate nohighlight">\(\mathbf{v}\)</span> as <span class="math notranslate nohighlight">\(\vec{v}\)</span>. The entries in a vector are called its <em>components</em>, and they are distinguished via subscripts. For example, in the vector above, the third component of <span class="math notranslate nohighlight">\(\mathbf{v}\)</span> is <span class="math notranslate nohighlight">\(v_3=3\)</span>, and the second component of <span class="math notranslate nohighlight">\(\mathbf{u}\)</span> is <span class="math notranslate nohighlight">\(u_2=0\)</span>. The number of components of a vector is its <em>dimension</em>. Both of the vectors above are 3-dimensional.</p>
+<p>Linear algebra originated over 200 years ago to address the need to describe geometric objects with both a direction and a magnitude. For example, a force applied to an object has both a magnitude - the amount of force applied - and a direction in which that force is applied. ‘Vector’ is the term used to describe such an object, which originates in Latin, where it means ‘carrier.’ A helpful way to think about a Euclidean vector originating at point A and terminating at point B is as the force needed to move from point A to point B.</p>
+<p>#TODO illustration here - explanation of how we draw vectors in two and three dimensions</p>
+<p><strong>Important:</strong> Note that when we represent a vector as an arrow as we have done above that the vector need not originate at the origin, it can start anywhere. Thus, the represention of a vector as an arrow is not unique. However, the arrow’s magnitude and direction always are.</p>
+<p><strong>Important:</strong> Mathematicians typically use 1-based indexing for vectors; that is, the first component of a vector <span class="math notranslate nohighlight">\(\mathbf{u}\)</span> is <span class="math notranslate nohighlight">\(u_1\)</span>. In contrast, the convention in most programming languages (and in particular, the convention in the Python programming language that we are using here) is to use 0-based indexing, where the first component in a list or array is the <span class="math notranslate nohighlight">\(0^{th}\)</span> component. Since this book is as much about programming as it is about math we will have to deal with this inconsistency frequently. Going forward, we will adopt the mathematical convention of using 1-based indexing unless we are actually writing code, when we will switch to 0-based indexing.</p>
+<section id="vector-arithmetic">
+<h2>Vector Arithmetic<a class="headerlink" href="#vector-arithmetic" title="Link to this heading">#</a></h2>
+<p>In general, arithmetic with vectors is only defined when the vectors have the same number of components. As long as that is the case, most arithmetic operations on vectors are straightforward, because most operations are done <em>componentwise</em>; that is, between the components of the vectors.</p>
+<p><strong>Vector Addition:</strong> Let <span class="math notranslate nohighlight">\(\mathbf{u}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{v}\)</span> be vectors with <span class="math notranslate nohighlight">\(n\)</span> components. Then <span class="math notranslate nohighlight">\(\mathbf{w} = \mathbf{u} + \mathbf{v}\)</span> is the vector whose <span class="math notranslate nohighlight">\(i^{th}\)</span> component <span class="math notranslate nohighlight">\(w_i = u_i + v_i\)</span>.</p>
+<p><strong>Example:</strong></p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix}
+        \hfill 1 \\
+        \hfill 2 \\
+        -1
+    \end{bmatrix} + 
+    \begin{bmatrix}
+        \hfill 2 \\
+        -3 \\
+        \hfill 0
+    \end{bmatrix} = 
+    \begin{bmatrix}
+        \hfill 1 + 2 \\
+        \hfill 2 - 3 \\
+        -1 + 0
+    \end{bmatrix} =
+    \begin{bmatrix}
+        \hfill 3 \\
+        -1 \\
+        -1
+    \end{bmatrix}
+\end{split}\]</div>
+<p><strong>Example:</strong></p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix}
+        1 \\
+        2
+    \end{bmatrix} + 
+    \begin{bmatrix}
+        7 \\
+        4 \\
+        0
+    \end{bmatrix}
+\end{split}\]</div>
+<p>is undefined, because the vectors do not have the same number of components.</p>
+<p>This simple componentwise addition has an elegant visual interpretation illustrated below. Thinking of vectors as representing forces, we see here the interaction of multiple forces acting on a single point simultaneously.</p>
+<p>#TODO illustration here</p>
+<p>Subtraction is also done componentwise.</p>
+<p><strong>Vector Subtraction:</strong> Let <span class="math notranslate nohighlight">\(\mathbf{u}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{v}\)</span> be vectors with <span class="math notranslate nohighlight">\(n\)</span> components. Then <span class="math notranslate nohighlight">\(\mathbf{w} = \mathbf{u} - \mathbf{v}\)</span> is the vector whose <span class="math notranslate nohighlight">\(i^{th}\)</span> component <span class="math notranslate nohighlight">\(w_i = u_i - v_i\)</span>.</p>
+<p><strong>Example:</strong></p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix}
+        \hfill 1 \\
+        \hfill 2 \\
+        -1
+    \end{bmatrix} - 
+    \begin{bmatrix}
+        \hfill 2 \\
+        -3 \\
+        \hfill 0
+    \end{bmatrix} = 
+    \begin{bmatrix}
+        1 - 2 \\
+        2 - (-3) \\
+        -1 - 0
+    \end{bmatrix} =
+    \begin{bmatrix}
+        -1 \\
+        \hfill 5 \\
+        -1
+    \end{bmatrix}
+\end{split}\]</div>
+<p><strong>Scalar Multiplication:</strong> Given a real number <span class="math notranslate nohighlight">\(s\)</span> and a Euclidean vector <span class="math notranslate nohighlight">\(\mathbf{u}\)</span>, we define a multiplication between <span class="math notranslate nohighlight">\(s\)</span> and <span class="math notranslate nohighlight">\(\mathbf{u}\)</span> as follows: <span class="math notranslate nohighlight">\(s\cdot\mathbf{u}\)</span> is the vector whose <span class="math notranslate nohighlight">\(i^{th}\)</span> component is <span class="math notranslate nohighlight">\(s\cdot u_i\)</span>.</p>
+<p><strong>Example:</strong></p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    4 \cdot 
+    \begin{bmatrix}
+        \hfill 3 \\
+        -1 \\
+        \hfill 2
+    \end{bmatrix} = 
+    \begin{bmatrix}
+        4 \cdot 3 \\
+        4 \cdot (-1) \\
+        4 \cdot 2
+    \end{bmatrix} = 
+    \begin{bmatrix}
+        \hfill 12 \\
+        -4 \\
+        \hfill 8
+    \end{bmatrix}
+\end{split}\]</div>
+<p>This multiplication is called scalar multiplication because it <em>scales</em> the vector: that is, it changes the magnitude of the vector but does not change its direction. You can see this illustrated below. Because of this, we commonly refer to real numbers as <em>scalars</em> in linear algebra.</p>
+<p>#TODO illustration here</p>
+<p>Scalar multiplication, vector addition, and vector subtraction are associative and distributive operations: if <span class="math notranslate nohighlight">\(s, t\)</span> are scalars and <span class="math notranslate nohighlight">\(\mathbf{u}, \mathbf{v}, \mathbf{w}\)</span> vectors, then</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(s(\mathbf{u} + \mathbf{v}) = s\mathbf{u} + s\mathbf{v}\)</span> (distributive property),</p></li>
+<li><p><span class="math notranslate nohighlight">\(s(t\mathbf{u}) = (st)\mathbf{u}\)</span> (associative property),</p></li>
+<li><p><span class="math notranslate nohighlight">\((s + t)\mathbf{u} = s\mathbf{u} + t\mathbf{u}\)</span> (distributive property), and</p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathbf{u} + (\mathbf{v} + \mathbf{w}) = (\mathbf{u} + \mathbf{v}) + \mathbf{w}\)</span> (associative property).</p></li>
+</ul>
+<p>Pause for a moment and make up several examples to verify some of these properties.</p>
+<p>Note that vector subtraction can be seen as a combination of vector addition and scalar multiplication with a negative scalar; for example,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+     2\cdot
+     \begin{bmatrix}
+         2 \\
+         1 \\
+         0
+     \end{bmatrix} - 4
+     \begin{bmatrix}
+         \hfill 1 \\
+         \hfill 1 \\
+         -1
+     \end{bmatrix} =
+     \begin{bmatrix}
+         4 \\
+         2 \\
+         0
+     \end{bmatrix} + (-4)
+     \begin{bmatrix}
+         \hfill 1 \\
+         \hfill 1 \\
+         -1
+     \end{bmatrix} =
+     \begin{bmatrix}
+         4 \\
+         2 \\
+         0
+     \end{bmatrix} +
+     \begin{bmatrix}
+         -4 \\
+         -4 \\
+         \hfill 4
+     \end{bmatrix} =
+     \begin{bmatrix}
+         \hfill 0 \\
+         -2 \\
+         \hfill 4
+     \end{bmatrix}.
+\end{split}\]</div>
+</section>
+<section id="the-dot-product">
+<h2>The Dot Product<a class="headerlink" href="#the-dot-product" title="Link to this heading">#</a></h2>
+<p>Multiplying vectors is more ambiguous than the preceding operations. There are a number of different ways that one might choose to define multiplication between vectors, including simply doing the multiplication componentwise to produce a new vector, analgous to what we did previously with addition and subtraction. Unfortunately, multiplying vectors componentwise to produce another vector doesn’t have an intuitive interpretation or an obvious application, but interestingly enough, if we multiply the corresponding components of two vectors together and <em>add up</em> the resulting products, we get a scalar that has several very important uses. This operation is called the <em>dot product</em> or <em>scalar product</em> (the latter because the result of the operation is a scalar), and it is defined precisely below.</p>
+<p><strong>Definition:</strong> Let <span class="math notranslate nohighlight">\(\mathbf{u},\mathbf{v}\)</span> be vectors with <span class="math notranslate nohighlight">\(n\)</span> components. The <em>dot product</em> of <span class="math notranslate nohighlight">\(\mathbf{u}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{b}\)</span> is the scalar value</p>
+<div class="math notranslate nohighlight">
+\[
+    \mathbf{u}\cdot\mathbf{v} = \sum_{i=1}^n u_iv_i.
+\]</div>
+<p><strong>Important:</strong> Just like the previous operations that we have discussed, the dot product of vectors of different dimension is not defined.</p>
+<p><strong>Example:</strong></p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix}
+        \hfill 1 \\
+        \hfill 2 \\
+        -1
+    \end{bmatrix} \cdot 
+    \begin{bmatrix}
+        \hfill 2 \\
+        -3 \\
+        \hfill 0
+    \end{bmatrix} = 1\cdot 2 + 2\cdot (-3) + (-1) \cdot 0 = 2 - 6 + 0 = -4.
+\end{split}\]</div>
+<p><strong>Example:</strong></p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix}
+        \hfill 1 \\
+        -1 
+    \end{bmatrix} \cdot 
+    \begin{bmatrix}
+        1 \\
+        1
+    \end{bmatrix} = 1\cdot 1+ (-1) \cdot 1 = 1 +  (-1) = 0.
+\end{split}\]</div>
+<p><strong>Exercise:</strong> Sketch the vectors above in standard position. Notice the angle between them.</p>
+<p>The dot product has several nice properties. Given vectors <span class="math notranslate nohighlight">\(\mathbf{x}, \mathbf{y}, \mathbf{w}\)</span>, we can show that</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\mathbf{x}\cdot\mathbf{y} = \mathbf{y}\cdot\mathbf{x}\)</span> (commutativity)</p></li>
+<li><p><span class="math notranslate nohighlight">\((\mathbf{x} + \mathbf{y})\cdot\mathbf{w} = \mathbf{x}\cdot\mathbf{w} + \mathbf{y}\cdot\mathbf{w}\)</span> (distributivity).</p></li>
+</ul>
+<p><strong>Example:</strong> We can calculate the dot product of a vector with itself:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix}
+        \hfill 2 \\
+        -1 
+    \end{bmatrix} \cdot 
+    \begin{bmatrix}
+        \hfill 1 \\
+        -1
+    \end{bmatrix} = 2\cdot 2+ (-1) \cdot (-1) = 2^2 +  (-1)^2 = 4 + 1 = 5.
+\end{split}\]</div>
+<p>This is where we find our first use for the dot product. Notice that in the previous example, the calculation is reminiscent of the Pythagorean Theorem <span class="math notranslate nohighlight">\(a^2 + b^2 = c^2\)</span>. When we calculate the dot product of a vector with itself, we are using the Pythagorean theorem to determine the squared magnitude, or length, of the vector. When can sketch this for the example above because it is two-dimensional, but the principle holds no matter how many dimensions we are working with.</p>
+<p>#TODO illustration</p>
+<p><strong>Definition:</strong> Let <span class="math notranslate nohighlight">\(\mathbf{u}\)</span> be a vector. The <em>norm</em> of <span class="math notranslate nohighlight">\(\mathbf{u}\)</span> is written <span class="math notranslate nohighlight">\(||\mathbf{u}||\)</span> and defined as the square root of the dot product of <span class="math notranslate nohighlight">\(\mathbf{u}\)</span> with itself:</p>
+<div class="math notranslate nohighlight">
+\[
+    ||\mathbf{u}|| = \sqrt{\mathbf{u}\cdot\mathbf{u}} = \sqrt{\sum_{i=1}^n u_i^2}.
+\]</div>
+<p>Note that strictly from the definition we can see that the norm of a vector is never negative, and could only equal zero if every component of the vector was 0. We call a vector whose components are all 0 a <em>zero vector</em> or <em>trivial vector</em> and write it as <span class="math notranslate nohighlight">\(\mathbf{0}\)</span>.</p>
+<p><strong>Definition:</strong> A <em>unit vector</em> is a vector with norm 1.</p>
+<p>Given a vector <span class="math notranslate nohighlight">\(\mathbf{x}\)</span>, it is easy to produce a unit vector that points in the same direction of <span class="math notranslate nohighlight">\(\mathbf{x}\)</span>: simply calculate <span class="math notranslate nohighlight">\(||\mathbf{x}||\)</span> and multiply <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> by <span class="math notranslate nohighlight">\(1/||\mathbf{x}||\)</span>; that is, calculate</p>
+<div class="math notranslate nohighlight">
+\[
+    \mathbf{u} = (1/||\mathbf{x}||)\cdot \mathbf{x} = \mathbf{x} / ||\mathbf{x}||.
+\]</div>
+<p>This is scalar multiplication, so we already know that this scales <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> without changing its direction, and you can check for small examples that the norm of the resulting vector <span class="math notranslate nohighlight">\(\mathbf{u}\)</span> is 1.</p>
+<p><strong>Example:</strong> Let
+$<span class="math notranslate nohighlight">\(
+    \mathbf{x} = \begin{bmatrix}
+                    2 \\
+                    1 \\
+                    1
+                 \end{bmatrix}.
+\)</span><span class="math notranslate nohighlight">\(
+Then \)</span>||\mathbf{x}|| = \sqrt{2^2 + 1^2 + 1^2} = \sqrt{6}<span class="math notranslate nohighlight">\(. Let
+\)</span><span class="math notranslate nohighlight">\(
+    \mathbf{u} = \frac{1}{\sqrt{6}}\cdot\begin{bmatrix}
+                                    2 \\
+                                    1 \\
+                                    1
+                                 \end{bmatrix} = 
+                                 \begin{bmatrix}
+                                    2/\sqrt{6} \\
+                                    1/\sqrt{6} \\
+                                    1/\sqrt{6}
+                                 \end{bmatrix}.
+\)</span><span class="math notranslate nohighlight">\(
+Now calculate \)</span>||\mathbf{u}|| = \sqrt{(2/\sqrt{6})^2 + (1/\sqrt{6})^2 + (1/\sqrt{6})^2} = \sqrt{4/6 + 1/6 + 1/6} = \sqrt{1} = 1$.</p>
+<p>The second place where we find use for the dot product is in determining the angle between two vectors. Consider the example above where the dot product of two vectors was zero. You probably noticed when you sketched them that they are perpendicular; that is, the angle between them is <span class="math notranslate nohighlight">\(90^{\circ}\)</span> or <span class="math notranslate nohighlight">\(\pi/2\)</span> radians. In fact, the following is true:</p>
+<p><strong>Theorem:</strong> Let <span class="math notranslate nohighlight">\(\mathbf{u}, \mathbf{v}\)</span> be vectors. <span class="math notranslate nohighlight">\(\mathbf{u}\cdot\mathbf{v} = ||\mathbf{u}||||\mathbf{v}||\cos{\theta}\)</span>, where <span class="math notranslate nohighlight">\(\theta\)</span> is the angle between <span class="math notranslate nohighlight">\(\mathbf{u}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{v}\)</span>.</p>
+<p>There are a number of ways to prove this fact, generally all based on the Law of Cosines. A complete proof will be left to the exercises, but below we will give a proof in the two-dimensional case that relies on the fact that (regardless of dimension) the dot product is <em>invariant to rotation</em>; that is, the dot product between two vectors will be the same even if the vectors are rotated, as long as the vectors are rotated by the same amount. We will revisit and prove this very important fact later on; but you can easily test this yourself with a quick example or two; for instance, compare the dot products of the vectors</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \mathbf{u} = \begin{bmatrix}
+                    1 \\
+                    1
+                 \end{bmatrix},
+    \mathbf{v} = \begin{bmatrix}
+                    -1 \\
+                    1 \\
+                 \end{bmatrix}\text{ and }
+    \mathbf{u}_{45} = \begin{bmatrix}
+                        0 \\
+                        \sqrt{2}
+                      \end{bmatrix},
+    \mathbf{v}_{45} = \begin{bmatrix}
+                        -\sqrt{2} \\
+                        0
+                      \end{bmatrix},
+\end{split}\]</div>
+<p>where the second pair of vectors are just the first vectors rotated counterclockwise by <span class="math notranslate nohighlight">\(45^{\circ}\)</span> or <span class="math notranslate nohighlight">\(\pi/4\)</span> radians.</p>
+<p><strong>Proof (in 2 dimensions):</strong> Let <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{y}\)</span> be vectors in two dimensions and let <span class="math notranslate nohighlight">\(\mathbf{u} = \mathbf{x} / ||\mathbf{x}||\)</span> and <span class="math notranslate nohighlight">\(\mathbf{v} = \mathbf{y} / ||\mathbf{y}||\)</span>. Then <span class="math notranslate nohighlight">\(\mathbf{u}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{v}\)</span> are unit vectors. Because the dot product is invariant to rotation, we can rotate <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{y}\)</span> until <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> points along the <span class="math notranslate nohighlight">\(x\)</span>-axis without changing the value of <span class="math notranslate nohighlight">\(\mathbf{x}\cdot\mathbf{y}\)</span>. Then</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \mathbf{u}=\begin{bmatrix}
+                    1 \\
+                    0
+                \end{bmatrix}\text{ and }
+    \mathbf{v}=\begin{bmatrix}
+                    \cos{\theta} \\
+                    \sin{\theta}
+                \end{bmatrix},
+\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\theta\)</span> is the angle between <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{y}\)</span> (equivalently, the angle between <span class="math notranslate nohighlight">\(\mathbf{u}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{v}\)</span>). We get the latter form for <span class="math notranslate nohighlight">\(\mathbf{v}\)</span> because as a unit vector <span class="math notranslate nohighlight">\(\mathbf{v}\)</span> terminates in a point on the unit circle when in standard position. Now a direct calculation shows that</p>
+<div class="math notranslate nohighlight">
+\[
+    \mathbf{u}\cdot\mathbf{v} = \cos{\theta},
+\]</div>
+<p>but</p>
+<div class="math notranslate nohighlight">
+\[
+    \mathbf{u}\cdot\mathbf{v} = \frac{\mathbf{x}}{||\mathbf{x}||}\cdot\frac{\mathbf{y}}{||\mathbf{y}||},
+\]</div>
+<p>so</p>
+<div class="math notranslate nohighlight">
+\[
+    \mathbf{x}\cdot\mathbf{y} = ||\mathbf{x}||||\mathbf{y}||\cos{\theta}.
+\]</div>
+<p><span class="math notranslate nohighlight">\(\blacksquare\)</span></p>
+<p>One immediate application of this theorem is that it gives us a way to quickly tell if two vectors meet at a right angle: if so, their dot product is 0 because <span class="math notranslate nohighlight">\(\cos(\pi/2)=0\)</span>. Similarly, when two vectors point in the same direction <span class="math notranslate nohighlight">\(\theta=0\)</span>, and thus their dot product will be the product of their norms, because <span class="math notranslate nohighlight">\(\cos(0) = 1\)</span>. More generally, the following inequality is often useful.</p>
+<p><strong>Theorem (Cauchy-Schwarz Inequality):</strong> Let <span class="math notranslate nohighlight">\(\mathbf{u}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{v}\)</span> be vectors. Then <span class="math notranslate nohighlight">\(|\mathbf{u}\cdot\mathbf{v}| &lt;= ||\mathbf{u}||||\mathbf{v}||\)</span>.</p>
+<p><strong>Proof:</strong> Since <span class="math notranslate nohighlight">\(|\cos\theta| &lt;= 1\)</span>, <span class="math notranslate nohighlight">\(|\mathbf{u}\cdot\mathbf{v}| = ||\mathbf{u}||||\mathbf{v}|||\cos\theta|&lt;= ||\mathbf{u}||||\mathbf{v}||\)</span>. <span class="math notranslate nohighlight">\(\blacksquare\)</span></p>
+<p>An immediate corollary to the Cauchy-Schwarz inequality is the <em>Triangle Inequality</em> given below.</p>
+<p><strong>Theorem (Triangle Inequality):</strong> Let <span class="math notranslate nohighlight">\(\mathbf{u}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{v}\)</span> be vectors. Then $<span class="math notranslate nohighlight">\(||\mathbf{u} + \mathbf{v}|| &lt;= ||\mathbf{u}|| + ||\mathbf{v}||\)</span>$.</p>
+<p><strong>Proof:</strong> First, note that <span class="math notranslate nohighlight">\(||\mathbf{u} + \mathbf{v}||^2 = (\mathbf{u} + \mathbf{v})\cdot(\mathbf{u} + \mathbf{v})\)</span>. Using the distributivity of the dot product, we can write this as
+$<span class="math notranslate nohighlight">\(
+    \mathbf{u}\cdot\mathbf{u} + \mathbf{u}\cdot\mathbf{v} + \mathbf{v}\cdot\mathbf{u} + \mathbf{v}\cdot\mathbf{v},
+\)</span>$</p>
+<p>which equals</p>
+<div class="math notranslate nohighlight">
+\[
+    ||\mathbf{u}||^2 + 2(\mathbf{u}\cdot\mathbf{v}) + ||\mathbf{v}||^2.
+\]</div>
+<p>Now by the Cauchy-Schwarz Inequality, the above expression is less than or equal to</p>
+<div class="math notranslate nohighlight">
+\[
+    ||\mathbf{u}||^2 + 2||\mathbf{u}||||\mathbf{v}|| + ||\mathbf{v}||^2 = (||\mathbf{u}||+||\mathbf{v}||)^2;
+\]</div>
+<p>that is,</p>
+<div class="math notranslate nohighlight">
+\[
+    ||\mathbf{u} + \mathbf{v}||^2 &lt;= (||\mathbf{u}||+||\mathbf{v}||)^2,
+\]</div>
+<p>and taking square roots on both sides leads to the result.
+<span class="math notranslate nohighlight">\(\blacksquare\)</span></p>
+<p>With two-dimensional vectors sketched in the plane, the triangle inequality is obvious: it simply states that the length of the longest side of a triangle cannot be greater than the sum of the lengths of the other sides. It is important to keep in mind, here and going forward, that this result and the others that we’ve obtained so far hold in higher dimensions where we can’t sketch out and easily visualize the behavior of the vectors we are working with. This is part of what makes liner algebra so powerful.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="motivation.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Motivation</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vector-arithmetic">Vector Arithmetic</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-dot-product">The Dot Product</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Jeremiah W. Johnson
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <div>
+  <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="jwjohnson314" data-description="Support me on Buy me a coffee!" data-message="Thanks for visiting; I hope you found this useful and I appreciate your support!" data-color="#5F7FFF" data-position="Right" data-x_margin="18" data-y_margin="18"></script> 
+</div>
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,54 @@
+# Book settings
+# Learn more at https://jupyterbook.org/customize/config.html
+
+title: My sample book
+author: Jeremiah W. Johnson
+logo: 
+copyright: "2025"
+
+# Force re-execution of notebooks on each build.
+# See https://jupyterbook.org/content/execute.html
+execute:
+  execute_notebooks: force
+
+# Define the name of the latex output file for PDF builds
+latex:
+  latex_documents:
+    targetname: book.tex
+
+# Add a bibtex file so that we can create citations
+bibtex_bibfiles:
+  - references.bib
+
+# Information about where the book exists on the web
+repository:
+  url: https://github.com/executablebooks/jupyter-book  # Online location of your book
+  path_to_book: docs  # Optional path to your book, relative to the repository root
+  branch: master  # Which branch of the repository should be used when creating links (optional)
+
+# Add GitHub buttons to your book
+# See https://jupyterbook.org/customize/config.html#add-a-link-to-your-repository
+html:
+  use_issues_button: true
+  use_repository_button: true
+  extra_footer: |
+    <div>
+      <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="jwjohnson314" data-description="Support me on Buy me a coffee!" data-message="Thanks for visiting; I hope you found this useful and I appreciate your support!" data-color="#5F7FFF" data-position="Right" data-x_margin="18" data-y_margin="18"></script> 
+    </div>
+sphinx:
+  config: 
+    mathjax_path: https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
+# parse:
+#   myst_enable_extensions:
+#     - amsmath
+#     - amsthm
+#     - tikz
+#     - bm
+#     - bbm
+#     - amsmath
+#     - amsfonts
+#     - amssymb
+#     - amsthm
+#     - mathtools
+#     - commath

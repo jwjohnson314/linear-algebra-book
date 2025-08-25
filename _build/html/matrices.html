@@ -1,0 +1,1007 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Matrices &#8212; Applied Linear Algebra</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'matrices';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Linear Systems and Gaussian Elimination" href="linear-systems-gaussian-elimination.html" />
+    <link rel="prev" title="Problem Set 1: Vectors" href="vectors-problem-set.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Applied Linear Algebra</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    <no title>
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="motivation.html">Motivation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vectors.html">Vectors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vectors-problem-set.html">Problem Set 1: Vectors</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="linear-systems-gaussian-elimination.html">Linear Systems and Gaussian Elimination</a></li>
+<li class="toctree-l1"><a class="reference internal" href="computation.html">Computation</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fmatrices.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/matrices.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Matrices</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#matrix-arithmetic-part-1">Matrix Arithmetic, Part 1</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#matrix-arithmetic-part-2-linear-systems-and-matrix-vector-multiplication">Matrix Arithmetic, Part 2: Linear Systems and Matrix-Vector Multiplication</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-dot-product-revisited">The Dot Product Revisited</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#matrix-arithmetic-part-3-matrix-matrix-multiplication">Matrix Arithmetic, Part 3: Matrix-Matrix Multiplication</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#important-matrices">Important Matrices</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="matrices">
+<h1>Matrices<a class="headerlink" href="#matrices" title="Link to this heading">#</a></h1>
+<div class="admonition-definition admonition">
+<p class="admonition-title">Definition</p>
+<p>A <em>matrix</em> is a rectangular array of mathematical objects arranged into rows and columns. The plural of matrix is <em>matrices</em>.</p>
+</div>
+<p>For the time being, the mathematical objects in these rectangular arrays we call matrices will be (real) numbers, but just as with vectors we want our definitions to be flexible. Our matrices are always finite dimensional; that is, they have only a finite number of rows and columns, though in the future you may encounter matrices with an infinite number of rows and/or columns.</p>
+<div class="important admonition">
+<p class="admonition-title">Notation</p>
+<p><strong>Notation:</strong> Matrices are usually denoted with capital letters from the front of the English alphabet. A matrix <span class="math notranslate nohighlight">\(A\)</span> with <span class="math notranslate nohighlight">\(m\)</span> rows and <span class="math notranslate nohighlight">\(n\)</span> columns is said to be an <span class="math notranslate nohighlight">\(m\times n\)</span> dimensional matrix, and we denote the entry in the <span class="math notranslate nohighlight">\(i^{th}\)</span> row and <span class="math notranslate nohighlight">\(j^{th}\)</span> column of <span class="math notranslate nohighlight">\(A\)</span> as <span class="math notranslate nohighlight">\(a_{i,j}\)</span>. We always follow a row-first, column-second convention when discussing matrices, and unless we are programming, we use 1-based indexing.</p>
+</div>
+<p><strong>Example:</strong></p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    A=\begin{bmatrix}
+        1 &amp; 2 &amp; 3 \\
+        4 &amp; 5 &amp; 6 \\
+        7 &amp; 8 &amp; 9 \\
+        0 &amp; 1 &amp; 2
+      \end{bmatrix}
+\end{split}\]</div>
+<p>is a <span class="math notranslate nohighlight">\(4\times 3\)</span> matrix: it has 4 rows and 3 columns. The entry in position <span class="math notranslate nohighlight">\(2, 3\)</span> is <span class="math notranslate nohighlight">\(a_{2,3}=6\)</span>. The entry in position <span class="math notranslate nohighlight">\(3, 2\)</span> is <span class="math notranslate nohighlight">\(a_{3, 2}=8\)</span>.</p>
+<p>As we will see, there are many different ways to think about what such an array of numbers represents. One particularly useful approach is to think of a matrix as a collection of (column) vectors. We use the name of the matrix with a single subscript to denote a specific column vector; the matrix above, for example, consists of the three column vectors</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    A_1 = \begin{bmatrix}
+            1 \\
+            4 \\
+            7 \\
+            0
+          \end{bmatrix},
+    A_2 = \begin{bmatrix}
+            2 \\
+            5 \\
+            8 \\
+            1
+          \end{bmatrix},\text{ and }
+    A_3 = \begin{bmatrix}
+            3 \\
+            6 \\
+            9 \\
+            2
+          \end{bmatrix}.
+\end{split}\]</div>
+<p>Alternatively, we might think of a vector as a special type of matrix: a matrix with only one column. That is, if a vector <span class="math notranslate nohighlight">\(\mathbf{v}\)</span> has <span class="math notranslate nohighlight">\(m\)</span> components, it could just as well be viewed as an <span class="math notranslate nohighlight">\(m\times 1\)</span> matrix. This is a very useful perspective, and the view that we take will depend on the context in which we find ourselves working.</p>
+<section id="matrix-arithmetic-part-1">
+<h2>Matrix Arithmetic, Part 1<a class="headerlink" href="#matrix-arithmetic-part-1" title="Link to this heading">#</a></h2>
+<p>If we think of a matrix as simply a collection of vectors, then the rules for performing many operations on matrices follow immediately: addition, subtraction, and scalar multiplication should be done componentwise, with the caveat that the first two operations are only defined if the matrices being added or subtracted are the same size. Why we might want to do these things, and how we should interpret the results, will have to wait, but at least these initial operations are straightforward.</p>
+<div class="admonition-matrix-addition-subtraction admonition">
+<p class="admonition-title">Matrix Addition/Subtraction</p>
+<p>Given two matrices <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span> of the same dimensions <span class="math notranslate nohighlight">\(m\times n\)</span>, the matrix <span class="math notranslate nohighlight">\(C = A \pm B\)</span> has in position <span class="math notranslate nohighlight">\(i, j\)</span> the entry <span class="math notranslate nohighlight">\(c_{i, j} = a_{i, j} \pm b_{i, j}\)</span>.</p>
+</div>
+<p><strong>Example:</strong></p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix}
+        1 &amp; 2 &amp; 3 \\
+        0 &amp; 0 &amp; 1
+    \end{bmatrix} + 
+    \begin{bmatrix}
+        2 &amp; 2 &amp;  -1 \\
+        1 &amp; 11 &amp; -1
+    \end{bmatrix} =
+    \begin{bmatrix}
+    1 + 2 &amp; 2 + 2 &amp; 3 + (-1) \\
+    0 + 1 &amp; 0 + 11 &amp; 1 + (-1)
+    \end{bmatrix} =
+    \begin{bmatrix}
+        3 &amp; 4 &amp; 2 \\
+        1 &amp; 11 &amp; 0
+    \end{bmatrix}.
+\end{split}\]</div>
+<p><strong>Example:</strong></p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix}
+        1 &amp; 2 &amp; 3 \\
+        0 &amp; 0 &amp; 1
+    \end{bmatrix} - 
+    \begin{bmatrix}
+        2 &amp; 2 &amp;  -1 \\
+        1 &amp; 11 &amp; -1
+    \end{bmatrix} =
+    \begin{bmatrix}
+    1 - 2 &amp; 2 - 2 &amp; 3 - (-1) \\
+    0 - 1 &amp; 0 - 11 &amp; 1 - (-1)
+    \end{bmatrix} =
+    \begin{bmatrix}
+        -1 &amp; \hfill0 &amp; 4 \\
+        -1 &amp; -11 &amp; 2
+    \end{bmatrix}.
+\end{split}\]</div>
+<p><strong>Example:</strong></p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix}
+        1 &amp; 2 &amp; 3 \\
+        0 &amp; 0 &amp; 1
+    \end{bmatrix} + 
+    \begin{bmatrix}
+        1 &amp; 1 \\
+        1 &amp; 0
+    \end{bmatrix}
+\end{split}\]</div>
+<p>is undefined, because the matrix on the left is <span class="math notranslate nohighlight">\(2\times 3\)</span> while the matrix on the right is <span class="math notranslate nohighlight">\(2\times 2\)</span>.</p>
+<div class="important admonition">
+<p class="admonition-title">Note</p>
+<p>We call <span class="math notranslate nohighlight">\(n\times n\)</span> matrices <em>square</em> matrices. They have many important characteristics that distiguish them from their nonsquare counterparts. The matrixe on the right in the example immediately above is a square matrix.</p>
+</div>
+<div class="admonition-scalar-multiplication admonition">
+<p class="admonition-title">Scalar Multiplication</p>
+<p>Given a matrix <span class="math notranslate nohighlight">\(A\)</span> and a scalar <span class="math notranslate nohighlight">\(s\)</span>, the entry in position <span class="math notranslate nohighlight">\(i, j\)</span> of the matrix <span class="math notranslate nohighlight">\(sA\)</span> is <span class="math notranslate nohighlight">\(s\cdot a_{i, j}\)</span>.</p>
+</div>
+<p><strong>Example:</strong></p>
+<p>$<span class="math notranslate nohighlight">\(
+    5\cdot
+    \begin{bmatrix}
+        1 &amp; 2 &amp; 3 \\
+        0 &amp; 0 &amp; 1
+    \end{bmatrix} = 
+    \begin{bmatrix}
+        5\cdot 1 &amp; 5\cdot 2 &amp; 5\cdot 3 \\
+        5\cdot 0 &amp; 5\cdot 0 &amp; 5\cdot 1
+    \end{bmatrix} = 
+    \begin{bmatrix}
+        5 &amp; 10 &amp; 15 \\
+        0 &amp; 0 &amp; 5
+    \end{bmatrix}
+\)</span>$.</p>
+<div class="admonition-transposition admonition">
+<p class="admonition-title">Transposition</p>
+<p>Given an <span class="math notranslate nohighlight">\(m\times n\)</span> matrix <span class="math notranslate nohighlight">\(A\)</span>, the <span class="math notranslate nohighlight">\(n\times m\)</span> matrix <span class="math notranslate nohighlight">\(A^T\)</span> whose <span class="math notranslate nohighlight">\(i, j^{th}\)</span> entry is <span class="math notranslate nohighlight">\(a_{j,i}\)</span> is called the <em>transpose</em> of <span class="math notranslate nohighlight">\(A\)</span>.</p>
+</div>
+<p><strong>Example:</strong></p>
+<p>Suppose that</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}  A =
+        \begin{bmatrix}
+            1 &amp; 2 &amp; 3 \\
+            0 &amp; 0 &amp; 1
+        \end{bmatrix}.
+\end{split}\]</div>
+<p>Then</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    A^T = 
+        \begin{bmatrix}
+            1 &amp; 0 \\
+            2 &amp; 0 \\
+            3 &amp; 1
+    \end{bmatrix}.
+\end{split}\]</div>
+<p>Transposing a matrix turns its rows into columns and vice versa. If we think of a vector as a matrix with only one column, transposing it turns it into a matrix with only one row. We might think of such a matrix as the previously mentioned but not yet studied <em>row vector</em>.</p>
+<p><strong>Example:</strong></p>
+<p>Let</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \mathbf{v} =
+        \begin{bmatrix}
+            \hfill1 \\
+            -1 \\
+            \hfill3
+        \end{bmatrix}.
+\end{split}\]</div>
+<p>Then</p>
+<div class="math notranslate nohighlight">
+\[
+    \mathbf{v}^T = 
+        \begin{bmatrix}
+            1 &amp; -1 &amp; 3
+        \end{bmatrix}.
+\]</div>
+</section>
+<section id="matrix-arithmetic-part-2-linear-systems-and-matrix-vector-multiplication">
+<h2>Matrix Arithmetic, Part 2: Linear Systems and Matrix-Vector Multiplication<a class="headerlink" href="#matrix-arithmetic-part-2-linear-systems-and-matrix-vector-multiplication" title="Link to this heading">#</a></h2>
+<p>Matrices and vectors show up naturally in linear systems; that is, when one wants to determine where two or more lines (or planes in 3 dimensions, or <em>hyperplanes</em> in dimensions higher than 3) intersect. Moreover, their appearance in this context suggests how we might define matrix-vector multiplication.</p>
+<div class="admonition-definition admonition">
+<p class="admonition-title">Definition</p>
+<p>A <em>linear equation</em> is an equation that can be written in the form <span class="math notranslate nohighlight">\(a_1x_1 + a_2x_2 + \cdots + a_nx_n = b\)</span>, where <span class="math notranslate nohighlight">\(b\)</span> and <span class="math notranslate nohighlight">\(a_i\)</span> is constant for all <span class="math notranslate nohighlight">\(1\leq i \leq n\)</span>. A linear equation written this way is said to be in <em>standard form</em>.</p>
+</div>
+<p><strong>Example:</strong> <span class="math notranslate nohighlight">\(y = 3x+2\)</span> is a linear equation, but it is not in standard form. If we move <span class="math notranslate nohighlight">\(3x\)</span> from the right side of the equation to the left, it is in standard form: <span class="math notranslate nohighlight">\( -3x + y = 2\)</span>.</p>
+<p>In two dimensions, linear equations are rarely put in standard form until we are confronted with a system of linear equations, because in two dimensions it is easier to plot a line or analyze it in other forms, such as the <em>slope-intercept</em> form that began the last example. Here is a linear system:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{alignat}
+        3x + 2y &amp;= 7 \\
+        x + 4y &amp;= 9
+    \end{alignat}
+\end{split}\]</div>
+<p>The connection to matrices starts with linear combinations. Consider the coefficients of <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span> as forming vectors. Then the left-hand sides of the equations in the system taken together can be viewed as a linear combination that produces a vector whose components are the left-hand sides of the two equations:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    x\begin{bmatrix}
+        3 \\
+        1
+    \end{bmatrix} + 
+    y\begin{bmatrix}
+        2 \\
+        4
+    \end{bmatrix} =
+    \begin{bmatrix}
+        3x + 2y \\
+        x + 4y
+    \end{bmatrix} =
+    \begin{bmatrix}
+        7 \\
+        9
+    \end{bmatrix},
+\end{split}\]</div>
+<p>where the scalars in the linear combination are the unknowns <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span> and the vectors in the linear combination contain the coeffients of their respective ‘scalars’. Of course, this only makes sense if we think of the right-hand sides of the two equations as forming a vector as well, but if we do so, we see that our conditions for equality between vectors give us exactly the system of equations that we started with: the first components must agree (first equation) and the second components must agree (second equation).</p>
+<p>Now, suppose we call</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \mathbf{x} = \begin{bmatrix}
+                    x \\
+                    y
+                 \end{bmatrix}.
+\end{split}\]</div>
+<p>Then multiplication of a matrix and a vector can be defined through this linear combination idea.</p>
+<div class="admonition-definition-column-method-of-matrix-multiplication admonition">
+<p class="admonition-title">Definition (<em>Column method</em> of matrix multiplication)</p>
+<p>Given a matrix <span class="math notranslate nohighlight">\(A\)</span> and a vector <span class="math notranslate nohighlight">\(\mathbf{v}\)</span>, the product <span class="math notranslate nohighlight">\(A\mathbf{v}\)</span> is the linear combination <span class="math notranslate nohighlight">\(v_1A_1 + \cdots + v_nA_n\)</span> (recall that <span class="math notranslate nohighlight">\(A_i\)</span> denotes the <span class="math notranslate nohighlight">\(i^{th}\)</span> column of <span class="math notranslate nohighlight">\(A\)</span>).</p>
+</div>
+<div class="important admonition">
+<p class="admonition-title">Dimensional considerations</p>
+<p>Note that the above definition only makes sense if the matrix has the same number of columns as the vector has components. Assuming that is so, the result of the multiplication will have the same number of components as the matrix has rows.</p>
+</div>
+<p>In the context of a linear system in standard form, we construct a matrix from the coefficients of the variables on the left, a vector of unknowns from the variables on the left, and the result of the matrix-vector multiplication is the vector of known quantities on the right-hand sides of the equations. This gives an equation of the form <span class="math notranslate nohighlight">\(A\mathbf{x}=\mathbf{b}\)</span>. In the current example, the left-hand side matrix multiplication looks like this:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix}
+        3 &amp; 2 \\
+        1 &amp; 4
+    \end{bmatrix}\cdot
+    \begin{bmatrix}
+        x \\
+        y
+    \end{bmatrix} = 
+        x\begin{bmatrix}
+        3 \\
+        1
+    \end{bmatrix} + 
+    y\begin{bmatrix}
+        2 \\
+        4
+    \end{bmatrix} =
+    \begin{bmatrix}
+        3x + 2y \\
+        x + 4y
+    \end{bmatrix}.
+\end{split}\]</div>
+<p>Again if we can write the left-hand side of a linear system as a product that results in a vector, then we must write the right-hand side as a vector too: <span class="math notranslate nohighlight">\([7\hspace{1em}9]^T\)</span>. Vector equality only holds when the components are all equal, so the linear system must be equivalent to the matrix-vector equation</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix}
+        3 &amp; 2 \\
+        1 &amp; 4
+    \end{bmatrix}\cdot
+    \begin{bmatrix}
+        x \\
+        y
+    \end{bmatrix}=
+    \begin{bmatrix}
+        7 \\
+        9
+    \end{bmatrix}.
+\end{split}\]</div>
+<p>Our motivation and our previous examples come from linear systems, but it is important to recognize that we have a general-purpose definition at hand, and provided the dimensions align we can multiply matrices and vectors whether they come from linear systems or not.</p>
+<p>In the next section we will focus on solving linear systems, but for the remainder of this one we turn our attention now to the general properties of matrix-vector multiplication and how they extend to give us matrix-matrix multiplication.</p>
+<p>First, i|t is important to note that the way we performed matrix-vector multiplication above is not how matrix-vector multiplication is usually performed by hand. It is the right viewpoint for obtaining a deep understanding of why we do matrix-vector multiplication the way we do. By hand, though, it is far more common to do the computation by taking dot products: the dot product of each of the rows of the matrix with the (column) vector being multiplied produces the same result as the linear combination computation described above; that is:</p>
+<div class="admonition-definition-alternative-row-method-of-matrix-multiplication admonition">
+<p class="admonition-title">Definition (Alternative <em>row method</em> of matrix multiplication)</p>
+<p>Given an <span class="math notranslate nohighlight">\(m\times n\)</span> matrix <span class="math notranslate nohighlight">\(A\)</span> and a vector <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> with <span class="math notranslate nohighlight">\(n\)</span> components, the product <span class="math notranslate nohighlight">\(A\mathbf{x}\)</span> is the vector with <span class="math notranslate nohighlight">\(m\)</span> components whose <span class="math notranslate nohighlight">\(i^{th}\)</span> component is the dot product of the <span class="math notranslate nohighlight">\(i^{th}\)</span> row of <span class="math notranslate nohighlight">\(A\)</span> with <span class="math notranslate nohighlight">\(\mathbf{x}\)</span>.</p>
+</div>
+<p><strong>Example:</strong> (row method)</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix}
+        1 &amp; 0 &amp; \hfill2\\
+        2 &amp; 2 &amp; -3
+    \end{bmatrix}\cdot
+    \begin{bmatrix}
+        1 \\
+        2 \\
+        3
+    \end{bmatrix} = 
+    \begin{bmatrix}
+        1\cdot 1 + 0\cdot 2 + 2\cdot 3 \\
+        2\cdot 1 + 2\cdot 2 -3\cdot 3
+    \end{bmatrix} = 
+    \begin{bmatrix}
+        1 + 6 \\ 
+        2 + 4 -9
+    \end{bmatrix}=
+    \begin{bmatrix}
+        \hfill7 \\ 
+        -3
+    \end{bmatrix}.
+\end{split}\]</div>
+<p>Note the dimensions above: the matrix is <span class="math notranslate nohighlight">\(2\times 3\)</span>, the vector multiplying the matrix is <span class="math notranslate nohighlight">\(3\times 1\)</span>, and the result is a <span class="math notranslate nohighlight">\(2\times 1\)</span> vector.</p>
+<p><strong>Example:</strong></p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix}
+        1 &amp; 7 \\
+        2 &amp; 5
+    \end{bmatrix}\cdot
+    \begin{bmatrix}
+        \hfill5 \\
+        -7 \\
+        \hfill9
+    \end{bmatrix}
+\end{split}\]</div>
+<p>is undefined, because the matrix does not have the same number of columns as the vector has components, so the underlying dot product calculations themselves are undefined.</p>
+<div class="important admonition">
+<p class="admonition-title">Note</p>
+<p>We have defined a one-sided operation so far: The discussion above tells us how to calculate <span class="math notranslate nohighlight">\(A\mathbf{x}\)</span> for an appropriately sized matrix <span class="math notranslate nohighlight">\(A\)</span> and vector <span class="math notranslate nohighlight">\(\mathbf{x}\)</span>, but it does not tell us how to calculate <span class="math notranslate nohighlight">\(\mathbf{x}A\)</span>, or even if such an operation is defined.</p>
+</div>
+</section>
+<section id="the-dot-product-revisited">
+<h2>The Dot Product Revisited<a class="headerlink" href="#the-dot-product-revisited" title="Link to this heading">#</a></h2>
+<p>It was pointed out above that a (column) vector can be viewed as a <span class="math notranslate nohighlight">\(m\times 1\)</span> matrix; so too a row vector could be viewed as a <span class="math notranslate nohighlight">\(n\times 1\)</span> matrix whose ‘columns’ are vectors containing only a single component. Suppose we have two vectors <span class="math notranslate nohighlight">\(\mathbf{u}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{v}\)</span>, each <span class="math notranslate nohighlight">\(m\times 1\)</span>. Then <span class="math notranslate nohighlight">\(\mathbf{u}^T\)</span> is a <span class="math notranslate nohighlight">\(1\times m\)</span> matrix, and either the column or row view of matrix-vector multiplication above gives</p>
+<div class="math notranslate nohighlight">
+\[
+    \mathbf{u}^T\mathbf{v} = \left[\sum_{i=1}^m u_iv_i\right],
+\]</div>
+<p>which is a <span class="math notranslate nohighlight">\(1\times 1\)</span> ‘vector’ whose sole component is precisely the dot product of <span class="math notranslate nohighlight">\(\mathbf{u}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{v}\)</span>. Analagously,</p>
+<div class="math notranslate nohighlight">
+\[
+    \mathbf{v}^T\mathbf{u} = \left[\sum_{i=1}^m v_iu_i\right].
+\]</div>
+<p>For reasons we will get in to later, we often abuse notation, drop the brackets, and treat <span class="math notranslate nohighlight">\(1\times 1\)</span> vectors as just real numbers. Since the real number in this case is precisely the dot product and the dot notation may be misinterpreted, we often prefer to notate the dot product of two vectors <span class="math notranslate nohighlight">\(\mathbf{u}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{v}\)</span> using the transpose as just described.</p>
+<div class="important admonition">
+<p class="admonition-title">Notation</p>
+<p>Let <span class="math notranslate nohighlight">\(\mathbf{u}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{v}\)</span> be vectors with <span class="math notranslate nohighlight">\(m\)</span> components. Then <span class="math notranslate nohighlight">\(\mathbf{u}\cdot\mathbf{v} = \mathbf{u}^T\mathbf{v} = \mathbf{v}^T\mathbf{u}\)</span>.</p>
+</div>
+</section>
+<section id="matrix-arithmetic-part-3-matrix-matrix-multiplication">
+<h2>Matrix Arithmetic, Part 3: Matrix-Matrix Multiplication<a class="headerlink" href="#matrix-arithmetic-part-3-matrix-matrix-multiplication" title="Link to this heading">#</a></h2>
+<p>Multiplication of two matrices is just a slight extension of the matrix-vector multiplication just defined. Suppose we have two matrices <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span> and we wish to calculate <span class="math notranslate nohighlight">\(AB\)</span>. Thinking of <span class="math notranslate nohighlight">\(B\)</span> as a collection of column vectors <span class="math notranslate nohighlight">\(B_1,\dots,B_p\)</span>, the logical way to do this multiplication then would be to do the matrix vector multiply <span class="math notranslate nohighlight">\(AB_i\)</span> for each column <span class="math notranslate nohighlight">\(B_i\)</span>, <span class="math notranslate nohighlight">\(1\leq i\leq p\)</span> of <span class="math notranslate nohighlight">\(B\)</span>. That would result in a new collection of column vectors, which we could organize into a new matrix:</p>
+<div class="math notranslate nohighlight">
+\[
+    AB = A\left[B_1\hspace{1em}B_2\dots B_p\right] = \left[AB_1\hspace{1em}AB_2\dots AB_p\right].
+\]</div>
+<p>Of course, this requires that <span class="math notranslate nohighlight">\(B\)</span> have the same number of rows as <span class="math notranslate nohighlight">\(A\)</span> has columns, and results in a matrix with the same number of rows as <span class="math notranslate nohighlight">\(A\)</span> and the same number of columns as <span class="math notranslate nohighlight">\(B\)</span>. It’s most common to use the row method for computation here, and the product can be written formulaically as follows:</p>
+<div class="admonition-definition-matrix-matrix-multiplication admonition">
+<p class="admonition-title">Definition: (Matrix-matrix multiplication)</p>
+<p>Let <span class="math notranslate nohighlight">\(A\)</span> be an <span class="math notranslate nohighlight">\(m\times n\)</span> matrix and <span class="math notranslate nohighlight">\(B\)</span> an <span class="math notranslate nohighlight">\(n\times p\)</span> matrix. The product <span class="math notranslate nohighlight">\(AB\)</span> is an <span class="math notranslate nohighlight">\(m\times p\)</span> matrix <span class="math notranslate nohighlight">\(C\)</span> such that</p>
+<div class="math notranslate nohighlight">
+\[
+    c_{ij} = \sum_{k=1}^n a_{ik}b_{kj}.
+\]</div>
+</div>
+<p>That is, <span class="math notranslate nohighlight">\(c_{ij}\)</span> is the dot product of the <span class="math notranslate nohighlight">\(i^{th}\)</span> row of <span class="math notranslate nohighlight">\(A\)</span> with the <span class="math notranslate nohighlight">\(j^{th}\)</span> column of <span class="math notranslate nohighlight">\(B\)</span>.</p>
+<p><strong>Example:</strong></p>
+<p>Below, a <span class="math notranslate nohighlight">\(2\times 3\)</span> matrix (left) and a <span class="math notranslate nohighlight">\(3\times 2\)</span> matrix (right) are multiplied. The operation is defined because the dimensions align: the matrix on the left has the same number of columns as the matrix on the right has rows. The output will be a <span class="math notranslate nohighlight">\(2\times 2\)</span> matrix. The dot product used to calculate entry <span class="math notranslate nohighlight">\(1, 1\)</span> of the result is highlighted: row one from the left is combined with column one on the right. The remaining three entries are calculated similarly.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix}
+        2 &amp; 3 &amp; 4 \\
+        1 &amp; 0 &amp; 0
+    \end{bmatrix}\begin{bmatrix}
+        7 &amp; \hfill0 \\
+        6 &amp; -1 \\
+        5 &amp; -2
+    \end{bmatrix} = 
+    \begin{bmatrix}
+        \textcolor{blue}{2} &amp; \textcolor{blue}{3} &amp; \textcolor{blue}{4} \\
+        1 &amp; 0 &amp; 0
+    \end{bmatrix}\begin{bmatrix}
+        \textcolor{orange}{7} &amp; \hfill0 \\
+        \textcolor{orange}{6} &amp; -1 \\
+        \textcolor{orange}{5} &amp; -2
+    \end{bmatrix} =
+    \begin{bmatrix}
+        \textcolor{blue}{2}\cdot \textcolor{orange}{7} + \textcolor{blue}{3}\cdot \textcolor{orange}{6} + \textcolor{blue}{4}\cdot \textcolor{orange}{5} &amp; \\
+        &amp;
+    \end{bmatrix} = 
+    \begin{bmatrix}
+        \textcolor{blue}{2}\cdot \textcolor{orange}{7} + \textcolor{blue}{3}\cdot \textcolor{orange}{6} + \textcolor{blue}{4}\cdot \textcolor{orange}{5} &amp; 2 \cdot 0 + 3\cdot (-1) + 4\cdot (-2) \\
+        1\cdot 7 + 0\cdot 6 + 0\cdot 5 &amp; 1\cdot 0 + 0\cdot (-1) + 0\cdot (-2)
+    \end{bmatrix} = 
+    \begin{bmatrix}
+        14 + 18 + 20 &amp; 0 - 3 - 8 \\
+        7 + 0 + 0 &amp; 0 + 0 + 0
+    \end{bmatrix} = 
+    \begin{bmatrix}
+        52 &amp; -11 \\
+        7 &amp; \hfill 0
+    \end{bmatrix}.
+\end{split}\]</div>
+<p><strong>Example:</strong></p>
+<p>Now a <span class="math notranslate nohighlight">\(2\times 2\)</span> matrix (left) and a <span class="math notranslate nohighlight">\(2\times 3\)</span> matrix (right) are multiplied. The operation is defined because again the dimensions align: the matrix on the left has the same number of columns (2) as the matrix on the right has rows. The output will be a <span class="math notranslate nohighlight">\(2\times 3\)</span> matrix, because there are three columns in the matrix on the right. The dot product used to calculate entry <span class="math notranslate nohighlight">\(2, 2\)</span> of the result is highlighted: row two from the left is combined with column two on the right. The remaining five entries are calculated similarly.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix}
+        2 &amp; 1  \\
+        1 &amp; 2
+    \end{bmatrix}\begin{bmatrix}
+        7 &amp; \hfill0 &amp; 3\\
+        6 &amp; -1 &amp; 3
+    \end{bmatrix} = 
+    \begin{bmatrix}
+        2 &amp; 1 \\
+        \textcolor{blue}{1} &amp; \textcolor{blue}{2}
+    \end{bmatrix}\begin{bmatrix}
+        7 &amp; \hfill\textcolor{orange}{0} &amp; 3 \\
+        6 &amp; \textcolor{orange}{-1} &amp; 3 \\
+    \end{bmatrix} =
+    \begin{bmatrix}
+        &amp;  &amp; \\
+        &amp; \textcolor{blue}{1}\cdot \textcolor{orange}{0} + \textcolor{blue}{2}\cdot \textcolor{orange}{(-1)} &amp;
+    \end{bmatrix} = 
+    \begin{bmatrix}
+        2\cdot 7 + 1\cdot 6 &amp; 2\cdot 0 + 1\cdot (-1) &amp; 2\cdot 3 + 1\cdot 3 \\
+        1\cdot 7 + 2\cdot 6 &amp; \textcolor{blue}{1}\cdot \textcolor{orange}{0} + \textcolor{blue}{2}\cdot \textcolor{orange}{(-1)} &amp; 1\cdot 3 + 2\cdot 3
+    \end{bmatrix} = 
+    \begin{bmatrix}
+        14 + 6 &amp; 0 - 1 &amp; 6 + 3 \\
+        7 + 12 &amp; 0 - 2 &amp; 3 + 6
+    \end{bmatrix} = 
+    \begin{bmatrix}
+        20 &amp; -1 &amp; 9 \\
+        19 &amp; -2 &amp; 9
+    \end{bmatrix}.
+\end{split}\]</div>
+<p><strong>Example:</strong></p>
+<p>A matrix with only one row looks like (is) a row vector. Nevertheless the same multiplication rule applies. The multiplication is defined because the number of columns on the left (3) matches the number of rows on the right. The output is <span class="math notranslate nohighlight">\(1\times 2\)</span>, because there is one row on the left and two columns on the right.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix}
+        1 &amp; 2 &amp; 1 
+    \end{bmatrix}
+    \begin{bmatrix}
+        3 &amp; 2 \\
+        4 &amp; 0 \\
+        8 &amp; 1
+    \end{bmatrix} = 
+    \begin{bmatrix}
+        1\cdot 3 + 2\cdot 4 + 1\cdot 8 &amp; 1\cdot 2 + 2\cdot 0 + 1\cdot 1
+    \end{bmatrix} = 
+    \begin{bmatrix}
+        3 + 8 + 8 &amp; 2 + 0 + 1
+    \end{bmatrix} = 
+    \begin{bmatrix}
+        19 &amp; 3
+    \end{bmatrix}.
+\end{split}\]</div>
+<div class="important admonition">
+<p class="admonition-title">Note</p>
+<p>A vector is just a matrix with a single column, and the definition given for matrix-matrix multiplication gives the same result when the matrix on the right is a vector.</p>
+</div>
+</section>
+<section id="important-matrices">
+<h2>Important Matrices<a class="headerlink" href="#important-matrices" title="Link to this heading">#</a></h2>
+<div class="admonition-definition admonition">
+<p class="admonition-title">Definition</p>
+<p>The <em>identity matrix</em> of dimension <span class="math notranslate nohighlight">\(n\)</span>, denoted <span class="math notranslate nohighlight">\(I\)</span>, is the <span class="math notranslate nohighlight">\(n\times n\)</span> square matrix with 1’s on the main diagonal and zeros everywhere else.</p>
+<p>The <em>zero matrix</em> of dimension <span class="math notranslate nohighlight">\(n\)</span>, denoted <span class="math notranslate nohighlight">\(0\)</span>, is the <span class="math notranslate nohighlight">\(n\times n\)</span> square matrix consisting only of zeros.</p>
+</div>
+<p><strong>Example:</strong> Below is the six-dimensional identity matrix:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    I = \begin{bmatrix}
+        1 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+        0 &amp; 1 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+        0 &amp; 0 &amp; 1 &amp; 0 &amp; 0 &amp; 0 \\
+        0 &amp; 0 &amp; 0 &amp; 1 &amp; 0 &amp; 0 \\
+        0 &amp; 0 &amp; 0 &amp; 0 &amp; 1 &amp; 0 \\
+        0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 1 
+        \end{bmatrix}.
+\end{split}\]</div>
+<p>With both of these special matrices, the dimension is usually not specified by simply inferred based on the context. These matrices have the properties that:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(IA = AI = A\)</span> for any <span class="math notranslate nohighlight">\(A\)</span> such that <span class="math notranslate nohighlight">\(IA\)</span> and <span class="math notranslate nohighlight">\(AI\)</span> are defined,</p></li>
+<li><p><span class="math notranslate nohighlight">\(0A = A0 = 0\)</span> for any <span class="math notranslate nohighlight">\(A\)</span> such that <span class="math notranslate nohighlight">\(0A\)</span> and <span class="math notranslate nohighlight">\(A0\)</span> are defined, and</p></li>
+<li><p><span class="math notranslate nohighlight">\(0 + A = A + 0 = A\)</span> for any <span class="math notranslate nohighlight">\(A\)</span> such that <span class="math notranslate nohighlight">\(0 + A\)</span> and <span class="math notranslate nohighlight">\(A + 0\)</span> are defined.</p></li>
+</ul>
+<p>Note that the first property above implies that <span class="math notranslate nohighlight">\(I\mathbf{v} = \mathbf{v}\)</span> for any vector <span class="math notranslate nohighlight">\(\mathbf{v}\)</span> such that the multiplication is defined. It is a worthwhile exercise to make up such a vector <span class="math notranslate nohighlight">\(\mathbf{v}\)</span> with six components and work out the multiplication with the six-dimensional <span class="math notranslate nohighlight">\(I\)</span> above to confirm this fact.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="vectors-problem-set.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Problem Set 1: Vectors</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="linear-systems-gaussian-elimination.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Linear Systems and Gaussian Elimination</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#matrix-arithmetic-part-1">Matrix Arithmetic, Part 1</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#matrix-arithmetic-part-2-linear-systems-and-matrix-vector-multiplication">Matrix Arithmetic, Part 2: Linear Systems and Matrix-Vector Multiplication</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-dot-product-revisited">The Dot Product Revisited</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#matrix-arithmetic-part-3-matrix-matrix-multiplication">Matrix Arithmetic, Part 3: Matrix-Matrix Multiplication</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#important-matrices">Important Matrices</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Jeremiah W. Johnson
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <div>
+  <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="jwjohnson314" data-description="Support me on Buy me a coffee!" data-message="Thanks for reading! If you found this useful and want to support this book project, you can Buy Me a Coffee here. Your support helps keep this book free for my students." data-color="#5F7FFF" data-position="Right" data-x_margin="18" data-y_margin="18"></script> 
+</div>
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

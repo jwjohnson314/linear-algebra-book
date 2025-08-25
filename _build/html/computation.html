@@ -6,7 +6,9 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Search - Applied Linear Algebra</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Computation &#8212; Applied Linear Algebra</title>
   
   
   
@@ -55,12 +57,12 @@
     <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'search';</script>
-  <script src="_static/searchtools.js"></script>
-  <script src="_static/language_data.js"></script>
-  <script src="searchindex.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'computation';</script>
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="#" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Linear Systems and Gaussian Elimination" href="linear-systems-gaussian-elimination.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -92,7 +94,7 @@
     <div class="search-button__overlay"></div>
     <div class="search-button__search-container">
 <form class="bd-search d-flex align-items-center"
-      action="#"
+      action="search.html"
       method="get">
   <i class="fa-solid fa-magnifying-glass"></i>
   <input type="search"
@@ -122,8 +124,6 @@
     <div class="bd-container__inner bd-page-width">
       
       
-      
-        
       
       <div class="bd-sidebar-primary bd-sidebar">
         
@@ -174,14 +174,13 @@
                 </a>
             </li>
         </ul>
-        <ul class="nav bd-sidenav">
+        <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="motivation.html">Motivation</a></li>
-
 <li class="toctree-l1"><a class="reference internal" href="vectors.html">Vectors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vectors-problem-set.html">Problem Set 1: Vectors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="matrices.html">Matrices</a></li>
-<li class="toctree-l1"><a class="reference internal" href="matrices-problem-set.html">Problem Set 2: Matrix Arithmetic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="linear-systems-gaussian-elimination.html">Linear Systems and Gaussian Elimination</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Computation</a></li>
 </ul>
 
     </div>
@@ -253,7 +252,7 @@
       
       
       
-      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fsearch.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fcomputation.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -265,6 +264,54 @@
   </span>
 <span class="btn__text-container">Open issue</span>
 </a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/computation.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
 </li>
       
   </ul>
@@ -315,42 +362,55 @@ document.write(`
 </div>
               
               
-  <div class="bd-search-container">
-    <h1>Search</h1>
-    <noscript>
-      <div class="admonition error">
-        <p class="admonition-title">Error</p>
-        <p>Please activate JavaScript to enable the search functionality.</p>
-      </div>
-    </noscript>
-    
-<form class="bd-search d-flex align-items-center"
-      action="#"
-      method="get">
-  <i class="fa-solid fa-magnifying-glass"></i>
-  <input type="search"
-         class="form-control"
-         name="q"
-         id="search-input"
-         placeholder="Search this book..."
-         aria-label="Search this book..."
-         autocomplete="off"
-         autocorrect="off"
-         autocapitalize="off"
-         spellcheck="false"/>
-  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form>
-    <div id="search-results"></div>
-  </div>
-  <script>
-    // Activate the search field on page load
-    let searchInput = document.querySelector("form.bd-search input");
-    if (searchInput) {
-        searchInput.focus();
-        searchInput.select();
-        console.log("[PST]: Set focus on search field.");
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Computation</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="computation">
+<h1>Computation<a class="headerlink" href="#computation" title="Link to this heading">#</a></h1>
+<p>Every mathematical operation we perform entails <em>computational cost</em>. In order to perform the computation, we must invest time and computational resources. For small examples like those in the previous chapter, the computational costs are negligible, but most real-world use of linear algebra is not like that. At the time of this writing, widely used machine learning or AI tools perform extensive computations with matrices containing millions to billions of components. The computational costs of such operations are high, and computational cost must always be a consideration when actually using linear algebra; indeed, there are many important ideas and algorithms from linear algebra that simply aren’t used because the costs are just too high.</p>
+<p><strong>Definition:</strong> The <em>time complexity</em> of an algorithm is the number of elementary operations needed to perform the algorithm.</p>
+<p>The above definition has a number of implicit assumptions, the most important one for us being the assumption that each elementary operation takes an equal fixed amount of time.</p>
+<p><strong>Example:</strong> The time complexity of adding two vectors of length <span class="math notranslate nohighlight">\(n\)</span> is <span class="math notranslate nohighlight">\(n\)</span>, because adding the vectors requires <span class="math notranslate nohighlight">\(n\)</span> elementary operations, one addition for each component of the new vector.</p>
+<p><strong>Example:</strong> The time complexity of the dot product of two vectors of lenth <span class="math notranslate nohighlight">\(n\)</span> is <span class="math notranslate nohighlight">\(2n-1\)</span>. There are <span class="math notranslate nohighlight">\(n\)</span> multiplications to perform, followed by summing the values produced by the multiplication, of which there are <span class="math notranslate nohighlight">\(n\)</span>. Only <span class="math notranslate nohighlight">\(n-1\)</span> additions are required to sum <span class="math notranslate nohighlight">\(n\)</span> elements (check this with an example if it isn’t obvious to you), therefore the time complexity of the dot product is <span class="math notranslate nohighlight">\(n + (n-1) = 2n-1\)</span> as stated.</p>
+<p>In the abstract we often want to think about the complexity of an algorithm asymptotically; that is, what does the complexity look like for a ‘large’ number of inputs? When we consider ‘large’ <span class="math notranslate nohighlight">\(n\)</span>, it turns out that many of the details can be ignored, only the leading term matter. For example, if <span class="math notranslate nohighlight">\(n=10^6\)</span>, the time complexity of the dot product is <span class="math notranslate nohighlight">\(2\times 10^6 -1 \approx 10^6\)</span> (maybe we can debate whether the 2 matters here, but the -1 certainly is negligible). For this reason we introduce the following notation.</p>
+<p><strong>Notation:</strong> Let <span class="math notranslate nohighlight">\(f(x)\)</span> and <span class="math notranslate nohighlight">\(g(x)\)</span> be functions defined</p>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
     }
-  </script>
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
 
               
               
@@ -359,6 +419,15 @@ document.write(`
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="linear-systems-gaussian-elimination.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Linear Systems and Gaussian Elimination</p>
+      </div>
+    </a>
 </div>
                 </footer>
               

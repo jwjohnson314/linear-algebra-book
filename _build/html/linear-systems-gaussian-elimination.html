@@ -1,0 +1,1197 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Linear Systems and Gaussian Elimination &#8212; Applied Linear Algebra</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'linear-systems-gaussian-elimination';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Problem Set 2: Matrix Arithmetic" href="matrices-problem-set.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Applied Linear Algebra</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    <no title>
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="motivation.html">Motivation</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="vectors.html">Vectors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vectors-problem-set.html">Problem Set 1: Vectors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrices.html">Matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrices-problem-set.html">Problem Set 2: Matrix Arithmetic</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Linear Systems and Gaussian Elimination</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Flinear-systems-gaussian-elimination.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/linear-systems-gaussian-elimination.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Linear Systems and Gaussian Elimination</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-elimination-method">The Elimination Method</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gaussian-elimination">Gaussian Elimination</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#computational-cost-of-gaussian-elimination">Computational Cost of Gaussian Elimination</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#row-reduction-as-matrix-multiplication">Row Reduction as Matrix Multiplication</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-a-lu-factorization">The <span class="math notranslate nohighlight">\(A=LU\)</span> Factorization</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-computational-efficiency-of-a-lu">The Computational Efficiency of <span class="math notranslate nohighlight">\(A=LU\)</span></a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="linear-systems-and-gaussian-elimination">
+<h1>Linear Systems and Gaussian Elimination<a class="headerlink" href="#linear-systems-and-gaussian-elimination" title="Link to this heading">#</a></h1>
+<section id="the-elimination-method">
+<h2>The Elimination Method<a class="headerlink" href="#the-elimination-method" title="Link to this heading">#</a></h2>
+<p>It is common to first encounter matrices as a tool for solving linear systems of equations by hand. At a basic level, matrices serve as a shorthand notation that simplify the process of adding or subtracting scalar multiples of equations to eliminate variables, a process called the <em>elimination method</em> of solving linear systems. The following example illustrates that approach and how we can use matrices to track the relevant data.</p>
+<p><strong>Example:</strong> Solve the linear system below:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{alignat}
+        2x + y &amp;= 4 \\
+        4x -2y &amp;= 8.
+    \end{alignat}
+\end{split}\]</div>
+<p>The elimination method is defined by three ‘legal’ operations that can be performed with the equations in a linear system, with the goal of producing a simpler equation than any currently in the system that nevertheless shares the solution. The three operations are given below.</p>
+<div class="important admonition">
+<p class="admonition-title">Elimination Operations</p>
+<p>The following three operations on a linear system of equations dd not change the solution to the system.</p>
+<ul class="simple">
+<li><p>Changing the order in which the equations are written down,</p></li>
+<li><p>Multiplying any equation in the system by a nonzero scalar,</p></li>
+<li><p>Adding or subtracting any two equations in the system.</p></li>
+</ul>
+</div>
+<p>Combining the last two operations in particular is key, because we can use them to produce simpler equations; specifically equations with fewer unknowns than any equation currently in the system. Here, for instance, we can take the first equation in the system and multiply it by 2:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{align}
+        2\cdot(2x + y) &amp;= 2\cdot 4 \\
+        4x -2y &amp;= 8,
+    \end{align}
+\end{split}\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{align}
+        4x +2y &amp;= 8 \\
+        4x -2y &amp;= 8.
+    \end{align}
+\end{split}\]</div>
+<p>Then we can add the result to the second equation to produce:</p>
+<div class="math notranslate nohighlight">
+\[
+    8x = 16,
+\]</div>
+<p>so <span class="math notranslate nohighlight">\(x = 2\)</span>. Then if we go back to the first equation and substitute <span class="math notranslate nohighlight">\(x=2\)</span> into it, we see <span class="math notranslate nohighlight">\(2\cdot2 + y = 4\)</span> or <span class="math notranslate nohighlight">\(4 + y = 4\)</span>, which implies that <span class="math notranslate nohighlight">\(y=0\)</span>.</p>
+</section>
+<section id="gaussian-elimination">
+<h2>Gaussian Elimination<a class="headerlink" href="#gaussian-elimination" title="Link to this heading">#</a></h2>
+<p>All of the arithmetic in the steps above is performed on the coefficients and constants in the system. The variables serve only as placeholders, and as such we can organize the data that defines the system into an array that we can manipulate more efficiently and effectively, particularly when the system is larger than this toy example:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix}
+        2 &amp; \hfill1 &amp; | &amp; 4 \\
+        4 &amp; -2 &amp; | &amp; 8
+    \end{bmatrix}
+\end{split}\]</div>
+<p>This is called the <em>augmented matrix</em> of the linear system. Each row represents an equation, and each column contains the coefficients of one of the variables, aside from the last column, which contains the constants in the sytem. The vertical bar is not necessary, but is helpful to visually separate the column of constants from the columns of coefficients.</p>
+<p>Now let’s translate the ‘legal’ steps of the elimination method to operations on the augmented matrix of the system. These operations are called <em>row operations</em>:</p>
+<div class="important admonition">
+<p class="admonition-title">Row Operations on an Augmented Matrix</p>
+<p>The following operations on the rows of an augmented matrix do not change the solution of the underlying linear system.</p>
+<ul class="simple">
+<li><p>Any two rows of the matrix can be interchanged,</p></li>
+<li><p>Any row can be multiplied by a nonzero constant, and</p></li>
+<li><p>Any two rows can be added or subtracted.</p></li>
+</ul>
+</div>
+<p>Note that these are just the elimination operations expressed in terms of the augmented matrix that represents the underlying linear system.</p>
+<p><strong>Example:</strong> Let’s solve the linear system</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{align}
+        2x +y &amp;= 6 \\
+        4x -2y &amp;= 8
+    \end{align}
+\end{split}\]</div>
+<p>using row operations on the augmented matrix of the system. First, form the matrix as above:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix}
+        2 &amp; \hfill1 &amp; | &amp; 6 \\
+        4 &amp; -2 &amp; | &amp; 8
+    \end{bmatrix}.
+\end{split}\]</div>
+<p>Now, let’s combine two row operations into one: we will multiply the first row by 2 and then add the result to row 2. We will put the row that results from these two operations into the augmented matrix in place of row 2, since it is just a ‘legally’ altered version of row 2:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix}
+        2 &amp; \hfill1 &amp; | &amp; 6 \\
+        4 &amp; -2 &amp; | &amp; 8
+    \end{bmatrix} \overset{R_2 + 2R_1\to R_2}{\sim}
+    \begin{bmatrix}
+        2 &amp; \hfill1 &amp; | &amp; 6 \\
+        8 &amp; 0 &amp; | &amp; 20
+    \end{bmatrix}.
+\end{split}\]</div>
+<p>Now consider the second row of the augmented matrix: it represents the equation <span class="math notranslate nohighlight">\(8x + 0y = 20\)</span> or just <span class="math notranslate nohighlight">\(8x=20\)</span>, so we can see that <span class="math notranslate nohighlight">\(x=20/8=5/2\)</span>. Suppose we now multiply the second equation by <span class="math notranslate nohighlight">\(1/4\)</span> and subtract the result from row 1:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix}
+        2 &amp; \hfill1 &amp; | &amp; 6 \\
+        4 &amp; -2 &amp; | &amp; 8
+    \end{bmatrix} \overset{R_2 + 2R_1\to R_2}{\sim}
+        \begin{bmatrix}
+        2 &amp; \hfill1 &amp; | &amp; 6 \\
+        8 &amp; 0 &amp; | &amp; 20
+    \end{bmatrix} \overset{R_1 - 1/4R_2 \to R_1}{\sim}
+    \begin{bmatrix}
+        0 &amp; \hfill1 &amp; | &amp; 1 \\
+        8 &amp; 0 &amp; | &amp; 20
+    \end{bmatrix},
+\end{split}\]</div>
+<p>and now the first row represents the equation <span class="math notranslate nohighlight">\(0x + y = 1\)</span>, or simply <span class="math notranslate nohighlight">\(y=1\)</span>. Let’s add two more row operations: a row swap, and a scalar multiply:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix}
+        2 &amp; \hfill1 &amp; | &amp; 6 \\
+        4 &amp; -2 &amp; | &amp; 8
+    \end{bmatrix} \overset{R_2 + 2R_1\to R_2}{\sim}
+        \begin{bmatrix}
+        2 &amp; \hfill1 &amp; | &amp; 6 \\
+        8 &amp; 0 &amp; | &amp; 20
+    \end{bmatrix} \overset{R_1 - 1/4R_2 \to R_1}{\sim}
+    \begin{bmatrix}
+        0 &amp; \hfill1 &amp; | &amp; 1 \\
+        8 &amp; 0 &amp; | &amp; 20
+    \end{bmatrix} \overset{R_1 \leftrightarrow R_2}{\sim}
+    \begin{bmatrix}
+        8 &amp; 0 &amp; | &amp; 20 \\
+        0 &amp; 1 &amp; | &amp; 1
+    \end{bmatrix} \overset{1/8 R_1 \to R_1}{\sim}
+    \begin{bmatrix}
+        1 &amp; 0 &amp; | &amp; 5/2 \\
+        0 &amp; 1 &amp; | &amp; 1
+    \end{bmatrix}.
+\end{split}\]</div>
+<p>With those last two row operations, we’ve produced an augmented matrix corresponding to the much simpler linear system</p>
+<div class="math notranslate nohighlight">
+\[\begin{split} 
+    \begin{align}
+        x &amp;= 5/2 \\
+        y &amp;= 1
+    \end{align}
+\end{split}\]</div>
+<p>and this is the solution to our original system.</p>
+<div class="important admonition">
+<p class="admonition-title">Notation</p>
+<p>We use the <span class="math notranslate nohighlight">\(\sim\)</span> symbol to indicate row operations because we are changing the augmented matrix, and the augmented matrix before the row operation is not equal to the augmented matrix after the row operation. It does, however, contain a linear system with the same solution. The symbols above the <span class="math notranslate nohighlight">\(\sim\)</span> indicate precisely what row operations are taking place; for example, <span class="math notranslate nohighlight">\(R_1 + 2R_2 \to R_1\)</span> can be read ‘multiply row 2 by 2, add the result to row 1, and store the result in row 1.</p>
+</div>
+<p>Using an augmented matrix to solve a system like the one in the previous example is overkill; the value of the augmented matrix doesn’t appear until we start working with systems of at least three equations in three or more unknowns.</p>
+<div class="admonition-definition admonition">
+<p class="admonition-title">Definition</p>
+<p>The <em>main diagonal</em> of an <span class="math notranslate nohighlight">\(m\times n\)</span> matrix <span class="math notranslate nohighlight">\(A\)</span> consists of the entries <span class="math notranslate nohighlight">\(a_{11}, a_{22},\dots,a_{mm}\)</span>.</p>
+</div>
+<div class="important admonition">
+<p class="admonition-title">Row Operation Rules of Thumb</p>
+<ul class="simple">
+<li><p>Make all entries below the main diagonal zero before making entries above the main diagonal zero.</p></li>
+<li><p>When working below the main diagonal, work left to right; that is, make all entries (below the main diagonal) in column <span class="math notranslate nohighlight">\(j\)</span> 0 before moving on to column <span class="math notranslate nohighlight">\(j+1\)</span>.</p></li>
+<li><p>When working below the main diagonal in column <span class="math notranslate nohighlight">\(j\)</span>, work down; that is make entry <span class="math notranslate nohighlight">\(a_{ij}\)</span> 0 before moving on to entry <span class="math notranslate nohighlight">\(a_{i+1j}\)</span>.</p></li>
+<li><p>When working above the main diagonal, work right to left; that is, make all entries in column <span class="math notranslate nohighlight">\(j\)</span> 0 before moving on to column <span class="math notranslate nohighlight">\(j-1\)</span>.</p></li>
+<li><p>When working above the main diagonal in column <span class="math notranslate nohighlight">\(j\)</span>, work up; that is make entry <span class="math notranslate nohighlight">\(a_{ij}\)</span> 0 before moving on to entry <span class="math notranslate nohighlight">\(a_{i-1j}\)</span>.</p></li>
+<li><p>It’s nice to have ones on the main diagonal (this will make row operations easier); swap rows or use scalar multiplication when convenient to produce these.</p></li>
+</ul>
+<p>Taken together, these heuristics suggest working in a counterclockwise around the augmented matrix performing row operations to produce zeros off of the main diagonal. This is called <em>Gaussian Elimination</em> and is illustrated in the following example.</p>
+</div>
+<p><strong>Example:</strong> Use Gaussian elimination to solve the linear system</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{align}
+        2x + 2y + z &amp;= 3 \\
+        x + y + z &amp;= 1 \\
+        3x -y -z &amp;= 3
+    \end{align}
+\end{split}\]</div>
+<p>First, form the augmented matrix:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix}
+        2 &amp; \hfill2 &amp; \hfill1 &amp; | &amp; 3 \\
+        1 &amp; \hfill1 &amp; \hfill1 &amp; | &amp; 1 \\
+        3 &amp; -1 &amp; -1 &amp; | &amp; 3
+    \end{bmatrix}
+\end{split}\]</div>
+<p>Then, swap rows one and two to get a <span class="math notranslate nohighlight">\(1\)</span> in position <span class="math notranslate nohighlight">\(1, 1\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix}
+        2 &amp; \hfill2 &amp; \hfill1 &amp; | &amp; 3 \\
+        1 &amp; \hfill1 &amp; \hfill1 &amp; | &amp; 1 \\
+        3 &amp; -1 &amp; -1 &amp; | &amp; 3
+    \end{bmatrix} \overset{R_1\leftrightarrow R_2}{\sim}
+        \begin{bmatrix}
+        1 &amp; \hfill1 &amp; \hfill1 &amp; | &amp; 1 \\
+        2 &amp; \hfill2 &amp; \hfill1 &amp; | &amp; 3 \\
+        3 &amp; -1 &amp; -1 &amp; | &amp; 3
+    \end{bmatrix}.
+\end{split}\]</div>
+<p>We will work down the first column constructing row operations to produce zeros:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix}
+        1 &amp; \hfill1 &amp; \hfill1 &amp; | &amp; 1 \\
+        2 &amp; \hfill2 &amp; \hfill1 &amp; | &amp; 3 \\
+        3 &amp; -1 &amp; -1 &amp; | &amp; 3
+    \end{bmatrix} \overset{R_2 -2R_1\to R_2}{\sim}
+    \begin{bmatrix}
+        1 &amp; \hfill1 &amp; \hfill1 &amp; | &amp; 1 \\
+        0 &amp; \hfill0 &amp; -1 &amp; | &amp; 1 \\
+        3 &amp; -1 &amp; -1 &amp; | &amp; 3
+    \end{bmatrix} \overset{R_3 - 3R_1\to R_3}{\sim}
+    \begin{bmatrix}
+        1 &amp; \hfill1 &amp; \hfill1 &amp; | &amp; 1 \\
+        0 &amp; \hfill0 &amp; -1 &amp; | &amp; 1 \\
+        0 &amp; -4 &amp; -4 &amp; | &amp; 0
+    \end{bmatrix}.
+\end{split}\]</div>
+<p>At this point, we want to move to the second column and produce zeros below the main diagonal - that’s really just in position <span class="math notranslate nohighlight">\(3, 2\)</span>. We only have two possible ways we could do this: a row operation that combines row 1 with row 3 and stores the result in row 3, or swapping rows 2 and 3. Aside from the fact that the second option is much simpler than the first, note also that if I construct <em>any</em> row operation that combines row 1 with row 3 the first entry of the result will necessarily be nonzero, because the first entry of row 1 is nonzero. This means that if I did this I would be destroying work that I already did. We don’t want to do that! Let’s swap the rows:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix}
+        1 &amp; \hfill1 &amp; \hfill1 &amp; | &amp; 1 \\
+        0 &amp; \hfill0 &amp; -1 &amp; | &amp; 1 \\
+        0 &amp; -4 &amp; -4 &amp; | &amp; 0
+    \end{bmatrix} \overset{R_2\leftrightarrow R_1}{\sim}
+    \begin{bmatrix}
+        1 &amp; \hfill1 &amp; \hfill1 &amp; | &amp; 1 \\
+        0 &amp; -4 &amp; -4 &amp; | &amp; 0 \\
+        0 &amp; \hfill0 &amp; -1 &amp; | &amp; 1
+    \end{bmatrix},
+\end{split}\]</div>
+<p>and then multiply row 3 by <span class="math notranslate nohighlight">\(-1\)</span>, because having 1’s on the main diagonal is preferable.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix}
+        1 &amp; \hfill1 &amp; \hfill1 &amp; | &amp; 1 \\
+        0 &amp; -4 &amp; -4 &amp; | &amp; 0 \\
+        0 &amp; \hfill0 &amp; -1 &amp; | &amp; 1
+    \end{bmatrix} \overset{-R_3\to R_3}{\sim}
+    \begin{bmatrix}
+        1 &amp; \hfill1 &amp; \hfill1 &amp; | &amp; 1 \\
+        0 &amp; -4 &amp; -4 &amp; | &amp; 0 \\
+        0 &amp; \hfill0 &amp; 1 &amp; | &amp; -1
+    \end{bmatrix}.
+\end{split}\]</div>
+<p>Now we work above the main diagonal, bottom to top, right to left:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix}
+        1 &amp; \hfill1 &amp; \hfill1 &amp; | &amp; 1 \\
+        0 &amp; -4 &amp; -4 &amp; | &amp; 0 \\
+        0 &amp; \hfill0 &amp; 1 &amp; | &amp; -1
+    \end{bmatrix} \overset{R_2 + 4R_3\to R_2}{\sim}
+    \begin{bmatrix}
+        1 &amp; \hfill1 &amp; \hfill1 &amp; | &amp; 1 \\
+        0 &amp; -4 &amp; 0 &amp; | &amp; -4 \\
+        0 &amp; \hfill0 &amp; 1 &amp; | &amp; -1
+    \end{bmatrix} \overset{R_1 - R_3\to R_1}{\sim}
+    \begin{bmatrix}
+        1 &amp; \hfill1 &amp; 0 &amp; | &amp; 2 \\
+        0 &amp; -4 &amp; 0 &amp; | &amp; -4 \\
+        0 &amp; \hfill0 &amp; 1 &amp; | &amp; -1
+    \end{bmatrix} \overset{-1/4R_2 \to R_2}{\sim}
+    \begin{bmatrix}
+        1 &amp; 1 &amp; 0 &amp; | &amp; \hfill2 \\
+        0 &amp; 1 &amp; 0 &amp; | &amp; \hfill1 \\
+        0 &amp; 0 &amp; 1 &amp; | &amp; -1
+    \end{bmatrix} \overset{R_1 - R_2 \to R_1}{\sim}
+    \begin{bmatrix}
+        1 &amp; 0 &amp; 0 &amp; | &amp; \hfill1 \\
+        0 &amp; 1 &amp; 0 &amp; | &amp; \hfill1 \\
+        0 &amp; 0 &amp; 1 &amp; | &amp; -1
+    \end{bmatrix}.
+\end{split}\]</div>
+<p>At this point, the rows of the matrix give three simple equations that provide the solution to our system:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{align}
+        x &amp;= \hfill1 \\
+        y &amp;= \hfill1 \\
+        z &amp;= -1
+    \end{align}
+\end{split}\]</div>
+</section>
+<section id="computational-cost-of-gaussian-elimination">
+<h2>Computational Cost of Gaussian Elimination<a class="headerlink" href="#computational-cost-of-gaussian-elimination" title="Link to this heading">#</a></h2>
+<p>Gaussian Elimination is expensive. Assuming the coefficient matrix is <span class="math notranslate nohighlight">\(n\times n\)</span>; following the algorithm as outlined above will result in <span class="math notranslate nohighlight">\(n^3/3 + n^2 - n/3\)</span> multiplications/divisions and <span class="math notranslate nohighlight">\(n^3/3 + n^2/2 - 5n/6\)</span> additions/subtractions. For large <span class="math notranslate nohighlight">\(n\)</span> that’s approximately <span class="math notranslate nohighlight">\(n^3/3\)</span> or <span class="math notranslate nohighlight">\(\mathcal{O}(n^3)\)</span> operations. Working by hand on a <span class="math notranslate nohighlight">\(3\times3\)</span> example probably already feels a bit tedious; now consider how this scales:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p><span class="math notranslate nohighlight">\(n\)</span></p></th>
+<th class="head"><p># Multiplications/Divisions</p></th>
+<th class="head"><p># Additions/Subtractions</p></th>
+<th class="head"><p>Total Operations</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>17</p></td>
+<td><p>11</p></td>
+<td><p>28</p></td>
+</tr>
+<tr class="row-odd"><td><p>10</p></td>
+<td><p>430</p></td>
+<td><p>375</p></td>
+<td><p>805</p></td>
+</tr>
+<tr class="row-even"><td><p>100</p></td>
+<td><p>343,300</p></td>
+<td><p>338,250</p></td>
+<td><p>681,550</p></td>
+</tr>
+<tr class="row-odd"><td><p>1,000</p></td>
+<td><p>334,333,000</p></td>
+<td><p>333,832,500</p></td>
+<td><p>668,165,500</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>What this means is that we need to take steps to obtain efficiencies wherever possible. The remainder of this section will be devoted to that task.</p>
+</section>
+<section id="row-reduction-as-matrix-multiplication">
+<h2>Row Reduction as Matrix Multiplication<a class="headerlink" href="#row-reduction-as-matrix-multiplication" title="Link to this heading">#</a></h2>
+<p>The reason that Gaussian elimination works to solve linear systems is that it is really a convenient way to express matrix multiplications. As we saw in the last section, a linear system can typically be expressed as a matrix equation <span class="math notranslate nohighlight">\(A\mathbf{x} = \mathbf{b}\)</span>; for example, the first system above</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{align}
+        2x + \hfill y &amp;= 4 \\
+        4x -2y &amp;= 8.
+    \end{align}
+\end{split}\]</div>
+<p>can be written as a matrix equation</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix}
+        2 &amp; \hfill1 \\
+        4 &amp; -2
+    \end{bmatrix}
+    \begin{bmatrix}
+        x \\
+        y
+    \end{bmatrix} = 
+    \begin{bmatrix}
+        4 \\
+        8
+    \end{bmatrix},
+\end{split}\]</div>
+<p>where the <em>coefficient matrix</em> is the square matrix on the left, we are solving for a vector of unknowns <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> whose components are <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span>, and the constants from the right-hand side of the system are the result of multiplying <span class="math notranslate nohighlight">\(A\)</span> with <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> according to the way we defined matrix-vector multiplication previously.</p>
+<p>Now as a general rule, if I have an equation <span class="math notranslate nohighlight">\(A\mathbf{x} = \mathbf{b}\)</span> and I multiply both sides of this equation by some matrix <span class="math notranslate nohighlight">\(E_{21}\)</span>, assuming that <span class="math notranslate nohighlight">\(E_{21}\)</span> has the right dimensions for the multiplication to be performed, then equality must still hold: <span class="math notranslate nohighlight">\(E_{21}A\mathbf{x} = E_{21}\mathbf{b}\)</span>. Let’s look at this with a specific <span class="math notranslate nohighlight">\(E_{21}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix}
+        \hfill1 &amp; 0 \\
+        -2 &amp; 1 
+    \end{bmatrix}
+    \begin{bmatrix}
+        2 &amp; \hfill1 \\
+        4 &amp; -2
+    \end{bmatrix}
+    \begin{bmatrix}
+        x \\
+        y
+    \end{bmatrix} = 
+    \begin{bmatrix}
+        \hfill1 &amp; 0 \\
+        -2 &amp; 1
+    \end{bmatrix}
+    \begin{bmatrix}
+        4 \\
+        8
+    \end{bmatrix}
+\end{split}\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix}
+        2 &amp; \hfill1 \\
+        0 &amp; -4
+    \end{bmatrix}
+    \begin{bmatrix}
+        x \\
+        y
+    \end{bmatrix} = 
+    \begin{bmatrix}
+        4 \\
+        0
+    \end{bmatrix}.
+\end{split}\]</div>
+<p>Multiplying by this particular <span class="math notranslate nohighlight">\(E_{21}\)</span> did the same thing as the specific row operation we would take to eliminate the entry in position <span class="math notranslate nohighlight">\(2,1\)</span> of the augmented matrix of the system:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix}
+        2 &amp; \hfill1 &amp; | &amp; 4\\
+        4 &amp; -2 &amp; | &amp; 8
+    \end{bmatrix} \overset{R_2 - 2R_1 \to R_2}{\sim}
+    \begin{bmatrix}
+        2 &amp; \hfill1 &amp; | &amp; 4\\
+        0 &amp; -4 &amp; | &amp; 0
+    \end{bmatrix}.
+\end{split}\]</div>
+<p>The matrix <span class="math notranslate nohighlight">\(E_{21}\)</span> above is called an <em>elimination matrix</em>.</p>
+<div class="admonition-definition admonition">
+<p class="admonition-title">Definition</p>
+<p>An <em>elimination matrix</em> is a square matrix with ones on the main diagonal and a single nonzero entry off of the main diagonal. We use the notation <span class="math notranslate nohighlight">\(E_{ij}\)</span> to indicate an elimination matrix with a nonzero entry in position <span class="math notranslate nohighlight">\(i, j\)</span>.</p>
+</div>
+<p>Elimination matrices are so called because as was demonstrated above, with the right choice of nonzero value they can be used to eliminate entries from other matrices. Row swaps come from <em>permutation matrices</em>.</p>
+<div class="admonition-definition admonition">
+<p class="admonition-title">Definition</p>
+<p>A <em>permutation matrix</em> is a square matrix in which each row and column contains only one nonzero entry, and that entry is 1. We use the notation <span class="math notranslate nohighlight">\(P_{ij}\)</span> to denote a permutation matrix such that <span class="math notranslate nohighlight">\(P_{ij}A\)</span> swaps rows <span class="math notranslate nohighlight">\(i\)</span> and <span class="math notranslate nohighlight">\(j\)</span> of <span class="math notranslate nohighlight">\(A\)</span>.</p>
+</div>
+<p>For example,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split} 
+    P_{13} = \begin{bmatrix}
+        0 &amp; 0 &amp; 1 \\
+        0 &amp; 1 &amp; 0 \\
+        1 &amp; 0 &amp; 0
+        \end{bmatrix}
+\end{split}\]</div>
+<p>can be used to swap rows 1 and 3 of a matrix; for example,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix}
+        0 &amp; 0 &amp; 1 \\
+        0 &amp; 1 &amp; 0 \\
+        1 &amp; 0 &amp; 0
+    \end{bmatrix}
+    \begin{bmatrix}
+        3 &amp; -1 &amp; 5 &amp; \hfill4 \\
+        0 &amp; \hfill2 &amp; -2 &amp; 1 \\
+        1 &amp; \hfill4 &amp; \hfill7 &amp; 0 
+    \end{bmatrix} = 
+    \begin{bmatrix}
+        1 &amp; \hfill4 &amp; \hfill7 &amp; 0  \\
+        0 &amp; \hfill2 &amp; -2 &amp; 1 \\
+        3 &amp; -1 &amp; \hfill5 &amp; 4
+    \end{bmatrix}.
+\end{split}\]</div>
+<p>An alternative way to define a permutation matrix is as a matrix whose rows can be rearranged to produce the identity matrix.</p>
+<p>We can reverse the row operation performed by an elimination matrix by changing the sign of the off-diagonal entry; for instance, take the row-reduced coefficient matrix from the linear system above:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix}
+        1 &amp; 0 \\
+        2 &amp; 1
+    \end{bmatrix}
+    \begin{bmatrix}
+        2 &amp; \hfill1 \\
+        0 &amp; -4
+    \end{bmatrix} = 
+    \begin{bmatrix}
+        2 &amp; \hfill1 \\
+        4 &amp; -2
+    \end{bmatrix}.
+\end{split}\]</div>
+<p>The matrix on the left is almost the same <span class="math notranslate nohighlight">\(E_{21}\)</span> from above, but with the sign of the entry in position <span class="math notranslate nohighlight">\(2, 1\)</span> changed from positive to negative. Because this matrix performs the inverse of the operation that <span class="math notranslate nohighlight">\(E_{21}\)</span> performs, we call it the inverse of <span class="math notranslate nohighlight">\(E_{21}\)</span> and denote it <span class="math notranslate nohighlight">\(E_{21}^{-1}\)</span>.</p>
+<p>Inverse matrices in general are important theoretical concepts but are computationally expensive to construct, so they aren’t often used in practice. However, inverses for elimination matrices are an exception: they can be quickly constructed as just demonstrated. Note that <span class="math notranslate nohighlight">\(E_{21}^{-1}E_{21} = I\)</span> and <span class="math notranslate nohighlight">\(E_{21}E_{21}^{-1} = I\)</span>; this is the key property of inverse matrices: if a matrix <span class="math notranslate nohighlight">\(A\)</span> has an inverse <span class="math notranslate nohighlight">\(A^{-1}\)</span>, then <span class="math notranslate nohighlight">\(AA^{-1} = A^{-1}A = I\)</span>.</p>
+<p>Moreover, inverses of elimination matrices serve an important use: they lead to a <em>factorization</em> of the coefficient matrix of a linear system called the <span class="math notranslate nohighlight">\(LU\)</span>-factorization that is widely used. Again, let’s refer to the example above, where we have</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix}
+        1 &amp; 0 \\
+        2 &amp; 1
+    \end{bmatrix}
+    \begin{bmatrix}
+        2 &amp; \hfill1 \\
+        0 &amp; -4
+    \end{bmatrix} = 
+    \begin{bmatrix}
+        2 &amp; \hfill1 \\
+        4 &amp; -2
+    \end{bmatrix}.
+\end{split}\]</div>
+<p>In the product on the left side of the equals sign, the matrix on the left is a lower-triangular matrix (<span class="math notranslate nohighlight">\(L\)</span>), while the matrix on the right is an upper-triangular matrix (<span class="math notranslate nohighlight">\(U\)</span>). Multiplying them together produces the coefficient matrix of the linear system: <span class="math notranslate nohighlight">\(A=LU\)</span>.</p>
+<div class="important admonition">
+<p class="admonition-title">Important</p>
+<p>Although above we are using the coefficient matrix of the linear system in the example above for convenience, we could have taken any matrix, multiplied by an elimination matrix, inverted the elimination matrix, and obtained this factorization.</p>
+</div>
+</section>
+<section id="the-a-lu-factorization">
+<h2>The <span class="math notranslate nohighlight">\(A=LU\)</span> Factorization<a class="headerlink" href="#the-a-lu-factorization" title="Link to this heading">#</a></h2>
+<div class="admonition-definition admonition">
+<p class="admonition-title">Definition</p>
+<p>Let <span class="math notranslate nohighlight">\(A\)</span> be a square matrix. An <span class="math notranslate nohighlight">\(LU\)</span>-factorization of <span class="math notranslate nohighlight">\(A\)</span> is an expression of <span class="math notranslate nohighlight">\(A\)</span> as a product of two square matrices <span class="math notranslate nohighlight">\(L\)</span> and <span class="math notranslate nohighlight">\(U\)</span> such that <span class="math notranslate nohighlight">\(A=LU\)</span>, <span class="math notranslate nohighlight">\(L\)</span> is lower triangular, and <span class="math notranslate nohighlight">\(U\)</span> is upper triangular.</p>
+<p>Not all square matrices have an <span class="math notranslate nohighlight">\(LU\)</span>-factorization, and when the factorization exist it is not unique.</p>
+</div>
+<p><strong>Example:</strong> Suppose that</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    A = \begin{bmatrix}
+            \hfill1 &amp; 2 &amp; 1 \\
+            \hfill2 &amp; 2 &amp; 0 \\
+            -1 &amp; 1 &amp; 1
+        \end{bmatrix}.
+\end{split}\]</div>
+<p>We will use elimination matrices to construct an <span class="math notranslate nohighlight">\(LU\)</span>-factorization of <span class="math notranslate nohighlight">\(A\)</span>. First, to eliminate the entry in position <span class="math notranslate nohighlight">\(2, 1\)</span>, we would multiply <span class="math notranslate nohighlight">\(A\)</span> by an elimination matrix <span class="math notranslate nohighlight">\(E_{21}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix}
+        \hfill 1 &amp; 0 &amp; 0 \\
+        -2 &amp; 1 &amp; 0 \\
+        \hfill 0 &amp; 0 &amp; 1
+    \end{bmatrix}
+    \begin{bmatrix}
+        \hfill1 &amp; 2 &amp; 1 \\
+        \hfill2 &amp; 2 &amp; 0 \\
+        -1 &amp; 1 &amp; 1
+    \end{bmatrix} = 
+    \begin{bmatrix}
+        \hfill1 &amp; \hfill2 &amp; \hfill1 \\
+        \hfill0 &amp; -2 &amp; -2 \\
+        -1 &amp; \hfill1 &amp; \hfill1
+    \end{bmatrix}.
+\end{split}\]</div>
+<p>Now eliminate the entry in position <span class="math notranslate nohighlight">\(3, 1\)</span> by multiplying with an appropriate <span class="math notranslate nohighlight">\(E_{31}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix}
+        1 &amp; 0 &amp; 0 \\
+        0 &amp; 1 &amp; 0 \\
+        1 &amp; 0 &amp; 1
+    \end{bmatrix}
+    \begin{bmatrix}
+        \hfill 1 &amp; 0 &amp; 0 \\
+        -2 &amp; 1 &amp; 0 \\
+        \hfill 0 &amp; 0 &amp; 1
+    \end{bmatrix}
+    \begin{bmatrix}
+        \hfill1 &amp; 2 &amp; 1 \\
+        \hfill2 &amp; 2 &amp; 0 \\
+        -1 &amp; 1 &amp; 1
+    \end{bmatrix} = 
+        \begin{bmatrix}
+        1 &amp; 0 &amp; 0 \\
+        0 &amp; 1 &amp; 0 \\
+        1 &amp; 0 &amp; 1
+    \end{bmatrix}
+    \begin{bmatrix}
+        \hfill1 &amp; \hfill2 &amp; \hfill1 \\
+        \hfill0 &amp; -2 &amp; -2 \\
+        -1 &amp; \hfill1 &amp; \hfill1
+    \end{bmatrix} = 
+     \begin{bmatrix}
+        \hfill1 &amp; \hfill2 &amp; \hfill1 \\
+        \hfill0 &amp; -2 &amp; -2 \\
+        0 &amp; \hfill3 &amp; \hfill2
+    \end{bmatrix}.
+\end{split}\]</div>
+<p>And finally, the entry in position <span class="math notranslate nohighlight">\(3, 2\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix}
+        1 &amp; 0 &amp; 0 \\
+        0 &amp; 1 &amp; 0 \\
+        0 &amp; 3/2 &amp; 1
+    \end{bmatrix}
+    \begin{bmatrix}
+        1 &amp; 0 &amp; 0 \\
+        0 &amp; 1 &amp; 0 \\
+        1 &amp; 0 &amp; 1
+    \end{bmatrix}
+    \begin{bmatrix}
+        \hfill 1 &amp; 0 &amp; 0 \\
+        -2 &amp; 1 &amp; 0 \\
+        \hfill 0 &amp; 0 &amp; 1
+    \end{bmatrix}
+    \begin{bmatrix}
+        \hfill1 &amp; 2 &amp; 1 \\
+        \hfill2 &amp; 2 &amp; 0 \\
+        -1 &amp; 1 &amp; 1
+    \end{bmatrix} = 
+    \begin{bmatrix}
+        1 &amp; 0 &amp; 0 \\
+        0 &amp; 1 &amp; 0 \\
+        0 &amp; 3/2 &amp; 1
+    \end{bmatrix}
+    \begin{bmatrix}
+        1 &amp; 0 &amp; 0 \\
+        0 &amp; 1 &amp; 0 \\
+        1 &amp; 0 &amp; 1
+    \end{bmatrix}
+    \begin{bmatrix}
+        \hfill1 &amp; \hfill2 &amp; \hfill1 \\
+        \hfill0 &amp; -2 &amp; -2 \\
+        -1 &amp; \hfill1 &amp; \hfill1
+    \end{bmatrix} = 
+    \begin{bmatrix}
+        1 &amp; 0 &amp; 0 \\
+        0 &amp; 1 &amp; 0 \\
+        0 &amp; 3/2 &amp; 1
+    \end{bmatrix}
+     \begin{bmatrix}
+        \hfill1 &amp; \hfill2 &amp; \hfill1 \\
+        \hfill0 &amp; -2 &amp; -2 \\
+        0 &amp; \hfill3 &amp; \hfill2
+    \end{bmatrix} = 
+    \begin{bmatrix}
+        \hfill1 &amp; \hfill2 &amp; \hfill1 \\
+        \hfill0 &amp; -2 &amp; -2 \\
+        0 &amp; \hfill0 &amp; -1
+    \end{bmatrix}.
+\end{split}\]</div>
+<p>The line above spells out the following computation: <span class="math notranslate nohighlight">\(E_{32}E_{31}E_{21}A = U\)</span> (note that the matrix on the right is upper triangular). If we now invert each of the three row operations in reverse order, we will have our factorization: <span class="math notranslate nohighlight">\(A=E_{21}^{-1}E_{31}^{-1}E_{32}^{-1}U = LU\)</span>. The inversions are straightforward:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    E_{32}^{-1} =  
+    \begin{bmatrix}
+        1 &amp; 0 &amp; 0 \\
+        0 &amp; 1 &amp; 0 \\
+        0 &amp; -3/2 &amp; 1
+    \end{bmatrix}, E_{31}^{-1} = 
+    \begin{bmatrix}
+        \hfill1 &amp; 0 &amp; 0 \\
+        \hfill0 &amp; 1 &amp; 0 \\
+        -1 &amp; 0 &amp; 1
+    \end{bmatrix}, E_{21}^{-1} = 
+    \begin{bmatrix}
+        \hfill 1 &amp; 0 &amp; 0 \\
+        2 &amp; 1 &amp; 0 \\
+        \hfill 0 &amp; 0 &amp; 1
+    \end{bmatrix},
+\end{split}\]</div>
+<p>and the multiplication of elimination matrices is very quick:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    E_{21}^{-1}E_{31}^{-1}E_{32}^{-1} = 
+    \begin{bmatrix}
+        1 &amp; 0 &amp; 0 \\
+        2 &amp; 1 &amp; 0 \\
+        -1 &amp; -3/2 &amp; 1
+    \end{bmatrix},
+\end{split}\]</div>
+<p>which is clearly lower triangular. Finally, we can check that <span class="math notranslate nohighlight">\(A = LU\)</span> for this <span class="math notranslate nohighlight">\(L\)</span> and <span class="math notranslate nohighlight">\(U\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split} LU = 
+    \begin{bmatrix}
+        1 &amp; 0 &amp; 0 \\
+        2 &amp; 1 &amp; 0 \\
+        -1 &amp; -3/2 &amp; 1
+    \end{bmatrix}
+    \begin{bmatrix}
+        \hfill1 &amp; \hfill2 &amp; \hfill1 \\
+        \hfill0 &amp; -2 &amp; -2 \\
+        0 &amp; \hfill0 &amp; -1
+    \end{bmatrix} =
+    \begin{bmatrix}
+        \hfill1 &amp; 2 &amp; 1 \\
+        \hfill2 &amp; 2 &amp; 0 \\
+        -1 &amp; 1 &amp; 1
+    \end{bmatrix} = A.
+\end{split}\]</div>
+</section>
+<section id="the-computational-efficiency-of-a-lu">
+<h2>The Computational Efficiency of <span class="math notranslate nohighlight">\(A=LU\)</span><a class="headerlink" href="#the-computational-efficiency-of-a-lu" title="Link to this heading">#</a></h2>
+<p>Calculating an <span class="math notranslate nohighlight">\(LU\)</span> factorization is not generally faster than solving a system using elimination; as the <span class="math notranslate nohighlight">\(LU\)</span> factorization is in effect just the elimination method expressed through matrices the computational cost is the same <span class="math notranslate nohighlight">\(\mathcal{O}(n^3)\)</span>. The efficiency we gain from it shows up in a specific situation that comes up often in applications: when we have to solve <span class="math notranslate nohighlight">\(A\mathbf{x} = \mathbf{b}\)</span> for one matrix <span class="math notranslate nohighlight">\(A\)</span> but a large number of distinct vectors <span class="math notranslate nohighlight">\(\mathbf{b}\)</span>. This is a quite common real-world scenario. Then, if we have a factorization <span class="math notranslate nohighlight">\(A=LU\)</span>, we can use the following steps to solve the systems:</p>
+<ol class="arabic simple">
+<li><p>Set <span class="math notranslate nohighlight">\(U\mathbf{x} = \mathbf{y}\)</span>. This is a placeholder operation, so no computational cost.</p></li>
+<li><p>Solve <span class="math notranslate nohighlight">\(L\mathbf{y} = \mathbf{b}\)</span> for <span class="math notranslate nohighlight">\(\mathbf{y}\)</span>. The cost is <span class="math notranslate nohighlight">\(\mathcal{O}(n^2)\)</span>, because <span class="math notranslate nohighlight">\(L\)</span> is triangular.</p></li>
+<li><p>Solve <span class="math notranslate nohighlight">\(U\mathbf{x} = \mathbf{y}\)</span> for <span class="math notranslate nohighlight">\(\mathbf{x}\)</span>. The cost is <span class="math notranslate nohighlight">\(\mathcal{O}(n^2)\)</span>, because <span class="math notranslate nohighlight">\(U\)</span> is triangular.</p></li>
+</ol>
+<p>The computational cost of all of three steps taken together is <span class="math notranslate nohighlight">\(\mathcal{O}(n^2)\)</span>. For small <span class="math notranslate nohighlight">\(n\)</span>, <span class="math notranslate nohighlight">\(\mathcal{O}(n^3)\)</span> and <span class="math notranslate nohighlight">\(\mathcal{O}(n^2)\)</span> are often similar in magnitude, but as <span class="math notranslate nohighlight">\(n\)</span> grows the difference becomes dramatic, so it can be vastly more efficient to first obtain the <span class="math notranslate nohighlight">\(A=LU\)</span> factorization at the <span class="math notranslate nohighlight">\(\mathcal{O}(n^3)\)</span> computational cost and then use it to solve <span class="math notranslate nohighlight">\(A\mathbf{x} = \mathbf{b}\)</span> over and over using the steps above at the dramatically reduced <span class="math notranslate nohighlight">\(\mathcal{O}(n^2)\)</span> cost.</p>
+<p>A real-world example where this occurs is in structural engineering analysis of a building under different loading conditions. Consider analyzing a large building framework where:</p>
+<ul class="simple">
+<li><p>the matrix <span class="math notranslate nohighlight">\(A\)</span> represents the structural stiffness: each component is determined basaed on the geometry, material properties, and connections of the building,</p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathbf{x}\)</span> represents the displacements/deflections at various nodes, and</p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathbf{b}\)</span> represents the external forces applied to the structure.</p></li>
+</ul>
+<p>The engineer needs to solve the same structural system - so, the same <span class="math notranslate nohighlight">\(A\)</span> - under many different loading scenarios:</p>
+<ul class="simple">
+<li><p>Dead loads (permanent weight of structure)</p></li>
+<li><p>Live loads (occupancy, furniture, equipment)</p></li>
+<li><p>Wind loads from different directions</p></li>
+<li><p>Snow loads</p></li>
+<li><p>Seismic loads</p></li>
+<li><p>Various combinations required by building codes</p></li>
+</ul>
+<p>Each loading case gives a different <span class="math notranslate nohighlight">\(\mathbf{b}\)</span>, but the structural stiffness matrix A remains the same since the building geometry and materials haven’t changed.</p>
+<p>Another real-world example that we will look at later comes up in marketing, where an analyst wants to predict a variety of different consumer behaviours which are captured in distinct vectors <span class="math notranslate nohighlight">\(\mathbf{b}\)</span> based on a fixed set of data about consumers which is captured in a single fixed matrix <span class="math notranslate nohighlight">\(A\)</span>. Again obtaining <span class="math notranslate nohighlight">\(A=LU\)</span> is expensive, but once obtained can be used over and over for far less computational cost.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="matrices-problem-set.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Problem Set 2: Matrix Arithmetic</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-elimination-method">The Elimination Method</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gaussian-elimination">Gaussian Elimination</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#computational-cost-of-gaussian-elimination">Computational Cost of Gaussian Elimination</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#row-reduction-as-matrix-multiplication">Row Reduction as Matrix Multiplication</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-a-lu-factorization">The <span class="math notranslate nohighlight">\(A=LU\)</span> Factorization</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-computational-efficiency-of-a-lu">The Computational Efficiency of <span class="math notranslate nohighlight">\(A=LU\)</span></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Jeremiah W. Johnson
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <div>
+  <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="jwjohnson314" data-description="Support me on Buy me a coffee!" data-message="Thanks for reading! If you found this useful and want to support this book project, you can Buy Me a Coffee here. Your support helps keep this book free for my students." data-color="#5F7FFF" data-position="Right" data-x_margin="18" data-y_margin="18"></script> 
+</div>
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

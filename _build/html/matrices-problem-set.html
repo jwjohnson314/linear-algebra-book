@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Motivation &#8212; Applied Linear Algebra</title>
+    <title>Problem Set 2: Matrix Arithmetic &#8212; Applied Linear Algebra</title>
   
   
   
@@ -59,11 +59,11 @@
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'motivation';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'matrices-problem-set';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Vectors" href="vectors.html" />
-    <link rel="prev" title="&lt;no title&gt;" href="intro.html" />
+    <link rel="next" title="Linear Systems and Gaussian Elimination" href="linear-systems-gaussian-elimination.html" />
+    <link rel="prev" title="Matrices" href="matrices.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -176,12 +176,12 @@
             </li>
         </ul>
         <ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Motivation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="motivation.html">Motivation</a></li>
 
 <li class="toctree-l1"><a class="reference internal" href="vectors.html">Vectors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vectors-problem-set.html">Problem Set 1: Vectors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="matrices.html">Matrices</a></li>
-<li class="toctree-l1"><a class="reference internal" href="matrices-problem-set.html">Problem Set 2: Matrix Arithmetic</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Problem Set 2: Matrix Arithmetic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="linear-systems-gaussian-elimination.html">Linear Systems and Gaussian Elimination</a></li>
 </ul>
 
@@ -254,7 +254,7 @@
       
       
       
-      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fmotivation.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fmatrices-problem-set.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -284,7 +284,7 @@
       
       
       
-      <li><a href="_sources/motivation.ipynb" target="_blank"
+      <li><a href="_sources/matrices-problem-set.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -368,7 +368,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Motivation</h1>
+    <h1>Problem Set 2: Matrix Arithmetic</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -378,10 +378,13 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Motivation</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#outline">Outline</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section-a-basic-matrix-operations">Section A: Basic Matrix Operations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section-b-matrix-vector-multiplication">Section B: Matrix-Vector Multiplication</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section-c-matrix-matrix-multiplication">Section C: Matrix-Matrix Multiplication</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section-d-dot-product-as-matrix-multiplication">Section D: Dot Product as Matrix Multiplication</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section-e-dimensional-analysis-and-undefined-operations">Section E: Dimensional Analysis and Undefined Operations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section-f-mixed-applications">Section F: Mixed Applications</a></li>
 </ul>
-
             </nav>
         </div>
     </div>
@@ -392,18 +395,63 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="motivation">
-<h1>Motivation<a class="headerlink" href="#motivation" title="Link to this heading">#</a></h1>
-<p>Linear algebra is one of the most well studied and widely applied branches of mathematics. In recent years, linear algebra has played a prominent role in the rise of machine learning and artificial intelligence through its key role in the development of deep neural networks such as those that power large language models such as ChatGPT, whose architectures can be loosely described simply as sequences of linear transformations interspersed with nonlinearities.</p>
-<p>The ubiquitious role of linear algebra in applications old and new means that there are plenty of resources - i.e. other books and/or online content - already available with which one can learn linear algebra; however, after spending more than a decade introducing students to linear algebra for the first time, I haven’t found a resource that addresses the subject the way that I believe it should be addressed. So here we are.</p>
-<p>There are two primary challenges one faces when learning linear algebra at the level where it is usually introduced, around the second or third year of college and usually after a calculus course. The first is that even in an applied linear algebra course the subject is inherently more abstract than any of the math one would have learned previously. For example, where in calculus one considers functions ‘one at a time’, studying, say, properties of a function like <span class="math notranslate nohighlight">\(f(x) = xe^{-x}\)</span> such as its extrema or end behavior, in linear algebra one considers infinite ‘spaces’ of vectors like <span class="math notranslate nohighlight">\(\mathbb{R}^2\)</span> and how such spaces are transformed under a given linear operator. This requires - or forces one to develop - some additional mathematical maturity. The second challenge is that even in an applied linear algebra course, interesting real-world applications are hard to come by until quite a bit of abstract theory has been developed. In my introductory applied linear algebra course it is often not until after mid-semester that we finally can begin to explore meaningful applications.</p>
-<p>Closely tied to both of these challenges is the computational complexity of linear algebra, a topic that is largely ignored in introductory courses but is central to every practical application of linear algebra. Every linear algebra operation is computationally expensive, and it is a disservice to a student of linear algebra to pretend otherwise. Linear systems are never solved via matrix inversion; it’s simply to expensive and error-prone. Eigenvalues are not computed via determinants, determinants are too computationally expensive for anything other than toy examples and thought exercises. And yet, countless hours are spent teaching students techniques such as these that are never used in the real world.</p>
-<p>The purpose of this book is to put computation front and center in an introductory presentation of linear algebra. That is why it is written using Jupyter notebooks: so that examples can be coded up and computational costs considered. I hope you will leave with a realistic perspective on how linear algebra is done in the real world.</p>
-<p>As is probably clear, this is an opinionated book that is not for everyone. One central opinion is that someone learning linear algebra needs to do just enough toy problems by hand to understand the operation or topic and then needs to consider the computational aspects of what they are doing: the computational costs, the stability of the operations, and so on. The presentation adheres to this approach throughout.</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="problem-set-2-matrix-arithmetic">
+<h1>Problem Set 2: Matrix Arithmetic<a class="headerlink" href="#problem-set-2-matrix-arithmetic" title="Link to this heading">#</a></h1>
+<section id="section-a-basic-matrix-operations">
+<h2>Section A: Basic Matrix Operations<a class="headerlink" href="#section-a-basic-matrix-operations" title="Link to this heading">#</a></h2>
+<p><strong>Problem 1:</strong> Given matrices <span class="math notranslate nohighlight">\(A = \begin{bmatrix} 2 &amp; -1 \\ 3 &amp; 4 \end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(B = \begin{bmatrix} 1 &amp; 5 \\ -2 &amp; 3 \end{bmatrix}\)</span>, compute <span class="math notranslate nohighlight">\(A + B\)</span>.</p>
+<p><strong>Problem 2:</strong> Using the same matrices from Problem 1, compute <span class="math notranslate nohighlight">\(A - B\)</span>.</p>
+<p><strong>Problem 3:</strong> Given <span class="math notranslate nohighlight">\(C = \begin{bmatrix} 3 &amp; 0 &amp; -2 \\ 1 &amp; 4 &amp; 5 \end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(D = \begin{bmatrix} -1 &amp; 2 &amp; 3 \\ 6 &amp; -3 &amp; 1 \end{bmatrix}\)</span>, find <span class="math notranslate nohighlight">\(2C - 3D\)</span>.</p>
+<p><strong>Problem 4:</strong> Compute <span class="math notranslate nohighlight">\(3A^T\)</span> where <span class="math notranslate nohighlight">\(A = \begin{bmatrix} 1 &amp; -2 &amp; 4 \\ 0 &amp; 3 &amp; -1 \end{bmatrix}\)</span>.</p>
+<p><strong>Problem 5:</strong> Given <span class="math notranslate nohighlight">\(E = \begin{bmatrix} 2 &amp; -1 \\ 0 &amp; 3 \\ 4 &amp; 1 \end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(F = \begin{bmatrix} 1 &amp; 2 &amp; -1 \\ 3 &amp; 0 &amp; 4 \end{bmatrix}\)</span>, determine if <span class="math notranslate nohighlight">\(E + F\)</span> is defined. If not, explain why.</p>
+<p><strong>Problem 6:</strong> Find the scalar <span class="math notranslate nohighlight">\(k\)</span> such that <span class="math notranslate nohighlight">\(k\begin{bmatrix} 2 &amp; -4 \\ 6 &amp; 8 \end{bmatrix} = \begin{bmatrix} 1 &amp; -2 \\ 3 &amp; 4 \end{bmatrix}\)</span>.</p>
 </section>
-<section class="tex2jax_ignore mathjax_ignore" id="outline">
-<h1>Outline<a class="headerlink" href="#outline" title="Link to this heading">#</a></h1>
-<p>This book is a work in progress. Upon completion it will cover many of the usual topics covered in an introductory linear algebra course, including the complete solution of <span class="math notranslate nohighlight">\(A\mathbf{x} = \mathbf{b}\)</span>, eigenvalue and eigenvector calculations, and various matrix decompositions including <span class="math notranslate nohighlight">\(A=LU\)</span>, <span class="math notranslate nohighlight">\(A=QR\)</span>, and the singular value decomposition. Applications to be covered include the normal equations of linear regression, Markov chains, PCA, neural networks, and perhaps some additional topics from probability theory. A few standard topics that are not practical are omitted; for instance, determinants will be relegated to an appendix.</p>
+<section id="section-b-matrix-vector-multiplication">
+<h2>Section B: Matrix-Vector Multiplication<a class="headerlink" href="#section-b-matrix-vector-multiplication" title="Link to this heading">#</a></h2>
+<p><strong>Problem 7:</strong> Compute <span class="math notranslate nohighlight">\(\begin{bmatrix} 1 &amp; 2 &amp; -1 \\ 3 &amp; 0 &amp; 4 \end{bmatrix} \begin{bmatrix} 2 \\ -1 \\ 3 \end{bmatrix}\)</span>.</p>
+<p><strong>Problem 8:</strong> Given <span class="math notranslate nohighlight">\(A = \begin{bmatrix} 2 &amp; -1 &amp; 3 \\ 0 &amp; 4 &amp; -2 \\ 1 &amp; 1 &amp; 5 \end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{x} = \begin{bmatrix} 1 \\ -2 \\ 3 \end{bmatrix}\)</span>, find <span class="math notranslate nohighlight">\(A\mathbf{x}\)</span>.</p>
+<p><strong>Problem 9:</strong> Determine if the product <span class="math notranslate nohighlight">\(\begin{bmatrix} 1 &amp; 2 \\ 3 &amp; 4 \\ 5 &amp; 6 \end{bmatrix} \begin{bmatrix} 2 \\ -1 \\ 3 \end{bmatrix}\)</span> is defined. If not, explain the dimensional incompatibility.</p>
+<p><strong>Problem 10:</strong> Compute <span class="math notranslate nohighlight">\(\begin{bmatrix} 3 &amp; -2 &amp; 1 &amp; 4 \end{bmatrix} \begin{bmatrix} 2 \\ 0 \\ -1 \\ 3 \end{bmatrix}\)</span>.</p>
+<p><strong>Problem 11:</strong> Given <span class="math notranslate nohighlight">\(\mathbf{b} = \begin{bmatrix} 5 \\ -2 \\ 1 \end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(A = \begin{bmatrix} 1 &amp; 0 &amp; 2 \\ -1 &amp; 3 &amp; 1 \\ 2 &amp; -1 &amp; 0 \end{bmatrix}\)</span>, solve for <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> in the equation <span class="math notranslate nohighlight">\(A\mathbf{x} = \mathbf{b}\)</span> (if possible).</p>
+</section>
+<section id="section-c-matrix-matrix-multiplication">
+<h2>Section C: Matrix-Matrix Multiplication<a class="headerlink" href="#section-c-matrix-matrix-multiplication" title="Link to this heading">#</a></h2>
+<p><strong>Problem 12:</strong> Compute <span class="math notranslate nohighlight">\(\begin{bmatrix} 1 &amp; 2 \\ 3 &amp; -1 \end{bmatrix} \begin{bmatrix} 4 &amp; 0 \\ -2 &amp; 5 \end{bmatrix}\)</span>.</p>
+<p><strong>Problem 13:</strong> Given <span class="math notranslate nohighlight">\(P = \begin{bmatrix} 2 &amp; -1 &amp; 3 \\ 0 &amp; 4 &amp; -2 \end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(Q = \begin{bmatrix} 1 &amp; 2 \\ -3 &amp; 1 \\ 2 &amp; 0 \end{bmatrix}\)</span>, find <span class="math notranslate nohighlight">\(PQ\)</span>.</p>
+<p><strong>Problem 14:</strong> Compute <span class="math notranslate nohighlight">\(QP\)</span> using the matrices from Problem 13.</p>
+<p><strong>Problem 15:</strong> Determine if <span class="math notranslate nohighlight">\(\begin{bmatrix} 1 &amp; 2 &amp; 3 \\ 4 &amp; 5 &amp; 6 \end{bmatrix} \begin{bmatrix} 7 &amp; 8 \\ 9 &amp; 10 \end{bmatrix}\)</span> is defined. Explain your reasoning.</p>
+<p><strong>Problem 16:</strong> Find <span class="math notranslate nohighlight">\(AB\)</span> and <span class="math notranslate nohighlight">\(BA\)</span> where <span class="math notranslate nohighlight">\(A = \begin{bmatrix} 1 &amp; 2 \\ 0 &amp; -1 \end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(B = \begin{bmatrix} 3 &amp; 1 \\ -2 &amp; 4 \end{bmatrix}\)</span>. Are they equal?</p>
+<p><strong>Problem 17:</strong> Compute <span class="math notranslate nohighlight">\(\begin{bmatrix} 2 &amp; -1 &amp; 0 \\ 1 &amp; 3 &amp; 2 \\ -1 &amp; 0 &amp; 4 \end{bmatrix}^2\)</span>.</p>
+</section>
+<section id="section-d-dot-product-as-matrix-multiplication">
+<h2>Section D: Dot Product as Matrix Multiplication<a class="headerlink" href="#section-d-dot-product-as-matrix-multiplication" title="Link to this heading">#</a></h2>
+<p><strong>Problem 18:</strong> Express the dot product <span class="math notranslate nohighlight">\(\mathbf{u} \cdot \mathbf{v}\)</span> as a matrix multiplication where <span class="math notranslate nohighlight">\(\mathbf{u} = \begin{bmatrix} 3 \\ -2 \\ 1 \end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{v} = \begin{bmatrix} 4 \\ 1 \\ -3 \end{bmatrix}\)</span>.</p>
+<p><strong>Problem 19:</strong> Compute the dot product <span class="math notranslate nohighlight">\(\begin{bmatrix} 2 &amp; -1 &amp; 3 &amp; 0 \end{bmatrix} \begin{bmatrix} 1 \\ 4 \\ -2 \\ 5 \end{bmatrix}\)</span>.</p>
+<p><strong>Problem 20:</strong> Given vectors <span class="math notranslate nohighlight">\(\mathbf{a} = \begin{bmatrix} 1 \\ 2 \\ -1 \end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{b} = \begin{bmatrix} 3 \\ 0 \\ 4 \end{bmatrix}\)</span>, compute <span class="math notranslate nohighlight">\(\mathbf{a}^T\mathbf{b}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{a}\mathbf{b}^T\)</span>.</p>
+<p><strong>Problem 21:</strong> Show that <span class="math notranslate nohighlight">\((\mathbf{u} \cdot \mathbf{v})^2 = (\mathbf{u}^T\mathbf{v})(\mathbf{v}^T\mathbf{u})\)</span> for <span class="math notranslate nohighlight">\(\mathbf{u} = \begin{bmatrix} 2 \\ -3 \end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{v} = \begin{bmatrix} 1 \\ 4 \end{bmatrix}\)</span>.</p>
+</section>
+<section id="section-e-dimensional-analysis-and-undefined-operations">
+<h2>Section E: Dimensional Analysis and Undefined Operations<a class="headerlink" href="#section-e-dimensional-analysis-and-undefined-operations" title="Link to this heading">#</a></h2>
+<p><strong>Problem 22:</strong> Explain why <span class="math notranslate nohighlight">\(\begin{bmatrix} 1 &amp; 2 &amp; 3 \end{bmatrix} + \begin{bmatrix} 4 \\ 5 \\ 6 \end{bmatrix}\)</span> is undefined.</p>
+<p><strong>Problem 23:</strong> Determine which of the following matrix products are defined and state the dimensions of the result:</p>
+<ul class="simple">
+<li><p>a) <span class="math notranslate nohighlight">\((2 \times 3)(3 \times 4)\)</span></p></li>
+<li><p>b) <span class="math notranslate nohighlight">\((4 \times 2)(3 \times 2)\)</span></p></li>
+<li><p>c) <span class="math notranslate nohighlight">\((1 \times 5)(5 \times 1)\)</span></p></li>
+<li><p>d) <span class="math notranslate nohighlight">\((3 \times 3)(2 \times 3)\)</span></p></li>
+</ul>
+<p><strong>Problem 24:</strong> Given matrices <span class="math notranslate nohighlight">\(A_{2 \times 4}\)</span>, <span class="math notranslate nohighlight">\(B_{4 \times 3}\)</span>, and <span class="math notranslate nohighlight">\(C_{3 \times 2}\)</span>, determine if <span class="math notranslate nohighlight">\((AB)C\)</span> and <span class="math notranslate nohighlight">\(A(BC)\)</span> are both defined and have the same dimensions.</p>
+<p><strong>Problem 25:</strong> Explain why the equation <span class="math notranslate nohighlight">\(A\mathbf{x} = \mathbf{b}\)</span> has no solution when <span class="math notranslate nohighlight">\(A = \begin{bmatrix} 1 &amp; 2 \\ 3 &amp; 4 \end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{b} = \begin{bmatrix} 1 \\ 2 \\ 3 \end{bmatrix}\)</span> from a dimensional perspective.</p>
+<p><strong>Problem 26:</strong> State the conditions under which <span class="math notranslate nohighlight">\(AB = BA\)</span> is possible for matrices <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span> in terms of their dimensions.</p>
+</section>
+<section id="section-f-mixed-applications">
+<h2>Section F: Mixed Applications<a class="headerlink" href="#section-f-mixed-applications" title="Link to this heading">#</a></h2>
+<p><strong>Problem 27:</strong> Given <span class="math notranslate nohighlight">\(A = \begin{bmatrix} 1 &amp; 0 &amp; -1 \\ 2 &amp; 1 &amp; 3 \end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{x} = \begin{bmatrix} 2 \\ -1 \\ 1 \end{bmatrix}\)</span>, find the unit vector in the direction of <span class="math notranslate nohighlight">\(A\mathbf{x}\)</span>.</p>
+<p><strong>Problem 28:</strong> Compute <span class="math notranslate nohighlight">\(\|A\mathbf{x}\|_2\)</span> where <span class="math notranslate nohighlight">\(A = \begin{bmatrix} 3 &amp; -1 \\ 2 &amp; 4 \\ 0 &amp; 1 \end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{x} = \begin{bmatrix} 2 \\ 1 \end{bmatrix}\)</span>.</p>
+<p><strong>Problem 29:</strong> For the matrix <span class="math notranslate nohighlight">\(M = \begin{bmatrix} 1/3 &amp; 2/3 &amp; 2/3 \\ 2/3 &amp; 1/3 &amp; -2/3 \\ 2/3 &amp; -2/3 &amp; 1/3 \end{bmatrix}\)</span>, verify that each column is a unit vector and that the columns are mutually <em>orthogonal</em>; that is, their dot products are zero.</p>
+<p><strong>Problem 30:</strong> Given vectors <span class="math notranslate nohighlight">\(\mathbf{u} = \begin{bmatrix} 1 \\ 2 \\ 1 \end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{v} = \begin{bmatrix} 2 \\ -1 \\ 0 \end{bmatrix}\)</span>, find scalars <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span> such that <span class="math notranslate nohighlight">\(\|a\mathbf{u} + b\mathbf{v}\| = 1\)</span> and <span class="math notranslate nohighlight">\(a + b = 1\)</span>.</p>
+<p><strong>Problem 31:</strong> Show that for any matrix <span class="math notranslate nohighlight">\(A\)</span> and compatible vectors <span class="math notranslate nohighlight">\(\mathbf{u}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{v}\)</span>, the triangle inequality holds: <span class="math notranslate nohighlight">\(\|A(\mathbf{u} + \mathbf{v})\|_2 \leq \|A\mathbf{u}\|_2 + \|A\mathbf{v}\|_2\)</span>. Verify with <span class="math notranslate nohighlight">\(A = \begin{bmatrix} 1 &amp; 2 \\ 0 &amp; 1 \end{bmatrix}\)</span>, <span class="math notranslate nohighlight">\(\mathbf{u} = \begin{bmatrix} 1 \\ 0 \end{bmatrix}\)</span>, and <span class="math notranslate nohighlight">\(\mathbf{v} = \begin{bmatrix} 0 \\ 1 \end{bmatrix}\)</span>.</p>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -437,20 +485,20 @@ document.write(`
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="intro.html"
+       href="matrices.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">&lt;no title&gt;</p>
+        <p class="prev-next-title">Matrices</p>
       </div>
     </a>
     <a class="right-next"
-       href="vectors.html"
+       href="linear-systems-gaussian-elimination.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Vectors</p>
+        <p class="prev-next-title">Linear Systems and Gaussian Elimination</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -470,10 +518,13 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Motivation</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#outline">Outline</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section-a-basic-matrix-operations">Section A: Basic Matrix Operations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section-b-matrix-vector-multiplication">Section B: Matrix-Vector Multiplication</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section-c-matrix-matrix-multiplication">Section C: Matrix-Matrix Multiplication</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section-d-dot-product-as-matrix-multiplication">Section D: Dot Product as Matrix Multiplication</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section-e-dimensional-analysis-and-undefined-operations">Section E: Dimensional Analysis and Undefined Operations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section-f-mixed-applications">Section F: Mixed Applications</a></li>
 </ul>
-
   </nav></div>
 
 </div></div>

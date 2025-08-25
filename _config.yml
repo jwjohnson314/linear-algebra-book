@@ -1,7 +1,7 @@
 # Book settings
 # Learn more at https://jupyterbook.org/customize/config.html
 
-title: My sample book
+title: Applied Linear Algebra
 author: Jeremiah W. Johnson
 logo: 
 copyright: "2025"
@@ -33,7 +33,7 @@ html:
   use_repository_button: true
   extra_footer: |
     <div>
-      <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="jwjohnson314" data-description="Support me on Buy me a coffee!" data-message="Thanks for visiting; I hope you found this useful and I appreciate your support!" data-color="#5F7FFF" data-position="Right" data-x_margin="18" data-y_margin="18"></script> 
+      <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="jwjohnson314" data-description="Support me on Buy me a coffee!" data-message="Thanks for reading! If you found this useful and want to support this book project, you can Buy Me a Coffee here. Your support helps keep this book free for my students." data-color="#5F7FFF" data-position="Right" data-x_margin="18" data-y_margin="18"></script> 
     </div>
 sphinx:
   config: 

@@ -1,0 +1,615 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Problem Set 1: Vectors &#8212; Applied Linear Algebra</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'vectors-problem-set';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Matrices" href="matrices.html" />
+    <link rel="prev" title="Vectors" href="vectors.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Applied Linear Algebra</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    <no title>
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="motivation.html">Motivation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vectors.html">Vectors</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Problem Set 1: Vectors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrices.html">Matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="linear-systems-gaussian-elimination.html">Linear Systems and Gaussian Elimination</a></li>
+<li class="toctree-l1"><a class="reference internal" href="computation.html">Computation</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fvectors-problem-set.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/vectors-problem-set.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Problem Set 1: Vectors</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section-a-basic-vector-operations">Section A: Basic Vector Operations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section-b-vector-norms-and-magnitudes">Section B: Vector Norms and Magnitudes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section-c-triangle-inequality">Section C: Triangle Inequality</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section-d-unit-vectors">Section D: Unit Vectors</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section-e-mixed-problems">Section E: Mixed Problems</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section-f-dot-products">Section F: Dot Products</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section-g-linear-combinations">Section G: Linear Combinations</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="problem-set-1-vectors">
+<h1>Problem Set 1: Vectors<a class="headerlink" href="#problem-set-1-vectors" title="Link to this heading">#</a></h1>
+<p>The problems below are intended to be done by hand using pencil/pen and paper.</p>
+<section id="section-a-basic-vector-operations">
+<h2>Section A: Basic Vector Operations<a class="headerlink" href="#section-a-basic-vector-operations" title="Link to this heading">#</a></h2>
+<p><strong>Problem 1.</strong> Given vectors <span class="math notranslate nohighlight">\(\mathbf{a} = \begin{bmatrix} 3 \\ -2 \\ 5 \end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{b} = \begin{bmatrix} -1 \\ 4 \\ 2 \end{bmatrix}\)</span>, find <span class="math notranslate nohighlight">\(\mathbf{a} + \mathbf{b}\)</span>.</p>
+<p><strong>Problem 2.</strong> If <span class="math notranslate nohighlight">\(\mathbf{u} = \begin{bmatrix} 7 \\ -3 \end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{v} = \begin{bmatrix} 2 \\ 8 \end{bmatrix}\)</span>, calculate <span class="math notranslate nohighlight">\(\mathbf{u} - \mathbf{v}\)</span> and sketch <span class="math notranslate nohighlight">\(\mathbf{u}, \mathbf{v}\)</span>, and <span class="math notranslate nohighlight">\(\mathbf{u} - \mathbf{v}\)</span> in the Cartesian plane.</p>
+<p><strong>Problem 3.</strong> For <span class="math notranslate nohighlight">\(\mathbf{p} = \begin{bmatrix} 4 \\ -1 \\ 6 \end{bmatrix}\)</span>, find <span class="math notranslate nohighlight">\(3\mathbf{p}\)</span>.</p>
+<p><strong>Problem 4.</strong> Given <span class="math notranslate nohighlight">\(\mathbf{x} = \begin{bmatrix} 2 \\ 5 \\ -3 \end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{y} = \begin{bmatrix} -4 \\ 1 \\ 7 \end{bmatrix}\)</span>, compute <span class="math notranslate nohighlight">\(2\mathbf{x} - 3\mathbf{y}\)</span>.</p>
+<p><strong>Problem 5.</strong> If <span class="math notranslate nohighlight">\(\mathbf{a} = \begin{bmatrix} 1 \\ 2 \end{bmatrix}\)</span>, <span class="math notranslate nohighlight">\(\mathbf{b} = \begin{bmatrix} 3 \\ -1 \end{bmatrix}\)</span>, and <span class="math notranslate nohighlight">\(\mathbf{c} = \begin{bmatrix} -2 \\ 4 \end{bmatrix}\)</span>, find <span class="math notranslate nohighlight">\(\mathbf{a} + \mathbf{b} + \mathbf{c}\)</span>.</p>
+<p><strong>Problem 6.</strong> Calculate <span class="math notranslate nohighlight">\(-5\mathbf{w}\)</span> where <span class="math notranslate nohighlight">\(\mathbf{w} = \begin{bmatrix} 2 \\ -3 \\ 1 \\ 4 \end{bmatrix}\)</span>.</p>
+<p><strong>Problem 7.</strong> For vectors <span class="math notranslate nohighlight">\(\mathbf{m} = \begin{bmatrix} 6 \\ -2 \\ 8 \end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{n} = \begin{bmatrix} 3 \\ -1 \\ 4 \end{bmatrix}\)</span>, verify that <span class="math notranslate nohighlight">\(\mathbf{m} = 2\mathbf{n}\)</span>.</p>
+<p><strong>Problem 8.</strong> Given <span class="math notranslate nohighlight">\(\mathbf{r} = \begin{bmatrix} -3 \\ 7 \\ 2 \end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{s} = \begin{bmatrix} 5 \\ -2 \\ -1 \end{bmatrix}\)</span>, find <span class="math notranslate nohighlight">\(\frac{1}{2}(\mathbf{r} + \mathbf{s})\)</span>.</p>
+<p><strong>Problem 9.</strong> If <span class="math notranslate nohighlight">\(\mathbf{d} = \begin{bmatrix} 4 \\ -6 \\ 8 \end{bmatrix}\)</span>, find a vector <span class="math notranslate nohighlight">\(\mathbf{e}\)</span> such that <span class="math notranslate nohighlight">\(\mathbf{d} + \mathbf{e} = \begin{bmatrix} 0 \\ 0 \\ 0 \end{bmatrix}\)</span>.</p>
+<p><strong>Problem 10.</strong> Calculate <span class="math notranslate nohighlight">\(4\mathbf{a} - 2\mathbf{b} + \mathbf{c}\)</span> where <span class="math notranslate nohighlight">\(\mathbf{a} = \begin{bmatrix} 1 \\ 0 \\ -2 \end{bmatrix}\)</span>, <span class="math notranslate nohighlight">\(\mathbf{b} = \begin{bmatrix} 3 \\ 4 \\ 1 \end{bmatrix}\)</span>, and <span class="math notranslate nohighlight">\(\mathbf{c} = \begin{bmatrix} -1 \\ 2 \\ 5 \end{bmatrix}\)</span>.</p>
+</section>
+<section id="section-b-vector-norms-and-magnitudes">
+<h2>Section B: Vector Norms and Magnitudes<a class="headerlink" href="#section-b-vector-norms-and-magnitudes" title="Link to this heading">#</a></h2>
+<p><strong>Problem 11.</strong> Find <span class="math notranslate nohighlight">\(\|\mathbf{v}\|\)</span> where <span class="math notranslate nohighlight">\(\mathbf{v} = \begin{bmatrix} 3 \\ 4 \end{bmatrix}\)</span>.</p>
+<p><strong>Problem 12.</strong> Calculate the magnitude of <span class="math notranslate nohighlight">\(\mathbf{w} = \begin{bmatrix} -2 \\ 1 \\ 2 \end{bmatrix}\)</span>.</p>
+<p><strong>Problem 13.</strong> If <span class="math notranslate nohighlight">\(\mathbf{u} = \begin{bmatrix} 1 \\ -2 \\ 3 \\ -4 \end{bmatrix}\)</span>, find <span class="math notranslate nohighlight">\(\|\mathbf{u}\|\)</span>.</p>
+<p><strong>Problem 14.</strong> Determine <span class="math notranslate nohighlight">\(\|\mathbf{a}\|\)</span> where <span class="math notranslate nohighlight">\(\mathbf{a} = \begin{bmatrix} 5 \\ 0 \\ -12 \end{bmatrix}\)</span>.</p>
+<p><strong>Problem 15.</strong> Given <span class="math notranslate nohighlight">\(\mathbf{p} = \begin{bmatrix} -6 \\ 8 \end{bmatrix}\)</span>, calculate <span class="math notranslate nohighlight">\(\|\mathbf{p}\|^2\)</span>.</p>
+<p><strong>Problem 16.</strong> Find the magnitude of <span class="math notranslate nohighlight">\(\mathbf{q} = \begin{bmatrix} 2 \\ -3 \\ 6 \\ 1 \end{bmatrix}\)</span>.</p>
+<p><strong>Problem 17.</strong> If <span class="math notranslate nohighlight">\(\mathbf{r} = \begin{bmatrix} a \\ 2a \\ -a \end{bmatrix}\)</span> where <span class="math notranslate nohighlight">\(a &gt; 0\)</span>, express <span class="math notranslate nohighlight">\(\|\mathbf{r}\|\)</span> in terms of <span class="math notranslate nohighlight">\(a\)</span>.</p>
+<p><strong>Problem 18.</strong> Calculate <span class="math notranslate nohighlight">\(\|3\mathbf{v}\|\)</span> where <span class="math notranslate nohighlight">\(\mathbf{v} = \begin{bmatrix} 2 \\ -1 \\ 4 \end{bmatrix}\)</span>.</p>
+<p><strong>Problem 19.</strong> Given <span class="math notranslate nohighlight">\(\mathbf{x} = \begin{bmatrix} 1 \\ 1 \\ 1 \\ 1 \\ 1 \end{bmatrix}\)</span>, find <span class="math notranslate nohighlight">\(\|\mathbf{x}\|\)</span>.</p>
+<p><strong>Problem 20.</strong> If <span class="math notranslate nohighlight">\(\|\mathbf{u}\| = 7\)</span> and <span class="math notranslate nohighlight">\(\mathbf{u} = \begin{bmatrix} 3 \\ -4 \\ b \end{bmatrix}\)</span>, find the value of <span class="math notranslate nohighlight">\(b\)</span>.</p>
+</section>
+<section id="section-c-triangle-inequality">
+<h2>Section C: Triangle Inequality<a class="headerlink" href="#section-c-triangle-inequality" title="Link to this heading">#</a></h2>
+<p><strong>Problem 21.</strong> For <span class="math notranslate nohighlight">\(\mathbf{a} = \begin{bmatrix} 2 \\ 3 \end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{b} = \begin{bmatrix} 1 \\ -4 \end{bmatrix}\)</span>, verify the triangle inequality: <span class="math notranslate nohighlight">\(\|\mathbf{a} + \mathbf{b}\| \leq \|\mathbf{a}\| + \|\mathbf{b}\|\)</span>.</p>
+<p><strong>Problem 22.</strong> Given <span class="math notranslate nohighlight">\(\mathbf{u} = \begin{bmatrix} 1 \\ 2 \\ -1 \end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{v} = \begin{bmatrix} -2 \\ 1 \\ 3 \end{bmatrix}\)</span>, check if <span class="math notranslate nohighlight">\(\|\mathbf{u} - \mathbf{v}\| \geq |\|\mathbf{u}\| - \|\mathbf{v}\||\)</span> holds.</p>
+<p><strong>Problem 23.</strong> For vectors <span class="math notranslate nohighlight">\(\mathbf{p} = \begin{bmatrix} 4 \\ 0 \end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{q} = \begin{bmatrix} 3 \\ 4 \end{bmatrix}\)</span>, calculate both sides of the triangle inequality and verify it holds.</p>
+<p><strong>Problem 24.</strong> If <span class="math notranslate nohighlight">\(\mathbf{x} = \begin{bmatrix} 1 \\ 1 \\ 1 \end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{y} = \begin{bmatrix} 2 \\ -1 \\ 0 \end{bmatrix}\)</span>, show that <span class="math notranslate nohighlight">\(\|\mathbf{x} + \mathbf{y}\| \leq \|\mathbf{x}\| + \|\mathbf{y}\|\)</span>.</p>
+<p><strong>Problem 25.</strong> Given <span class="math notranslate nohighlight">\(\mathbf{m} = \begin{bmatrix} -3 \\ 4 \\ 0 \end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{n} = \begin{bmatrix} 1 \\ -1 \\ 2 \end{bmatrix}\)</span>, verify the reverse triangle inequality: <span class="math notranslate nohighlight">\(\|\mathbf{m} - \mathbf{n}\| \geq |\|\mathbf{m}\| - \|\mathbf{n}\||\)</span>.</p>
+<p><strong>Problem 26.</strong> For <span class="math notranslate nohighlight">\(\mathbf{a} = \begin{bmatrix} 5 \\ -2 \\ 1 \end{bmatrix}\)</span>, <span class="math notranslate nohighlight">\(\mathbf{b} = \begin{bmatrix} -1 \\ 3 \\ 2 \end{bmatrix}\)</span>, and <span class="math notranslate nohighlight">\(\mathbf{c} = \begin{bmatrix} 2 \\ 1 \\ -3 \end{bmatrix}\)</span>, verify that <span class="math notranslate nohighlight">\(\|\mathbf{a} + \mathbf{b} + \mathbf{c}\| \leq \|\mathbf{a}\| + \|\mathbf{b}\| + \|\mathbf{c}\|\)</span>.</p>
+<p><strong>Problem 27.</strong> If <span class="math notranslate nohighlight">\(\mathbf{u}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{v}\)</span> are vectors such that <span class="math notranslate nohighlight">\(\|\mathbf{u}\| = 5\)</span> and <span class="math notranslate nohighlight">\(\|\mathbf{v}\| = 3\)</span>, what are the possible range of values for <span class="math notranslate nohighlight">\(\|\mathbf{u} + \mathbf{v}\|\)</span>?</p>
+<p><strong>Problem 28.</strong> Given that <span class="math notranslate nohighlight">\(\|\mathbf{r}\| = 4\)</span> and <span class="math notranslate nohighlight">\(\|\mathbf{s}\| = 7\)</span>, find the range of possible values for <span class="math notranslate nohighlight">\(\|\mathbf{r} - \mathbf{s}\|\)</span>.</p>
+</section>
+<section id="section-d-unit-vectors">
+<h2>Section D: Unit Vectors<a class="headerlink" href="#section-d-unit-vectors" title="Link to this heading">#</a></h2>
+<p><strong>Problem 29.</strong> Find the unit vector in the direction of <span class="math notranslate nohighlight">\(\mathbf{v} = \begin{bmatrix} 6 \\ -8 \end{bmatrix}\)</span>.</p>
+<p><strong>Problem 30.</strong> Given <span class="math notranslate nohighlight">\(\mathbf{w} = \begin{bmatrix} 2 \\ 1 \\ -2 \end{bmatrix}\)</span>, find the unit vector <span class="math notranslate nohighlight">\(\hat{\mathbf{w}}\)</span>.</p>
+<p><strong>Problem 31.</strong> If <span class="math notranslate nohighlight">\(\mathbf{u} = \begin{bmatrix} 3 \\ 4 \\ 0 \end{bmatrix}\)</span>, calculate the unit vector parallel to <span class="math notranslate nohighlight">\(\mathbf{u}\)</span>.</p>
+<p><strong>Problem 32.</strong> Find a unit vector in the direction of <span class="math notranslate nohighlight">\(\mathbf{a} = \begin{bmatrix} 1 \\ -1 \\ 1 \\ -1 \end{bmatrix}\)</span>.</p>
+<p><strong>Problem 33.</strong> Given <span class="math notranslate nohighlight">\(\mathbf{p} = \begin{bmatrix} 0 \\ 5 \\ 0 \end{bmatrix}\)</span>, find the unit vector in the direction of <span class="math notranslate nohighlight">\(\mathbf{p}\)</span>.</p>
+<p><strong>Problem 34.</strong> If <span class="math notranslate nohighlight">\(\mathbf{r} = \begin{bmatrix} -4 \\ 3 \end{bmatrix}\)</span>, find the unit vector <span class="math notranslate nohighlight">\(\hat{\mathbf{r}}\)</span> and verify that <span class="math notranslate nohighlight">\(\|\hat{\mathbf{r}}\| = 1\)</span>.</p>
+<p><strong>Problem 35.</strong> Find two unit vectors that are parallel to <span class="math notranslate nohighlight">\(\mathbf{v} = \begin{bmatrix} 2 \\ -1 \\ 2 \end{bmatrix}\)</span>.</p>
+<p><strong>Problem 36.</strong> Given <span class="math notranslate nohighlight">\(\mathbf{q} = \begin{bmatrix} a \\ 2a \\ 2a \end{bmatrix}\)</span> where <span class="math notranslate nohighlight">\(a \neq 0\)</span>, find the unit vector in the direction of <span class="math notranslate nohighlight">\(\mathbf{q}\)</span>.</p>
+<p><strong>Problem 37.</strong> If <span class="math notranslate nohighlight">\(\hat{\mathbf{u}}\)</span> is a unit vector in the direction of <span class="math notranslate nohighlight">\(\mathbf{u} = \begin{bmatrix} 3 \\ -4 \\ 12 \end{bmatrix}\)</span>, find <span class="math notranslate nohighlight">\(5\hat{\mathbf{u}}\)</span>.</p>
+<p><strong>Problem 38.</strong> Find the unit vector that points in the opposite direction of <span class="math notranslate nohighlight">\(\mathbf{w} = \begin{bmatrix} 1 \\ 2 \\ -3 \end{bmatrix}\)</span>.</p>
+</section>
+<section id="section-e-mixed-problems">
+<h2>Section E: Mixed Problems<a class="headerlink" href="#section-e-mixed-problems" title="Link to this heading">#</a></h2>
+<p><strong>Problem 39.</strong> Given <span class="math notranslate nohighlight">\(\mathbf{a} = \begin{bmatrix} 2 \\ -1 \\ 3 \end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{b} = \begin{bmatrix} -1 \\ 4 \\ 1 \end{bmatrix}\)</span>, find <span class="math notranslate nohighlight">\(\|\mathbf{a} + \mathbf{b}\|\)</span> and compare it to <span class="math notranslate nohighlight">\(\|\mathbf{a}\| + \|\mathbf{b}\|\)</span>.</p>
+<p><strong>Problem 40.</strong> If <span class="math notranslate nohighlight">\(\mathbf{u} = \begin{bmatrix} 4 \\ -3 \end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(\hat{\mathbf{v}}\)</span> is a unit vector in the direction of <span class="math notranslate nohighlight">\(\mathbf{v} = \begin{bmatrix} 5 \\ 12 \end{bmatrix}\)</span>, find <span class="math notranslate nohighlight">\(\mathbf{u} + 2\hat{\mathbf{v}}\)</span>.</p>
+<p><strong>Problem 41.</strong> For <span class="math notranslate nohighlight">\(\mathbf{p} = \begin{bmatrix} 1 \\ 0 \\ -2 \\ 3 \end{bmatrix}\)</span>, find scalars <span class="math notranslate nohighlight">\(c_1\)</span> and <span class="math notranslate nohighlight">\(c_2\)</span> such that <span class="math notranslate nohighlight">\(c_1\mathbf{p} + c_2(-\mathbf{p})\)</span> is a unit vector.</p>
+<p><strong>Problem 42.</strong> Given vectors <span class="math notranslate nohighlight">\(\mathbf{x} = \begin{bmatrix} 3 \\ 4 \end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{y} = \begin{bmatrix} -1 \\ 2 \end{bmatrix}\)</span>, find unit vectors <span class="math notranslate nohighlight">\(\hat{\mathbf{x}}\)</span> and <span class="math notranslate nohighlight">\(\hat{\mathbf{y}}\)</span>, then calculate <span class="math notranslate nohighlight">\(\|\hat{\mathbf{x}} + \hat{\mathbf{y}}\|\)</span>.</p>
+<p><strong>Problem 43.</strong> If <span class="math notranslate nohighlight">\(\mathbf{a} = \begin{bmatrix} 2 \\ 1 \\ -1 \end{bmatrix}\)</span>, find the vector <span class="math notranslate nohighlight">\(\mathbf{b}\)</span> such that <span class="math notranslate nohighlight">\(\mathbf{b}\)</span> has the same direction as <span class="math notranslate nohighlight">\(\mathbf{a}\)</span> but has magnitude 10.</p>
+<p><strong>Problem 44.</strong> For <span class="math notranslate nohighlight">\(\mathbf{r} = \begin{bmatrix} -6 \\ 8 \end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{s} = \begin{bmatrix} 3 \\ -4 \end{bmatrix}\)</span>, find the angle between the unit vectors <span class="math notranslate nohighlight">\(\hat{\mathbf{r}}\)</span> and <span class="math notranslate nohighlight">\(\hat{\mathbf{s}}\)</span>.</p>
+<p><strong>Problem 45.</strong> Given <span class="math notranslate nohighlight">\(\mathbf{u} = \begin{bmatrix} 1 \\ 2 \\ 2 \end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{v} = \begin{bmatrix} 2 \\ -1 \\ 1 \end{bmatrix}\)</span>, find a unit vector perpendicular to both <span class="math notranslate nohighlight">\(\mathbf{u}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{v}\)</span>.</p>
+<p><strong>Problem 46.</strong> If <span class="math notranslate nohighlight">\(\|\mathbf{a}\| = 3\)</span>, <span class="math notranslate nohighlight">\(\|\mathbf{b}\| = 4\)</span>, and <span class="math notranslate nohighlight">\(\|\mathbf{a} + \mathbf{b}\| = 5\)</span>, find <span class="math notranslate nohighlight">\(\|\mathbf{a} - \mathbf{b}\|\)</span>.</p>
+<p><strong>Problem 47.</strong> Find all vectors <span class="math notranslate nohighlight">\(\mathbf{x} = \begin{bmatrix} x \\ y \end{bmatrix}\)</span> such that <span class="math notranslate nohighlight">\(\|\mathbf{x}\| = 1\)</span> and <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> is parallel to <span class="math notranslate nohighlight">\(\mathbf{v} = \begin{bmatrix} 3 \\ -4 \end{bmatrix}\)</span>.</p>
+<p><strong>Problem 48.</strong> Given <span class="math notranslate nohighlight">\(\mathbf{p} = \begin{bmatrix} 2 \\ -3 \\ 6 \end{bmatrix}\)</span>, find vectors <span class="math notranslate nohighlight">\(\mathbf{q}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{r}\)</span> such that <span class="math notranslate nohighlight">\(\mathbf{q}\)</span> is a unit vector parallel to <span class="math notranslate nohighlight">\(\mathbf{p}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{r}\)</span> is a unit vector antiparallel to <span class="math notranslate nohighlight">\(\mathbf{p}\)</span>.</p>
+<p><strong>Problem 49.</strong> For vectors <span class="math notranslate nohighlight">\(\mathbf{a} = \begin{bmatrix} 1 \\ 1 \\ 0 \end{bmatrix}\)</span>, <span class="math notranslate nohighlight">\(\mathbf{b} = \begin{bmatrix} 1 \\ 0 \\ 1 \end{bmatrix}\)</span>, and <span class="math notranslate nohighlight">\(\mathbf{c} = \begin{bmatrix} 0 \\ 1 \\ 1 \end{bmatrix}\)</span>, verify that <span class="math notranslate nohighlight">\(\|\mathbf{a} + \mathbf{b} + \mathbf{c}\|^2 = \|\mathbf{a}\|^2 + \|\mathbf{b}\|^2 + \|\mathbf{c}\|^2 + 2(\mathbf{a} \cdot \mathbf{b} + \mathbf{b} \cdot \mathbf{c} + \mathbf{c} \cdot \mathbf{a})\)</span>.</p>
+<p><strong>Problem 50.</strong> If <span class="math notranslate nohighlight">\(\mathbf{u}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{v}\)</span> are unit vectors such that <span class="math notranslate nohighlight">\(\|\mathbf{u} + \mathbf{v}\| = \sqrt{3}\)</span>, find <span class="math notranslate nohighlight">\(\|\mathbf{u} - \mathbf{v}\|\)</span>.</p>
+</section>
+<section id="section-f-dot-products">
+<h2>Section F: Dot Products<a class="headerlink" href="#section-f-dot-products" title="Link to this heading">#</a></h2>
+<p><strong>Problem 51.</strong> Calculate the dot product <span class="math notranslate nohighlight">\(\mathbf{a} \cdot \mathbf{b}\)</span> where <span class="math notranslate nohighlight">\(\mathbf{a} = \begin{bmatrix} 2 \\ -3 \\ 4 \end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{b} = \begin{bmatrix} 1 \\ 5 \\ -2 \end{bmatrix}\)</span>.</p>
+<p><strong>Problem 52.</strong> Given <span class="math notranslate nohighlight">\(\mathbf{u} = \begin{bmatrix} 3 \\ -1 \\ 2 \\ 4 \end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{v} = \begin{bmatrix} 2 \\ 6 \\ -1 \\ 0 \end{bmatrix}\)</span>, find <span class="math notranslate nohighlight">\(\mathbf{u} \cdot \mathbf{v}\)</span>.</p>
+<p><strong>Problem 53.</strong> For vectors <span class="math notranslate nohighlight">\(\mathbf{p} = \begin{bmatrix} 4 \\ 3 \end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{q} = \begin{bmatrix} -2 \\ 6 \end{bmatrix}\)</span>, calculate <span class="math notranslate nohighlight">\((\mathbf{p} + \mathbf{q}) \cdot \mathbf{p}\)</span>.</p>
+<p><strong>Problem 54.</strong> If <span class="math notranslate nohighlight">\(\mathbf{x} = \begin{bmatrix} 1 \\ -2 \\ 3 \end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{y} = \begin{bmatrix} 4 \\ 1 \\ -1 \end{bmatrix}\)</span>, find the angle between <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{y}\)</span> using the dot product formula.</p>
+<p><strong>Problem 55.</strong> Given unit vectors <span class="math notranslate nohighlight">\(\hat{\mathbf{u}} = \begin{bmatrix} \frac{3}{5} \\ \frac{4}{5} \end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(\hat{\mathbf{v}} = \begin{bmatrix} -\frac{1}{\sqrt{2}} \\ \frac{1}{\sqrt{2}} \end{bmatrix}\)</span>, find <span class="math notranslate nohighlight">\(\hat{\mathbf{u}} \cdot \hat{\mathbf{v}}\)</span> and determine if the vectors are orthogonal.</p>
+</section>
+<section id="section-g-linear-combinations">
+<h2>Section G: Linear Combinations<a class="headerlink" href="#section-g-linear-combinations" title="Link to this heading">#</a></h2>
+<p><strong>Problem 56.</strong> Express the vector <span class="math notranslate nohighlight">\(\mathbf{w} = \begin{bmatrix} 7 \\ -1 \\ 5 \end{bmatrix}\)</span> as a linear combination of <span class="math notranslate nohighlight">\(\mathbf{a} = \begin{bmatrix} 1 \\ 2 \\ -1 \end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{b} = \begin{bmatrix} 2 \\ -1 \\ 3 \end{bmatrix}\)</span>.</p>
+<p><strong>Problem 57.</strong> Determine if the vector <span class="math notranslate nohighlight">\(\mathbf{v} = \begin{bmatrix} 5 \\ 3 \end{bmatrix}\)</span> can be written as a linear combination of <span class="math notranslate nohighlight">\(\mathbf{u}_1 = \begin{bmatrix} 2 \\ 1 \end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{u}_2 = \begin{bmatrix} 1 \\ 2 \end{bmatrix}\)</span>. If so, find the coefficients.</p>
+<p><strong>Problem 58.</strong> Given vectors <span class="math notranslate nohighlight">\(\mathbf{e}_1 = \begin{bmatrix} 1 \\ 0 \\ 1 \end{bmatrix}\)</span>, <span class="math notranslate nohighlight">\(\mathbf{e}_2 = \begin{bmatrix} 0 \\ 1 \\ 1 \end{bmatrix}\)</span>, and <span class="math notranslate nohighlight">\(\mathbf{e}_3 = \begin{bmatrix} 1 \\ 1 \\ 0 \end{bmatrix}\)</span>, find scalars <span class="math notranslate nohighlight">\(c_1\)</span>, <span class="math notranslate nohighlight">\(c_2\)</span>, and <span class="math notranslate nohighlight">\(c_3\)</span> such that <span class="math notranslate nohighlight">\(c_1\mathbf{e}_1 + c_2\mathbf{e}_2 + c_3\mathbf{e}_3 = \begin{bmatrix} 2 \\ 3 \\ 1 \end{bmatrix}\)</span>.</p>
+<p><strong>Problem 59.</strong> Show that the vector <span class="math notranslate nohighlight">\(\mathbf{z} = \begin{bmatrix} 7 \\ -2 \\ 12 \end{bmatrix}\)</span> is a linear combination of <span class="math notranslate nohighlight">\(\mathbf{p} = \begin{bmatrix} 2 \\ -1 \\ 3 \end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{q} = \begin{bmatrix} 1 \\ 0 \\ 2 \end{bmatrix}\)</span>, and find all possible ways to express it.</p>
+<p><strong>Problem 60.</strong> (Challenging) Determine whether one of the vectors <span class="math notranslate nohighlight">\(\mathbf{a} = \begin{bmatrix} 1 \\ 2 \\ -1 \end{bmatrix}\)</span>, <span class="math notranslate nohighlight">\(\mathbf{b} = \begin{bmatrix} 2 \\ 1 \\ 3 \end{bmatrix}\)</span>, and <span class="math notranslate nohighlight">\(\mathbf{c} = \begin{bmatrix} 0 \\ 5 \\ -7 \end{bmatrix}\)</span> can be expressed as a linear combination of the others.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="vectors.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Vectors</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="matrices.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Matrices</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section-a-basic-vector-operations">Section A: Basic Vector Operations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section-b-vector-norms-and-magnitudes">Section B: Vector Norms and Magnitudes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section-c-triangle-inequality">Section C: Triangle Inequality</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section-d-unit-vectors">Section D: Unit Vectors</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section-e-mixed-problems">Section E: Mixed Problems</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section-f-dot-products">Section F: Dot Products</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section-g-linear-combinations">Section G: Linear Combinations</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Jeremiah W. Johnson
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <div>
+  <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="jwjohnson314" data-description="Support me on Buy me a coffee!" data-message="Thanks for reading! If you found this useful and want to support this book project, you can Buy Me a Coffee here. Your support helps keep this book free for my students." data-color="#5F7FFF" data-position="Right" data-x_margin="18" data-y_margin="18"></script> 
+</div>
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

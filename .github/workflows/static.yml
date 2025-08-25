@@ -36,7 +36,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          publish_dir: linear-algebra-book/_build/html
+          path: linear-algebra-book/_build/html
           
       - name: Deploy to GitHub Pages
         id: deployment

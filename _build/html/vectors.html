@@ -1163,16 +1163,18 @@ document.write(`
     \mathbf{u} = (1/||\mathbf{x}||)\cdot \mathbf{x} = \mathbf{x} / ||\mathbf{x}||.
 \]</div>
 <p>This is scalar multiplication, so we already know that this scales <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> without changing its direction, and you can check for small examples that the norm of the resulting vector <span class="math notranslate nohighlight">\(\mathbf{u}\)</span> is 1.</p>
-<p><strong>Example:</strong> Let
-$<span class="math notranslate nohighlight">\(
+<p><strong>Example:</strong> Let</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
     \mathbf{x} = \begin{bmatrix}
                     2 \\
                     1 \\
                     1
                  \end{bmatrix}.
-\)</span><span class="math notranslate nohighlight">\(
-Then \)</span>||\mathbf{x}|| = \sqrt{2^2 + 1^2 + 1^2} = \sqrt{6}<span class="math notranslate nohighlight">\(. Let
-\)</span><span class="math notranslate nohighlight">\(
+\end{split}\]</div>
+<p>Then <span class="math notranslate nohighlight">\(||\mathbf{x}|| = \sqrt{2^2 + 1^2 + 1^2} = \sqrt{6}\)</span>. Let</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
     \mathbf{u} = \frac{1}{\sqrt{6}}\cdot\begin{bmatrix}
                                     2 \\
                                     1 \\
@@ -1183,8 +1185,8 @@ Then \)</span>||\mathbf{x}|| = \sqrt{2^2 + 1^2 + 1^2} = \sqrt{6}<span class="mat
                                     1/\sqrt{6} \\
                                     1/\sqrt{6}
                                  \end{bmatrix}.
-\)</span><span class="math notranslate nohighlight">\(
-Now calculate \)</span>||\mathbf{u}|| = \sqrt{(2/\sqrt{6})^2 + (1/\sqrt{6})^2 + (1/\sqrt{6})^2} = \sqrt{4/6 + 1/6 + 1/6} = \sqrt{1} = 1$.</p>
+\end{split}\]</div>
+<p>Now calculate <span class="math notranslate nohighlight">\(||\mathbf{u}|| = \sqrt{(2/\sqrt{6})^2 + (1/\sqrt{6})^2 + (1/\sqrt{6})^2} = \sqrt{4/6 + 1/6 + 1/6} = \sqrt{1} = 1\)</span>.</p>
 <p>The second place where we find use for the dot product is in determining the angle between two vectors. Consider the example above where the dot product of two vectors was zero. You probably noticed when you sketched them that they are perpendicular; that is, the angle between them is <span class="math notranslate nohighlight">\(90^{\circ}\)</span> or <span class="math notranslate nohighlight">\(\pi/2\)</span> radians. In fact, the following is true:</p>
 <div class="admonition-theorem admonition">
 <p class="admonition-title">Theorem</p>

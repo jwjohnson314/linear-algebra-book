@@ -10,4 +10,5 @@ chapters:
 - file: matrices
 - file: matrices-problem-set
 - file: linear-systems-gaussian-elimination
+- file: gaussian-elimination-lu-problem-set
 # - file: computation

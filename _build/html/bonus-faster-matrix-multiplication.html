@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>&lt;no title&gt; &#8212; Applied Linear Algebra</title>
+    <title>Optional: Faster Matrix Multiplication &#8212; Applied Linear Algebra</title>
   
   
   
@@ -59,10 +59,9 @@
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'intro';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'bonus-faster-matrix-multiplication';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Motivation" href="motivation.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -145,7 +144,7 @@
     
   
 
-<a class="navbar-brand logo" href="#">
+<a class="navbar-brand logo" href="intro.html">
   
   
   
@@ -176,8 +175,8 @@
     <div class="bd-toc-item navbar-nav active">
         
         <ul class="nav bd-sidenav bd-sidenav__home-link">
-            <li class="toctree-l1 current active">
-                <a class="reference internal" href="#">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
                     <no title>
                 </a>
             </li>
@@ -263,7 +262,7 @@
       
       
       
-      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fintro.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fbonus-faster-matrix-multiplication.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -293,7 +292,7 @@
       
       
       
-      <li><a href="_sources/intro.md" target="_blank"
+      <li><a href="_sources/bonus-faster-matrix-multiplication.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -303,7 +302,7 @@
 <span class="btn__icon-container">
   <i class="fas fa-file"></i>
   </span>
-<span class="btn__text-container">.md</span>
+<span class="btn__text-container">.ipynb</span>
 </a>
 </li>
       
@@ -377,11 +376,19 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1><no title></h1>
+    <h1>Optional: Faster Matrix Multiplication</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#strassen-s-algorithm">Strassen’s Algorithm</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -391,9 +398,139 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <p><img alt="Cover image showing vectors under transformation and illustrating vector addition" src="_images/cover-image.png" /></p>
-<div class="toctree-wrapper compound">
+  <section class="tex2jax_ignore mathjax_ignore" id="optional-faster-matrix-multiplication">
+<h1>Optional: Faster Matrix Multiplication<a class="headerlink" href="#optional-faster-matrix-multiplication" title="Link to this heading">#</a></h1>
+<p>The row method of matrix multiplication is the standard approach used for calculating matrix products by hand. However, it is expensive: to multiply two dense <span class="math notranslate nohighlight">\(n\times n\)</span> matrices requires <span class="math notranslate nohighlight">\(n^2\)</span> dot products be calculated, one for each of the <span class="math notranslate nohighlight">\(n^2\)</span> entries in the result. Each dot product involves <span class="math notranslate nohighlight">\(n\)</span> multiplications and <span class="math notranslate nohighlight">\(n-1\)</span> additions, or <span class="math notranslate nohighlight">\(2n-1\)</span> operations taken together. All told, then, multiplying two <span class="math notranslate nohighlight">\(n\times n\)</span> matrices requires <span class="math notranslate nohighlight">\(n^2(2n-1) = 2n^3 - n^2\)</span> operations, or more succinctly, is <span class="math notranslate nohighlight">\(\mathcal{O}(n^3)\)</span>.</p>
+<p>It is worth noting that matrix multiplication is an <em>embarassingly parallel</em> problem; that is, every dot product that needs to be calculated can be calculated independently of the others, so the computation lends itself naturally to massive parallelization. This does require many threads (<span class="math notranslate nohighlight">\(n^2\)</span>, to be precise) and is the reason that NVIDIA’s stock has gone up more than 30,000% over the past ten years: NVIDIA’s H100 GPUs (state-of-the-art at the time of this writing) can execute over 250,000 concurrent threads, making them invaluable for speeding up the massive matrix multiplies required to train and perform inference with large language models and other state-of-the-art machine learning/AI models.</p>
+<p>No matter how much compute is available, better algorithms are crucuial for getting the most out of one’s hardware. There are many classic problems in  computer science that illustrate the impact that a good algorithm can have; consider for instance the <a class="reference external" href="https://en.wikipedia.org/wiki/Maximum_subarray_problem">maximum subarray problem</a>.</p>
+<div class="admonition-the-maximum-subarray-problem admonition">
+<p class="admonition-title">The Maximum Subarray Problem</p>
+<p>Given integers <span class="math notranslate nohighlight">\(a_1\)</span>, <span class="math notranslate nohighlight">\(a_2, \dots, a_n\)</span>, determine indices <span class="math notranslate nohighlight">\(i\)</span> and <span class="math notranslate nohighlight">\(j\)</span> such that <span class="math notranslate nohighlight">\(\sum_{k=i}^j a_k\)</span> is as large as possible.</p>
 </div>
+<p><strong>Example:</strong> Given the values <span class="math notranslate nohighlight">\(-3, 2, 5, -4, 7, 2, -3, -6, 8\)</span> and using 0-based indexing, <span class="math notranslate nohighlight">\(i=1\)</span> and <span class="math notranslate nohighlight">\(j=5\)</span> produce the sum <span class="math notranslate nohighlight">\(2 + 5 -4 + 7 + 2 = 12\)</span>, which is maximal. A naive exhaustive approach to this problem is <span class="math notranslate nohighlight">\(\mathcal{O}(n^3)\)</span>, but a good algorithm (<em>Kadane’s algorithm</em>) runs in <span class="math notranslate nohighlight">\(\mathcal{O}(n)\)</span>, making the latter approach very quick even in situations where the naive algorithm is simply unrunnable.</p>
+<p>Although matrix multiplication was first described in 1812, it wasn’t until 1969 that Volker Strassen showed that it could be done in less than <span class="math notranslate nohighlight">\(\mathcal{O}(n^3)\)</span> time, using an algorithm now named after him. Strassen’s algorithm runs in <span class="math notranslate nohighlight">\(\mathcal{O}(n^{\log_27}) \approx \mathcal{O}(n^{2.8074})\)</span>. While this might seems a small improvement it is significant for large enough <span class="math notranslate nohighlight">\(n\)</span>, and Strassen’s algorithm is currently implemented in widely-used linear algebra libraries such as LAPACK and BLAS.</p>
+<p>Faster algorithm’s than Strassen’s exist, but they are generally not as numerically stable. This is a very active area of research. In January 2024, a <a class="reference external" href="https://arxiv.org/abs/2307.07970">new algorithm</a> brought the complexity down to <span class="math notranslate nohighlight">\(\mathcal{O}(n^{2.371552})\)</span>. It is theorized that the lower bound on the time needed to perform matrix multiplication is <span class="math notranslate nohighlight">\(n^{2 + \mathcal{O}(1)}\)</span>, which would be remarkable if true, but this has not been proven and it is a major open question in theoretical computer science. The image below (<a class="reference external" href="https://commons.wikimedia.org/w/index.php?curid=87408497">By Jochen Burghardt - Own work, CC BY-SA 4.0</a>) shows the improvements in runtime made by various algorithms over the years along with a forecast of future gains.</p>
+<p><img alt="mm improvements over time" src="_images/mm_complexity.png" /></p>
+<section id="strassen-s-algorithm">
+<h2>Strassen’s Algorithm<a class="headerlink" href="#strassen-s-algorithm" title="Link to this heading">#</a></h2>
+<p>Strassens’s algorithm is not at all intuitive. It is important to note at the outset that multiplication is generally a slower operation for a modern processor to perform than addition (generally 3-6 times slower; for this reason many compilers will replace <span class="math notranslate nohighlight">\(2x\)</span> with <span class="math notranslate nohighlight">\(x + x\)</span>). Strassen noticed that when multiplying <span class="math notranslate nohighlight">\(2\times2\)</span> matrices it is possible to reduct the number of multiplications required from 8 using the standard approach to 7. This is done as follows: Let</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    A=\begin{bmatrix}
+        a &amp; b \\
+        c &amp; d
+    \end{bmatrix}\text{ and }
+    B=\begin{bmatrix}
+        e &amp; f \\
+        g &amp; h
+    \end{bmatrix}
+\end{split}\]</div>
+<p>and define the following constants:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(m_1 = (a + d)\times(e + h)\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(m_2 = (c + d)\times e\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(m_3 = a\times(f-h)\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(m_4 = d\times(g - e)\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(m_5 = (a + b)\times h\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(m_6 = (c - a)\times(e + f)\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(m_7 = (b - d)\times(g + h)\)</span></p></li>
+</ul>
+<p>Then</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    AB = \begin{bmatrix}
+            m_1 + m_4 - m_5 + m_7 &amp; m_3 + m_5 \\
+            m_2 + m_4 &amp; m_1 - m_2 + m_3 + m_6
+         \end{bmatrix}.
+\end{split}\]</div>
+<p><strong>Example:</strong></p>
+<p>Let</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    A = \begin{bmatrix}
+            1 &amp; 2 \\
+            -1 &amp; 3
+        \end{bmatrix}\text{ and }
+        B=\begin{bmatrix}
+            0 &amp; 4 \\
+            -5 &amp; 7
+        \end{bmatrix}.
+\end{split}\]</div>
+<p>Then</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(m_1 = (1 + 3)\times(0 + 7) = 28\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(m_2 = (-1 + 3)\times0 = 0\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(m_3 = 1\times(4 - 7)=-3\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(m_4 = 3\times(-5 - 0) = -15\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(m_5 = (1 + 2)\times7 = 21\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(m_6 = (-1 - 1)\times(0 + 4) = -8\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(m_7 = (2 - 3)\times(-5 + 7) = -2\)</span></p></li>
+</ul>
+<p>and</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    AB = \begin{bmatrix}
+            28 + (-15) - 21 + (-2) &amp; -3 + 21 \\
+            0  + (-15) &amp; 28 - 0 + (-3) + (-8)
+        \end{bmatrix} = 
+        \begin{bmatrix}
+            -10 &amp; 18 \\
+            -15 &amp; 17
+        \end{bmatrix},
+\end{split}\]</div>
+<p>which you can verify with the conventional calculation.</p>
+<p>To extend this to matrices with <span class="math notranslate nohighlight">\(n&gt;2\)</span>, we need to introduce <em>block matrices</em>. This is simply a conceptualization of a matrix as a collection of compatible submatrices; for example, I could write a <span class="math notranslate nohighlight">\(4\times4\)</span> matrix <span class="math notranslate nohighlight">\(A\)</span> using <span class="math notranslate nohighlight">\(2\times2\)</span> blocks:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    A = \begin{bmatrix}
+            a_{11} &amp; a_{12} &amp; a_{13} &amp; a_{14} \\
+            a_{21} &amp; a_{22} &amp; a_{23} &amp; a_{24} \\
+            a_{31} &amp; a_{32} &amp; a_{33} &amp; a_{34} \\
+            a_{41} &amp; a_{42} &amp; a_{43} &amp; a_{44}
+        \end{bmatrix}=
+        \begin{bmatrix}
+            A_{11} &amp; A_{12} \\
+            A_{21} &amp; A_{22}
+        \end{bmatrix}.
+\end{split}\]</div>
+<p>Here each <span class="math notranslate nohighlight">\(A_{ij}\)</span> is a <span class="math notranslate nohighlight">\(2\times2\)</span> matrix; in particular,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    A_{11}=\begin{bmatrix}
+        a_{11} &amp; a_{12} \\
+        a_{21} &amp; a_{22}
+        \end{bmatrix}\text{ and }
+    A_{22} = \begin{bmatrix}
+        a_{33} &amp; a_{34} \\
+        a_{43} &amp; a_{44}
+        \end{bmatrix}.
+\end{split}\]</div>
+<p>the components in the ‘upper left corner’ and ‘lower right corner’ of <span class="math notranslate nohighlight">\(A\)</span> itself. Now, it is important to know that multiplication with compatible block matrices is the same as multiplication with ordinary matrices; for example,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix}
+        A &amp; B \\
+        C &amp; D
+    \end{bmatrix}
+    \begin{bmatrix}
+        E &amp; F \\
+        G &amp; H
+    \end{bmatrix}=
+    \begin{bmatrix}
+        AE + BG &amp; AF + BH \\
+        CE + DG &amp; CF + DH
+    \end{bmatrix}
+\end{split}\]</div>
+<p>using the standard row method.</p>
+<p>So, to extend Strassen’s algorithm to matrices with <span class="math notranslate nohighlight">\(n&gt;2\)</span>, we use recursion with block matrices:</p>
+<ul class="simple">
+<li><p>Divide each <span class="math notranslate nohighlight">\(n\times n\)</span> matrix into four <span class="math notranslate nohighlight">\((n/2)\times(n/2)\)</span> blocks as above</p></li>
+<li><p>Apply the above 7-multiplication formula recursively</p></li>
+<li><p>Combine the results using additions/subtractions</p></li>
+</ul>
+<p>A complete analysis of the runtime complexity of Strassen’s algorithm is beyond the scope of this course (for now, I may add it later if there is interest). As you no doubt notices, there is a <em>significant</em> increase in additions for a very slight reduction in multiplications  (there are also additional space considerations that we are not considering here). For small matrices, this impacts the efficiency of the algorithm, and in practice Strassen’s algorithm isn’t usually used until <span class="math notranslate nohighlight">\(n\)</span> is around 1000, where it begins to outperform other methods.</p>
+</section>
+</section>
 
     <script type="text/x-thebe-config">
     {
@@ -425,21 +562,27 @@ document.write(`
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
-    <a class="right-next"
-       href="motivation.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Motivation</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
-    </a>
 </div>
                 </footer>
               
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#strassen-s-algorithm">Strassen’s Algorithm</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>

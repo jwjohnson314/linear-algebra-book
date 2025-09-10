@@ -62,6 +62,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'gaussian-elimination-lu-problem-set';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="The Matrix Inverse" href="inverse-matrices.html" />
     <link rel="prev" title="Linear Systems and Gaussian Elimination" href="linear-systems-gaussian-elimination.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -189,6 +190,7 @@
 <li class="toctree-l1"><a class="reference internal" href="matrices-problem-set.html">Problem Set 2: Matrix Arithmetic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="linear-systems-gaussian-elimination.html">Linear Systems and Gaussian Elimination</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Problem Set 3: Gaussian Elimination and <span class="math notranslate nohighlight">\(A=LU\)</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="inverse-matrices.html">The Matrix Inverse</a></li>
 </ul>
 
     </div>
@@ -430,57 +432,75 @@ document.write(`
 <h2>Part A: Gaussian Elimination and Row Reduction<a class="headerlink" href="#part-a-gaussian-elimination-and-row-reduction" title="Link to this heading">#</a></h2>
 <section id="problem-1">
 <h3>Problem 1<a class="headerlink" href="#problem-1" title="Link to this heading">#</a></h3>
-<p>Solve the following system using Gaussian elimination with back substitution:
-$<span class="math notranslate nohighlight">\(\begin{cases}
+<p>Solve the following system using Gaussian elimination with back substitution:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{cases}
 2x_1 + 3x_2 - x_3 = 7 \\
 x_1 - 2x_2 + 2x_3 = -1 \\
 3x_1 + x_2 + x_3 = 8
-\end{cases}\)</span>$</p>
+\end{cases}
+\end{split}\]</div>
 </section>
 <section id="problem-2">
 <h3>Problem 2<a class="headerlink" href="#problem-2" title="Link to this heading">#</a></h3>
-<p>Use Gaussian elimination to solve:
-$<span class="math notranslate nohighlight">\(\begin{cases}
+<p>Use Gaussian elimination to solve:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{cases}
 x_1 + 2x_2 + x_3 = 4 \\
 2x_1 + x_2 - x_3 = 1 \\
 x_1 - x_2 + 2x_3 = 3
-\end{cases}\)</span>$</p>
+\end{cases}
+\end{split}\]</div>
 </section>
 <section id="problem-3">
 <h3>Problem 3<a class="headerlink" href="#problem-3" title="Link to this heading">#</a></h3>
-<p>Solve the system by reducing the augmented matrix to row echelon form:
-$<span class="math notranslate nohighlight">\(\left[\begin{array}{ccc|c}
+<p>Solve the system by reducing the augmented matrix to row echelon form:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\left[\begin{array}{ccc|c}
 1 &amp; -1 &amp; 2 &amp; 5 \\
 3 &amp; 1 &amp; 4 &amp; 13 \\
 2 &amp; -1 &amp; 3 &amp; 8
-\end{array}\right]\)</span>$</p>
+\end{array}\right]
+\end{split}\]</div>
 </section>
 <section id="problem-4">
 <h3>Problem 4<a class="headerlink" href="#problem-4" title="Link to this heading">#</a></h3>
-<p>Determine if the following system has a unique solution, infinitely many solutions, or no solution:
-$<span class="math notranslate nohighlight">\(\begin{cases}
+<p>Determine if the following system has a unique solution, infinitely many solutions, or no solution:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{cases}
 2x_1 + 4x_2 - 2x_3 = 6 \\
 x_1 + 2x_2 - x_3 = 3 \\
 3x_1 + 6x_2 - 3x_3 = 9
-\end{cases}\)</span>$</p>
+\end{cases}
+\end{split}\]</div>
 </section>
 <section id="problem-5">
 <h3>Problem 5<a class="headerlink" href="#problem-5" title="Link to this heading">#</a></h3>
-<p>Solve using Gaussian elimination (reduce to reduced row echelon form):
-$<span class="math notranslate nohighlight">\(\begin{cases}
+<p>Solve using Gaussian elimination (reduce to reduced row echelon form):</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{cases}
 x_1 + x_2 + x_3 = 6 \\
 2x_1 + 3x_2 + x_3 = 11 \\
 x_1 + 2x_2 + 2x_3 = 9
-\end{cases}\)</span>$</p>
+\end{cases}
+\end{split}\]</div>
 </section>
 <section id="problem-6">
 <h3>Problem 6<a class="headerlink" href="#problem-6" title="Link to this heading">#</a></h3>
-<p>Find the solution to the homogeneous system:
-$<span class="math notranslate nohighlight">\(\begin{cases}
+<p>Find the solution to the homogeneous system:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{cases}
 x_1 + 2x_2 - 3x_3 + x_4 = 0 \\
 2x_1 + 4x_2 - 5x_3 + 3x_4 = 0 \\
 x_1 + 2x_2 - 4x_3 - x_4 = 0
-\end{cases}\)</span>$</p>
+\end{cases}
+\end{split}\]</div>
 </section>
 <section id="problem-7">
 <h3>Problem 7<a class="headerlink" href="#problem-7" title="Link to this heading">#</a></h3>
@@ -489,21 +509,26 @@ a) A unique solution<br />
 b) No solution<br />
 c) Infinitely many solutions</p>
 <div class="math notranslate nohighlight">
-\[\begin{split}\begin{cases}
+\[\begin{split}
+\begin{cases}
 x_1 + x_2 + x_3 = 3 \\
 2x_1 + 3x_2 + x_3 = 7 \\
 x_1 + 2x_2 + kx_3 = k + 1
-\end{cases}\end{split}\]</div>
+\end{cases}
+\end{split}\]</div>
 </section>
 <section id="problem-8">
 <h3>Problem 8<a class="headerlink" href="#problem-8" title="Link to this heading">#</a></h3>
-<p>Use row operations to solve:
-$<span class="math notranslate nohighlight">\(\left[\begin{array}{cccc|c}
+<p>Use row operations to solve:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\left[\begin{array}{cccc|c}
 2 &amp; -1 &amp; 3 &amp; 1 &amp; 8 \\
 1 &amp; 2 &amp; -1 &amp; 2 &amp; 3 \\
 3 &amp; 1 &amp; 2 &amp; -1 &amp; 7 \\
 1 &amp; -1 &amp; 4 &amp; -2 &amp; 5
-\end{array}\right]\)</span>$</p>
+\end{array}\right]
+\end{split}\]</div>
 </section>
 </section>
 <hr class="docutils" />
@@ -511,53 +536,70 @@ $<span class="math notranslate nohighlight">\(\left[\begin{array}{cccc|c}
 <h2>Part B: LU Factorization<a class="headerlink" href="#part-b-lu-factorization" title="Link to this heading">#</a></h2>
 <section id="problem-9">
 <h3>Problem 9<a class="headerlink" href="#problem-9" title="Link to this heading">#</a></h3>
-<p>Find the LU factorization of the matrix:
-$<span class="math notranslate nohighlight">\(A = \begin{bmatrix}
+<p>Find the LU factorization of the matrix:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+A = \begin{bmatrix}
 2 &amp; 4 &amp; -2 \\
 1 &amp; 5 &amp; 2 \\
 3 &amp; -1 &amp; 1
-\end{bmatrix}\)</span>$</p>
+\end{bmatrix}
+\end{split}\]</div>
 </section>
 <section id="problem-10">
 <h3>Problem 10<a class="headerlink" href="#problem-10" title="Link to this heading">#</a></h3>
-<p>Decompose the following matrix into LU form:
-$<span class="math notranslate nohighlight">\(A = \begin{bmatrix}
+<p>Decompose the following matrix into LU form:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+A = \begin{bmatrix}
 1 &amp; 3 &amp; 2 \\
 2 &amp; 8 &amp; 6 \\
 4 &amp; 11 &amp; 13
-\end{bmatrix}\)</span>$</p>
+\end{bmatrix}
+\end{split}\]</div>
 </section>
 <section id="problem-11">
 <h3>Problem 11<a class="headerlink" href="#problem-11" title="Link to this heading">#</a></h3>
-<p>Find the LU factorization (without pivoting) of:
-$<span class="math notranslate nohighlight">\(A = \begin{bmatrix}
+<p>Find the LU factorization (without pivoting) of:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+A = \begin{bmatrix}
 3 &amp; -3 &amp; 6 \\
 -6 &amp; 7 &amp; -13 \\
 3 &amp; -4 &amp; 10
-\end{bmatrix}\)</span>$</p>
+\end{bmatrix}
+\end{split}\]</div>
 </section>
 <section id="problem-12">
 <h3>Problem 12<a class="headerlink" href="#problem-12" title="Link to this heading">#</a></h3>
-<p>Given the matrix below, determine if LU factorization (without pivoting) is possible. If so, find L and U:
-$<span class="math notranslate nohighlight">\(A = \begin{bmatrix}
+<p>Given the matrix below, determine if LU factorization (without pivoting) is possible. If so, find L and U:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+A = \begin{bmatrix}
 0 &amp; 2 &amp; 1 \\
 1 &amp; 3 &amp; 2 \\
 2 &amp; 1 &amp; 4
-\end{bmatrix}\)</span>$</p>
+\end{bmatrix}
+\end{split}\]</div>
 </section>
 <section id="problem-13">
 <h3>Problem 13<a class="headerlink" href="#problem-13" title="Link to this heading">#</a></h3>
-<p>Find the LU factorization of:
-$<span class="math notranslate nohighlight">\(A = \begin{bmatrix}
+<p>Find the LU factorization of:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+A = \begin{bmatrix}
 4 &amp; 2 &amp; 1 \\
 8 &amp; 6 &amp; 4 \\
 12 &amp; 8 &amp; 13
-\end{bmatrix}\)</span>$</p>
+\end{bmatrix}
+\end{split}\]</div>
 </section>
 <section id="problem-14">
 <h3>Problem 14<a class="headerlink" href="#problem-14" title="Link to this heading">#</a></h3>
-<p>Use LU factorization to solve the system <span class="math notranslate nohighlight">\(Ax = b\)</span> where:
-$<span class="math notranslate nohighlight">\(A = \begin{bmatrix}
+<p>Use LU factorization to solve the system <span class="math notranslate nohighlight">\(Ax = b\)</span> where:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+A = \begin{bmatrix}
 2 &amp; 1 &amp; 0 \\
 4 &amp; 3 &amp; 1 \\
 6 &amp; 6 &amp; 4
@@ -565,7 +607,8 @@ $<span class="math notranslate nohighlight">\(A = \begin{bmatrix}
 3 \\
 8 \\
 16
-\end{bmatrix}\)</span>$</p>
+\end{bmatrix}
+\end{split}\]</div>
 <p><strong>Steps:</strong>
 a) Find the LU factorization of A<br />
 b) Solve <span class="math notranslate nohighlight">\(Ly = b\)</span> by forward substitution<br />
@@ -573,8 +616,10 @@ c) Solve <span class="math notranslate nohighlight">\(Ux = y\)</span> by back su
 </section>
 <section id="problem-15">
 <h3>Problem 15<a class="headerlink" href="#problem-15" title="Link to this heading">#</a></h3>
-<p>Given that <span class="math notranslate nohighlight">\(A = LU\)</span> where:
-$<span class="math notranslate nohighlight">\(L = \begin{bmatrix}
+<p>Given that <span class="math notranslate nohighlight">\(A = LU\)</span> where:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+L = \begin{bmatrix}
 1 &amp; 0 &amp; 0 \\
 2 &amp; 1 &amp; 0 \\
 -1 &amp; 3 &amp; 1
@@ -582,7 +627,8 @@ $<span class="math notranslate nohighlight">\(L = \begin{bmatrix}
 3 &amp; 6 &amp; -3 \\
 0 &amp; -2 &amp; 4 \\
 0 &amp; 0 &amp; 5
-\end{bmatrix}\)</span>$</p>
+\end{bmatrix}
+\end{split}\]</div>
 <p>Solve <span class="math notranslate nohighlight">\(Ax = b\)</span> for <span class="math notranslate nohighlight">\(b = \begin{bmatrix} 9 \\ 4 \\ 15 \end{bmatrix}\)</span></p>
 </section>
 </section>
@@ -598,12 +644,15 @@ c) Verify your answer by direct substitution</p>
 </section>
 <section id="problem-17">
 <h3>Problem 17<a class="headerlink" href="#problem-17" title="Link to this heading">#</a></h3>
-<p>Consider the system:
-$<span class="math notranslate nohighlight">\(\begin{cases}
+<p>Consider the system:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{cases}
 x_1 + 2x_2 + 3x_3 = 14 \\
 2x_1 + 5x_2 + 8x_3 = 36 \\
 x_1 + 3x_2 + 6x_3 = 25
-\end{cases}\)</span>$</p>
+\end{cases}
+\end{split}\]</div>
 <p>Solve this system using:
 a) Gaussian elimination<br />
 b) LU factorization<br />
@@ -611,36 +660,45 @@ Compare your results.</p>
 </section>
 <section id="problem-18">
 <h3>Problem 18<a class="headerlink" href="#problem-18" title="Link to this heading">#</a></h3>
-<p>Given the coefficient matrix:
-$<span class="math notranslate nohighlight">\(A = \begin{bmatrix}
+<p>Given the coefficient matrix:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+A = \begin{bmatrix}
 2 &amp; -1 &amp; 1 \\
 4 &amp; 1 &amp; 2 \\
 6 &amp; -2 &amp; 5
-\end{bmatrix}\)</span>$</p>
+\end{bmatrix}
+\end{split}\]</div>
 <p>a) Perform Gaussian elimination to find the row echelon form<br />
 b) Find the LU factorization<br />
 c) Solve <span class="math notranslate nohighlight">\(Ax = b\)</span> for <span class="math notranslate nohighlight">\(b = \begin{bmatrix} 2 \\ 9 \\ 10 \end{bmatrix}\)</span> using both methods</p>
 </section>
 <section id="problem-19">
 <h3>Problem 19<a class="headerlink" href="#problem-19" title="Link to this heading">#</a></h3>
-<p>Analyze the following system for consistency:
-$<span class="math notranslate nohighlight">\(\begin{cases}
+<p>Analyze the following system for consistency:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{cases}
 2x_1 + 3x_2 - x_3 + 4x_4 = 7 \\
 x_1 + 2x_2 + x_3 - x_4 = 3 \\
 3x_1 + 5x_2 + 2x_3 - 5x_4 = 10 \\
 x_1 + x_2 - 2x_3 + 3x_4 = 1
-\end{cases}\)</span>$</p>
+\end{cases}
+\end{split}\]</div>
 <p>If consistent, find the general solution.</p>
 </section>
 <section id="problem-20">
 <h3>Problem 20<a class="headerlink" href="#problem-20" title="Link to this heading">#</a></h3>
-<p><strong>Challenge Problem:</strong> For the matrix:
-$<span class="math notranslate nohighlight">\(A = \begin{bmatrix}
+<p><strong>Challenge Problem:</strong> For the matrix:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+A = \begin{bmatrix}
 1 &amp; 1 &amp; 1 &amp; 1 \\
 1 &amp; 2 &amp; 3 &amp; 4 \\
 1 &amp; 3 &amp; 6 &amp; 10 \\
 1 &amp; 4 &amp; 10 &amp; 20
-\end{bmatrix}\)</span>$</p>
+\end{bmatrix}
+\end{split}\]</div>
 <p>a) Find the LU factorization<br />
 b) Use the factorization to solve <span class="math notranslate nohighlight">\(Ax = e_2\)</span> (where <span class="math notranslate nohighlight">\(e_2\)</span> is the second standard basis vector)<br />
 c) What do you notice about the structure of matrix A? (Hint: Consider the pattern in the entries)</p>
@@ -688,6 +746,15 @@ c) What do you notice about the structure of matrix A? (Hint: Consider the patte
         <p class="prev-next-subtitle">previous</p>
         <p class="prev-next-title">Linear Systems and Gaussian Elimination</p>
       </div>
+    </a>
+    <a class="right-next"
+       href="inverse-matrices.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">The Matrix Inverse</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
     </a>
 </div>
                 </footer>

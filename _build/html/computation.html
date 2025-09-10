@@ -189,6 +189,8 @@
 <li class="toctree-l1"><a class="reference internal" href="matrices.html">Matrices</a></li>
 <li class="toctree-l1"><a class="reference internal" href="matrices-problem-set.html">Problem Set 2: Matrix Arithmetic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="linear-systems-gaussian-elimination.html">Linear Systems and Gaussian Elimination</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gaussian-elimination-lu-problem-set.html">Problem Set 3: Gaussian Elimination and <span class="math notranslate nohighlight">\(A=LU\)</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="inverse-matrices.html">The Matrix Inverse</a></li>
 </ul>
 
     </div>
@@ -361,7 +363,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -377,6 +381,16 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#time-complexity">Time Complexity</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#comparing-orders">Comparing Orders</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#time-complexity-of-vector-and-matrix-operations">Time Complexity of Vector and Matrix Operations</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -388,13 +402,252 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="computation">
 <h1>Computation<a class="headerlink" href="#computation" title="Link to this heading">#</a></h1>
-<p>Every mathematical operation we perform entails <em>computational cost</em>. In order to perform the computation, we must invest time and computational resources. For small examples like those in the previous chapter, the computational costs are negligible, but most real-world use of linear algebra is not like that. At the time of this writing, widely used machine learning or AI tools perform extensive computations with matrices containing millions to billions of components. The computational costs of such operations are high, and computational cost must always be a consideration when actually using linear algebra; indeed, there are many important ideas and algorithms from linear algebra that simply aren’t used because the costs are just too high.</p>
-<p><strong>Definition:</strong> The <em>time complexity</em> of an algorithm is the number of elementary operations needed to perform the algorithm.</p>
-<p>The above definition has a number of implicit assumptions, the most important one for us being the assumption that each elementary operation takes an equal fixed amount of time.</p>
-<p><strong>Example:</strong> The time complexity of adding two vectors of length <span class="math notranslate nohighlight">\(n\)</span> is <span class="math notranslate nohighlight">\(n\)</span>, because adding the vectors requires <span class="math notranslate nohighlight">\(n\)</span> elementary operations, one addition for each component of the new vector.</p>
-<p><strong>Example:</strong> The time complexity of the dot product of two vectors of lenth <span class="math notranslate nohighlight">\(n\)</span> is <span class="math notranslate nohighlight">\(2n-1\)</span>. There are <span class="math notranslate nohighlight">\(n\)</span> multiplications to perform, followed by summing the values produced by the multiplication, of which there are <span class="math notranslate nohighlight">\(n\)</span>. Only <span class="math notranslate nohighlight">\(n-1\)</span> additions are required to sum <span class="math notranslate nohighlight">\(n\)</span> elements (check this with an example if it isn’t obvious to you), therefore the time complexity of the dot product is <span class="math notranslate nohighlight">\(n + (n-1) = 2n-1\)</span> as stated.</p>
-<p>In the abstract we often want to think about the complexity of an algorithm asymptotically; that is, what does the complexity look like for a ‘large’ number of inputs? When we consider ‘large’ <span class="math notranslate nohighlight">\(n\)</span>, it turns out that many of the details can be ignored, only the leading term matter. For example, if <span class="math notranslate nohighlight">\(n=10^6\)</span>, the time complexity of the dot product is <span class="math notranslate nohighlight">\(2\times 10^6 -1 \approx 10^6\)</span> (maybe we can debate whether the 2 matters here, but the -1 certainly is negligible). For this reason we introduce the following notation.</p>
-<p><strong>Notation:</strong> Let <span class="math notranslate nohighlight">\(f(x)\)</span> and <span class="math notranslate nohighlight">\(g(x)\)</span> be functions defined</p>
+<p>Linear algebra in practice is done using software, as the number of computations required for even basic operations is prohibitive for working by hand. We are going to focus on two aspects of computation in linear algebra: <em>time complexity</em> and <em>numerical stability</em>.</p>
+<section id="time-complexity">
+<h2>Time Complexity<a class="headerlink" href="#time-complexity" title="Link to this heading">#</a></h2>
+<p>Every mathematical operation we perform entails computational costs. In order to perform the computation, we must invest time and computational resources. For small examples like those illustrated in previous chapters, the computational costs are negligible, but most real-world use of linear algebra is not like that. At the time of this writing, widely used machine learning or AI tools perform extensive computations - primarily matrix-matrix or matrix-vector multiplies - with matrices containing millions to billions of components. The computational costs of such operations can be amortized only to a degree through parallelization, and the computational cost is always a consideration when actually using linear algebra; indeed, there are many important ideas and algorithms from linear algebra that simply aren’t used because the costs are just too high.</p>
+<div class="admonition-definition-big-o-notation admonition">
+<p class="admonition-title">Definition: Big-O notation</p>
+<p>We say ‘<span class="math notranslate nohighlight">\(f(x)\)</span> is on the order of <span class="math notranslate nohighlight">\(g(x)\)</span>’ and write <span class="math notranslate nohighlight">\(f(x) = \mathcal{O}(g(x))\)</span> as <span class="math notranslate nohighlight">\(x\to\infty\)</span> if there exist constants <span class="math notranslate nohighlight">\(M, x_0\)</span> such that <span class="math notranslate nohighlight">\(|f(x)| \leq M|g(x)|\)</span> for all <span class="math notranslate nohighlight">\(x \geq x_0\)</span>.</p>
+</div>
+<p>big-O notation is typically used when one is interested in describing the growth rate of a function; that is, what happens in a general sense as the input grows large. It is not appropriate when we are looking for exactness, and it is important to recognize that big-O notation is a way of simply giving an upper bound on the growth rate of a function, and that upper bound is not necessarily the <em>least</em> upper bound.</p>
+<p><strong>Example:</strong> Suppose that <span class="math notranslate nohighlight">\(f(x) = 3x^3 - 270x^2 + 121234x + 9999\)</span>. Then <span class="math notranslate nohighlight">\(f(x) = \mathcal{O}(x^3)\)</span>, because for very large values of <span class="math notranslate nohighlight">\(x\)</span>, <span class="math notranslate nohighlight">\(f(x)\)</span> is not very different than <span class="math notranslate nohighlight">\(3x^3\)</span>, and in particular, <span class="math notranslate nohighlight">\(|f(x)| \leq 3|x^3|\)</span> for large enough <span class="math notranslate nohighlight">\(x\)</span>. On the other hand, it never equals <span class="math notranslate nohighlight">\(3x^3\)</span>. Formally, for <span class="math notranslate nohighlight">\(x \geq 1\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{align*}
+        |3x^3 - 270x^2 + 121234x + 9999| &amp;\leq 3x^3 + |-270x^2| + |121234x| + 9999 \\
+        |3x^3 - 270x^2 + 121234x + 9999| &amp;\leq 3x^3 + 270x^3 + 121234x^3 + 9999x^3 \\
+        |3x^3 - 270x^2 + 121234x + 9999| &amp;\leq 131,506x^3,
+    \end{align*}
+\end{split}\]</div>
+<p>which proves the claim, though note that in fact <span class="math notranslate nohighlight">\(M\)</span> can be made smaller than <span class="math notranslate nohighlight">\(131,506\)</span>; see the computational example below:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">cubic</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">return</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">x</span><span class="o">**</span><span class="mi">3</span> <span class="o">-</span> <span class="mi">270</span> <span class="o">*</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">121234</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">9999</span>
+
+<span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100000000</span><span class="p">,</span> <span class="mi">11</span><span class="p">)):</span>
+    <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">cubic</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="mi">3</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">3</span><span class="p">]</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;cubic(x)&#39;</span><span class="p">,</span> <span class="s1">&#39;$3x^3$&#39;</span><span class="p">]</span>
+<span class="n">df</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>x</th>
+      <th>cubic(x)</th>
+      <th>$3x^3$</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1.0</td>
+      <td>1.309660e+05</td>
+      <td>3.000000e+00</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>10000000.9</td>
+      <td>2.999974e+21</td>
+      <td>3.000001e+21</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>20000000.8</td>
+      <td>2.399989e+22</td>
+      <td>2.400000e+22</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>30000000.7</td>
+      <td>8.099976e+22</td>
+      <td>8.100001e+22</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>40000000.6</td>
+      <td>1.919996e+23</td>
+      <td>1.920000e+23</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>50000000.5</td>
+      <td>3.749993e+23</td>
+      <td>3.750000e+23</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>60000000.4</td>
+      <td>6.479990e+23</td>
+      <td>6.480000e+23</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>70000000.3</td>
+      <td>1.028999e+24</td>
+      <td>1.029000e+24</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>80000000.2</td>
+      <td>1.535998e+24</td>
+      <td>1.536000e+24</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>90000000.1</td>
+      <td>2.186998e+24</td>
+      <td>2.187000e+24</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>100000000.0</td>
+      <td>2.999997e+24</td>
+      <td>3.000000e+24</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>When using big-O notation to discuss algorithms for computation, we typically have in mind a function <span class="math notranslate nohighlight">\(f(x)\)</span> where the input size is the independent variable <span class="math notranslate nohighlight">\(x\)</span>, and the output of <span class="math notranslate nohighlight">\(f\)</span> is the runtime of the algorithm. In this context, there is an implicit assumption that <span class="math notranslate nohighlight">\(x\)</span> is a positive integer and the outputs of <span class="math notranslate nohighlight">\(f\)</span> and <span class="math notranslate nohighlight">\(g\)</span> are nonnegative real numbers.</p>
+<div class="admonition-definition-time-complexity admonition">
+<p class="admonition-title">Definition: Time Complexity</p>
+<p>The <em>time complexity</em> of an algorithm is the number of elementary operations needed to perform the algorithm.</p>
+</div>
+<p>The above definition has a number of implicit assumptions, the most important one for us being the assumption that each elementary operation takes an equal fixed amount of time (this is sometimes called the <em>unit cost</em> model of computation). In practice this is not true; on modern processors it is estimated that multiplication takes 3-6 times longer than addition. For this reason, we will often count multiplication operations and addition operations separately when analyzing algorithms that involve both, and may even choose to focus only on multiplications at the expense of additions from time to time.</p>
+</section>
+<section id="comparing-orders">
+<h2>Comparing Orders<a class="headerlink" href="#comparing-orders" title="Link to this heading">#</a></h2>
+<p>Suppose that we want to add together positive integers from <span class="math notranslate nohighlight">\(1\)</span> to <span class="math notranslate nohighlight">\(n\)</span>. There are two common ways to do this. One is the obvious way: <span class="math notranslate nohighlight">\(\sum_{i=1}^n i = 1 + 2 + \cdots + (n-1) + n\)</span>. The other is to use the formula <span class="math notranslate nohighlight">\(\sum_{i=1}^n i = n(n+1)/2\)</span>. The first is <span class="math notranslate nohighlight">\(\mathcal{O}(n)\)</span>, while the second is <span class="math notranslate nohighlight">\(\mathcal{O}(1)\)</span>. In fact, we can time these two approaches here to see the difference here:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%time</span>it
+
+<span class="nb">sum</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100000</span><span class="p">):</span>
+    <span class="nb">sum</span> <span class="o">+=</span> <span class="n">i</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3.87 ms ± 337 μs per loop (mean ± std. dev. of 7 runs, 100 loops each)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%time</span>it
+
+<span class="mi">100000</span><span class="o">*</span><span class="p">(</span><span class="mi">100000</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>5.32 ns ± 0.098 ns per loop (mean ± std. dev. of 7 runs, 100,000,000 loops each)
+</pre></div>
+</div>
+</div>
+</div>
+<p>The second approach is much faster than the first, but the really important thing to note here is that the second approach takes approximately as long (there is some variability that can’t be controlled) regardless of how many integers we happen to be adding up, while the first increases in time proportional to the number of integers being added up:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%time</span>it 
+
+<span class="nb">sum</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100000000</span><span class="p">):</span>
+    <span class="nb">sum</span> <span class="o">+=</span> <span class="n">i</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">KeyboardInterrupt</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="nn">----&gt; 1 get_ipython().run_cell_magic(&#39;timeit&#39;, &#39;&#39;, &#39;\nsum = 0\nfor i</span> in <span class="ni">range</span><span class="nt">(100000000):\n    sum += i\n&#39;)</span>
+
+<span class="nn">File ~/opt/anaconda3/envs/linalg/lib/python3.13/site-packages/IPython/core/interactiveshell.py:2541,</span> in <span class="ni">InteractiveShell.run_cell_magic</span><span class="nt">(self, magic_name, line, cell)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2539</span> <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">builtin_trap</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">2540</span>     <span class="n">args</span> <span class="o">=</span> <span class="p">(</span><span class="n">magic_arg_s</span><span class="p">,</span> <span class="n">cell</span><span class="p">)</span>
+<span class="ne">-&gt; </span><span class="mi">2541</span>     <span class="n">result</span> <span class="o">=</span> <span class="n">fn</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2543</span> <span class="c1"># The code below prevents the output from being displayed</span>
+<span class="g g-Whitespace">   </span><span class="mi">2544</span> <span class="c1"># when using magics with decorator @output_can_be_silenced</span>
+<span class="g g-Whitespace">   </span><span class="mi">2545</span> <span class="c1"># when the last Python token in the expression is a &#39;;&#39;.</span>
+<span class="g g-Whitespace">   </span><span class="mi">2546</span> <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">magic</span><span class="o">.</span><span class="n">MAGIC_OUTPUT_CAN_BE_SILENCED</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+
+<span class="nn">File ~/opt/anaconda3/envs/linalg/lib/python3.13/site-packages/IPython/core/magics/execution.py:1199,</span> in <span class="ni">ExecutionMagics.timeit</span><span class="nt">(self, line, cell, local_ns)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1196</span>         <span class="k">if</span> <span class="n">time_number</span> <span class="o">&gt;=</span> <span class="mf">0.2</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1197</span>             <span class="k">break</span>
+<span class="ne">-&gt; </span><span class="mi">1199</span> <span class="n">all_runs</span> <span class="o">=</span> <span class="n">timer</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">repeat</span><span class="p">,</span> <span class="n">number</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1200</span> <span class="n">best</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">all_runs</span><span class="p">)</span> <span class="o">/</span> <span class="n">number</span>
+<span class="g g-Whitespace">   </span><span class="mi">1201</span> <span class="n">worst</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">all_runs</span><span class="p">)</span> <span class="o">/</span> <span class="n">number</span>
+
+<span class="nn">File ~/opt/anaconda3/envs/linalg/lib/python3.13/timeit.py:208,</span> in <span class="ni">Timer.repeat</span><span class="nt">(self, repeat, number)</span>
+<span class="g g-Whitespace">    </span><span class="mi">206</span> <span class="n">r</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="g g-Whitespace">    </span><span class="mi">207</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">repeat</span><span class="p">):</span>
+<span class="ne">--&gt; </span><span class="mi">208</span>     <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">timeit</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">209</span>     <span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">210</span> <span class="k">return</span> <span class="n">r</span>
+
+<span class="nn">File ~/opt/anaconda3/envs/linalg/lib/python3.13/site-packages/IPython/core/magics/execution.py:173,</span> in <span class="ni">Timer.timeit</span><span class="nt">(self, number)</span>
+<span class="g g-Whitespace">    </span><span class="mi">171</span> <span class="n">gc</span><span class="o">.</span><span class="n">disable</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">172</span> <span class="k">try</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">173</span>     <span class="n">timing</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inner</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">timer</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">174</span> <span class="k">finally</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">175</span>     <span class="k">if</span> <span class="n">gcold</span><span class="p">:</span>
+
+<span class="nn">File &lt;magic-timeit&gt;:3,</span> in <span class="ni">inner</span><span class="nt">(_it, _timer)</span>
+
+<span class="ne">KeyboardInterrupt</span>: 
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%time</span>it
+
+<span class="mi">100000000</span><span class="o">*</span><span class="p">(</span><span class="mi">100000000</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>6.58 ns ± 0.11 ns per loop (mean ± std. dev. of 7 runs, 100,000,000 loops each)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="time-complexity-of-vector-and-matrix-operations">
+<h2>Time Complexity of Vector and Matrix Operations<a class="headerlink" href="#time-complexity-of-vector-and-matrix-operations" title="Link to this heading">#</a></h2>
+<p><strong>Example:</strong> The time complexity of adding two vectors of length <span class="math notranslate nohighlight">\(n\)</span> is <span class="math notranslate nohighlight">\(n\)</span>, because adding the vectors requires <span class="math notranslate nohighlight">\(n\)</span> elementary operations, one addition for each component of the new vector. In big-O notation, the time complexity is <span class="math notranslate nohighlight">\(\mathcal{O}(n)\)</span>.</p>
+<p><strong>Example:</strong> The time complexity of the dot product of two vectors of lenth <span class="math notranslate nohighlight">\(n\)</span> is <span class="math notranslate nohighlight">\(2n-1\)</span>. There are <span class="math notranslate nohighlight">\(n\)</span> multiplications to perform, followed by summing the values produced by the multiplication, of which there are <span class="math notranslate nohighlight">\(n\)</span>. Only <span class="math notranslate nohighlight">\(n-1\)</span> additions are required to sum <span class="math notranslate nohighlight">\(n\)</span> elements (check this with an example if it isn’t obvious to you), therefore the time complexity of the dot product is <span class="math notranslate nohighlight">\(n + (n-1) = 2n-1\)</span> or <span class="math notranslate nohighlight">\(\mathcal{O}(n)\)</span>.</p>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -433,6 +686,23 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#time-complexity">Time Complexity</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#comparing-orders">Comparing Orders</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#time-complexity-of-vector-and-matrix-operations">Time Complexity of Vector and Matrix Operations</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>

@@ -62,6 +62,8 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'computation';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="The Matrix Inverse" href="inverse-matrices.html" />
+    <link rel="prev" title="Problem Set 3: Gaussian Elimination and \(A=LU\)" href="gaussian-elimination-lu-problem-set.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -124,8 +126,6 @@
       
       
       
-        
-      
       <div class="bd-sidebar-primary bd-sidebar">
         
 
@@ -181,7 +181,7 @@
                 </a>
             </li>
         </ul>
-        <ul class="nav bd-sidenav">
+        <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="motivation.html">Motivation</a></li>
 
 <li class="toctree-l1"><a class="reference internal" href="vectors.html">Vectors</a></li>
@@ -190,6 +190,7 @@
 <li class="toctree-l1"><a class="reference internal" href="matrices-problem-set.html">Problem Set 2: Matrix Arithmetic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="linear-systems-gaussian-elimination.html">Linear Systems and Gaussian Elimination</a></li>
 <li class="toctree-l1"><a class="reference internal" href="gaussian-elimination-lu-problem-set.html">Problem Set 3: Gaussian Elimination and <span class="math notranslate nohighlight">\(A=LU\)</span></a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Computation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="inverse-matrices.html">The Matrix Inverse</a></li>
 </ul>
 
@@ -389,6 +390,8 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#time-complexity">Time Complexity</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#comparing-orders">Comparing Orders</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#time-complexity-of-vector-and-matrix-operations">Time Complexity of Vector and Matrix Operations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#time-complexity-of-gaussian-elimination">Time Complexity of Gaussian Elimination</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#time-complexity-of-back-substitution">Time Complexity of Back Substitution</a></li>
 </ul>
             </nav>
         </div>
@@ -405,12 +408,12 @@ document.write(`
 <p>Linear algebra in practice is done using software, as the number of computations required for even basic operations is prohibitive for working by hand. We are going to focus on two aspects of computation in linear algebra: <em>time complexity</em> and <em>numerical stability</em>.</p>
 <section id="time-complexity">
 <h2>Time Complexity<a class="headerlink" href="#time-complexity" title="Link to this heading">#</a></h2>
-<p>Every mathematical operation we perform entails computational costs. In order to perform the computation, we must invest time and computational resources. For small examples like those illustrated in previous chapters, the computational costs are negligible, but most real-world use of linear algebra is not like that. At the time of this writing, widely used machine learning or AI tools perform extensive computations - primarily matrix-matrix or matrix-vector multiplies - with matrices containing millions to billions of components. The computational costs of such operations can be amortized only to a degree through parallelization, and the computational cost is always a consideration when actually using linear algebra; indeed, there are many important ideas and algorithms from linear algebra that simply aren’t used because the costs are just too high.</p>
+<p>Every mathematical operation we perform entails computational costs. In order to perform the computation, we must invest time and computational resources. For small examples like those illustrated in previous chapters, the computational costs are negligible, but most real-world use of linear algebra is not like that. At the time of this writing, widely used machine learning or AI tools rely on matrix-matrix or matrix-vector multiplies done with matrices containing millions to billions of components. The computational costs of such operations can be amortized only to a degree through parallelization, and the computational cost is always a consideration when actually using linear algebra; indeed, there are many important ideas and algorithms from linear algebra that aren’t used because the computational costs are just too high.</p>
 <div class="admonition-definition-big-o-notation admonition">
 <p class="admonition-title">Definition: Big-O notation</p>
 <p>We say ‘<span class="math notranslate nohighlight">\(f(x)\)</span> is on the order of <span class="math notranslate nohighlight">\(g(x)\)</span>’ and write <span class="math notranslate nohighlight">\(f(x) = \mathcal{O}(g(x))\)</span> as <span class="math notranslate nohighlight">\(x\to\infty\)</span> if there exist constants <span class="math notranslate nohighlight">\(M, x_0\)</span> such that <span class="math notranslate nohighlight">\(|f(x)| \leq M|g(x)|\)</span> for all <span class="math notranslate nohighlight">\(x \geq x_0\)</span>.</p>
 </div>
-<p>big-O notation is typically used when one is interested in describing the growth rate of a function; that is, what happens in a general sense as the input grows large. It is not appropriate when we are looking for exactness, and it is important to recognize that big-O notation is a way of simply giving an upper bound on the growth rate of a function, and that upper bound is not necessarily the <em>least</em> upper bound.</p>
+<p>Big-O notation is typically used when one is interested in describing the growth rate of a function; that is, what happens in a general sense as the input grows large. It is not appropriate when we are looking for exactness, and it is important to recognize that big-O notation is a way of simply giving an upper bound on the growth rate of a function, and that upper bound is not necessarily the <em>least</em> upper bound.</p>
 <p><strong>Example:</strong> Suppose that <span class="math notranslate nohighlight">\(f(x) = 3x^3 - 270x^2 + 121234x + 9999\)</span>. Then <span class="math notranslate nohighlight">\(f(x) = \mathcal{O}(x^3)\)</span>, because for very large values of <span class="math notranslate nohighlight">\(x\)</span>, <span class="math notranslate nohighlight">\(f(x)\)</span> is not very different than <span class="math notranslate nohighlight">\(3x^3\)</span>, and in particular, <span class="math notranslate nohighlight">\(|f(x)| \leq 3|x^3|\)</span> for large enough <span class="math notranslate nohighlight">\(x\)</span>. On the other hand, it never equals <span class="math notranslate nohighlight">\(3x^3\)</span>. Formally, for <span class="math notranslate nohighlight">\(x \geq 1\)</span>,</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
@@ -534,28 +537,40 @@ document.write(`
 </table>
 </div></div></div>
 </div>
-<p>When using big-O notation to discuss algorithms for computation, we typically have in mind a function <span class="math notranslate nohighlight">\(f(x)\)</span> where the input size is the independent variable <span class="math notranslate nohighlight">\(x\)</span>, and the output of <span class="math notranslate nohighlight">\(f\)</span> is the runtime of the algorithm. In this context, there is an implicit assumption that <span class="math notranslate nohighlight">\(x\)</span> is a positive integer and the outputs of <span class="math notranslate nohighlight">\(f\)</span> and <span class="math notranslate nohighlight">\(g\)</span> are nonnegative real numbers.</p>
+<p>We will be using big-O notation to loosely describe the worst-case scenario for the runtime of an algorithm with an input size of <span class="math notranslate nohighlight">\(n\)</span>. That is, we define a function <span class="math notranslate nohighlight">\(f(n)\)</span> where the input size is the independent variable <span class="math notranslate nohighlight">\(n\)</span> and the output of <span class="math notranslate nohighlight">\(f\)</span> is the runtime of the algorithm. There is an implicit assumption that <span class="math notranslate nohighlight">\(n\)</span> is a positive integer and the output of <span class="math notranslate nohighlight">\(f\)</span> is a nonnegative real number.</p>
 <div class="admonition-definition-time-complexity admonition">
 <p class="admonition-title">Definition: Time Complexity</p>
 <p>The <em>time complexity</em> of an algorithm is the number of elementary operations needed to perform the algorithm.</p>
 </div>
-<p>The above definition has a number of implicit assumptions, the most important one for us being the assumption that each elementary operation takes an equal fixed amount of time (this is sometimes called the <em>unit cost</em> model of computation). In practice this is not true; on modern processors it is estimated that multiplication takes 3-6 times longer than addition. For this reason, we will often count multiplication operations and addition operations separately when analyzing algorithms that involve both, and may even choose to focus only on multiplications at the expense of additions from time to time.</p>
+<p>It is assumed implicitly in the above definition that each elementary operation takes an equal fixed amount of time. This is sometimes called the <em>unit cost</em> model of computation. In practice, this is not true: on modern processors it is estimated that multiplication takes 3-6 times longer than addition. For this reason, we will often count multiplication operations and addition operations separately when analyzing algorithms that involve both, and may even choose to focus only on multiplications at the expense of additions from time to time (see the bonus section on faster matrix multiplication, for example).</p>
 </section>
 <section id="comparing-orders">
 <h2>Comparing Orders<a class="headerlink" href="#comparing-orders" title="Link to this heading">#</a></h2>
-<p>Suppose that we want to add together positive integers from <span class="math notranslate nohighlight">\(1\)</span> to <span class="math notranslate nohighlight">\(n\)</span>. There are two common ways to do this. One is the obvious way: <span class="math notranslate nohighlight">\(\sum_{i=1}^n i = 1 + 2 + \cdots + (n-1) + n\)</span>. The other is to use the formula <span class="math notranslate nohighlight">\(\sum_{i=1}^n i = n(n+1)/2\)</span>. The first is <span class="math notranslate nohighlight">\(\mathcal{O}(n)\)</span>, while the second is <span class="math notranslate nohighlight">\(\mathcal{O}(1)\)</span>. In fact, we can time these two approaches here to see the difference here:</p>
+<p>Suppose that we want to add together positive integers from <span class="math notranslate nohighlight">\(1\)</span> to <span class="math notranslate nohighlight">\(n\)</span>. This is a simple operation that can be done in a few different ways and will illustrate the type of difference we are trying to capture with big-O. One way to add these numbers up is the obvious way: <span class="math notranslate nohighlight">\(\sum_{i=1}^n i = 1 + 2 + \cdots + (n-1) + n\)</span>. The other is to use the famous formula <span class="math notranslate nohighlight">\(\sum_{i=1}^n i = n(n+1)/2\)</span>. The first is <span class="math notranslate nohighlight">\(\mathcal{O}(n)\)</span> (linear), while the second is <span class="math notranslate nohighlight">\(\mathcal{O}(1)\)</span> (constant). In fact, we can time these two approaches to see the difference here:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">naive_sum</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">out</span> <span class="o">+=</span> <span class="n">i</span>
+    <span class="k">return</span> <span class="n">i</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">fast_sum</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">n</span> <span class="o">*</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span> <span class="o">/</span> <span class="mi">2</span>
+</pre></div>
+</div>
+</div>
+</div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%time</span>it
 
-<span class="nb">sum</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100000</span><span class="p">):</span>
-    <span class="nb">sum</span> <span class="o">+=</span> <span class="n">i</span>
+<span class="n">naive_sum</span><span class="p">(</span><span class="mi">1000000</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3.87 ms ± 337 μs per loop (mean ± std. dev. of 7 runs, 100 loops each)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>44.7 ms ± 2.73 ms per loop (mean ± std. dev. of 7 runs, 10 loops each)
 </pre></div>
 </div>
 </div>
@@ -564,32 +579,30 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%time</span>it
 
-<span class="mi">100000</span><span class="o">*</span><span class="p">(</span><span class="mi">100000</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+<span class="n">fast_sum</span><span class="p">(</span><span class="mi">1000000</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>5.32 ns ± 0.098 ns per loop (mean ± std. dev. of 7 runs, 100,000,000 loops each)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>77 ns ± 1.87 ns per loop (mean ± std. dev. of 7 runs, 10,000,000 loops each)
 </pre></div>
 </div>
 </div>
 </div>
-<p>The second approach is much faster than the first, but the really important thing to note here is that the second approach takes approximately as long (there is some variability that can’t be controlled) regardless of how many integers we happen to be adding up, while the first increases in time proportional to the number of integers being added up:</p>
+<p>The second approach is much faster than the first, but the really important thing to note here is that the second approach takes approximately as long (there is some variability that is expected and can’t be controlled) regardless of how many integers we happen to be adding up, while the first increases in time proportional to the number of integers being added up:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%time</span>it 
 
-<span class="nb">sum</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100000000</span><span class="p">):</span>
-    <span class="nb">sum</span> <span class="o">+=</span> <span class="n">i</span>
+<span class="n">naive_sum</span><span class="p">(</span><span class="mi">1000000000</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
 <span class="ne">KeyboardInterrupt</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="nn">----&gt; 1 get_ipython().run_cell_magic(&#39;timeit&#39;, &#39;&#39;, &#39;\nsum = 0\nfor i</span> in <span class="ni">range</span><span class="nt">(100000000):\n    sum += i\n&#39;)</span>
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">run_cell_magic</span><span class="p">(</span><span class="s1">&#39;timeit&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">naive_sum(1000000000)</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
 
 <span class="nn">File ~/opt/anaconda3/envs/linalg/lib/python3.13/site-packages/IPython/core/interactiveshell.py:2541,</span> in <span class="ni">InteractiveShell.run_cell_magic</span><span class="nt">(self, magic_name, line, cell)</span>
 <span class="g g-Whitespace">   </span><span class="mi">2539</span> <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">builtin_trap</span><span class="p">:</span>
@@ -600,19 +613,12 @@ document.write(`
 <span class="g g-Whitespace">   </span><span class="mi">2545</span> <span class="c1"># when the last Python token in the expression is a &#39;;&#39;.</span>
 <span class="g g-Whitespace">   </span><span class="mi">2546</span> <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">magic</span><span class="o">.</span><span class="n">MAGIC_OUTPUT_CAN_BE_SILENCED</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
 
-<span class="nn">File ~/opt/anaconda3/envs/linalg/lib/python3.13/site-packages/IPython/core/magics/execution.py:1199,</span> in <span class="ni">ExecutionMagics.timeit</span><span class="nt">(self, line, cell, local_ns)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1196</span>         <span class="k">if</span> <span class="n">time_number</span> <span class="o">&gt;=</span> <span class="mf">0.2</span><span class="p">:</span>
-<span class="g g-Whitespace">   </span><span class="mi">1197</span>             <span class="k">break</span>
-<span class="ne">-&gt; </span><span class="mi">1199</span> <span class="n">all_runs</span> <span class="o">=</span> <span class="n">timer</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">repeat</span><span class="p">,</span> <span class="n">number</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1200</span> <span class="n">best</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">all_runs</span><span class="p">)</span> <span class="o">/</span> <span class="n">number</span>
-<span class="g g-Whitespace">   </span><span class="mi">1201</span> <span class="n">worst</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">all_runs</span><span class="p">)</span> <span class="o">/</span> <span class="n">number</span>
-
-<span class="nn">File ~/opt/anaconda3/envs/linalg/lib/python3.13/timeit.py:208,</span> in <span class="ni">Timer.repeat</span><span class="nt">(self, repeat, number)</span>
-<span class="g g-Whitespace">    </span><span class="mi">206</span> <span class="n">r</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="g g-Whitespace">    </span><span class="mi">207</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">repeat</span><span class="p">):</span>
-<span class="ne">--&gt; </span><span class="mi">208</span>     <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">timeit</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">209</span>     <span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">210</span> <span class="k">return</span> <span class="n">r</span>
+<span class="nn">File ~/opt/anaconda3/envs/linalg/lib/python3.13/site-packages/IPython/core/magics/execution.py:1195,</span> in <span class="ni">ExecutionMagics.timeit</span><span class="nt">(self, line, cell, local_ns)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1193</span> <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">):</span>
+<span class="g g-Whitespace">   </span><span class="mi">1194</span>     <span class="n">number</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">**</span> <span class="n">index</span>
+<span class="ne">-&gt; </span><span class="mi">1195</span>     <span class="n">time_number</span> <span class="o">=</span> <span class="n">timer</span><span class="o">.</span><span class="n">timeit</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1196</span>     <span class="k">if</span> <span class="n">time_number</span> <span class="o">&gt;=</span> <span class="mf">0.2</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1197</span>         <span class="k">break</span>
 
 <span class="nn">File ~/opt/anaconda3/envs/linalg/lib/python3.13/site-packages/IPython/core/magics/execution.py:173,</span> in <span class="ni">Timer.timeit</span><span class="nt">(self, number)</span>
 <span class="g g-Whitespace">    </span><span class="mi">171</span> <span class="n">gc</span><span class="o">.</span><span class="n">disable</span><span class="p">()</span>
@@ -621,7 +627,13 @@ document.write(`
 <span class="g g-Whitespace">    </span><span class="mi">174</span> <span class="k">finally</span><span class="p">:</span>
 <span class="g g-Whitespace">    </span><span class="mi">175</span>     <span class="k">if</span> <span class="n">gcold</span><span class="p">:</span>
 
-<span class="nn">File &lt;magic-timeit&gt;:3,</span> in <span class="ni">inner</span><span class="nt">(_it, _timer)</span>
+<span class="nn">File &lt;magic-timeit&gt;:1,</span> in <span class="ni">inner</span><span class="nt">(_it, _timer)</span>
+
+<span class="nn">Cell In[2], line 4,</span> in <span class="ni">naive_sum</span><span class="nt">(n)</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">out</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+<span class="ne">----&gt; </span><span class="mi">4</span>     <span class="n">out</span> <span class="o">+=</span> <span class="n">i</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="k">return</span> <span class="n">i</span>
 
 <span class="ne">KeyboardInterrupt</span>: 
 </pre></div>
@@ -632,21 +644,203 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%time</span>it
 
-<span class="mi">100000000</span><span class="o">*</span><span class="p">(</span><span class="mi">100000000</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+<span class="n">fast_sum</span><span class="p">(</span><span class="mi">1000000000</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>6.58 ns ± 0.11 ns per loop (mean ± std. dev. of 7 runs, 100,000,000 loops each)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>118 ns ± 3.32 ns per loop (mean ± std. dev. of 7 runs, 10,000,000 loops each)
 </pre></div>
 </div>
 </div>
 </div>
+<div class="important admonition">
+<p class="admonition-title"><span class="math notranslate nohighlight">\(\mathcal{O}(1)\)</span> Means Constant Time</p>
+<p><span class="math notranslate nohighlight">\(\mathcal{O}(1)\)</span> means the algorithm requires constant time regardless of the input. It does not mean 1 unit of time. There is always some variability, but the time taken by a <span class="math notranslate nohighlight">\(\mathcal{O}(1)\)</span> algorithm is not affected by the size of the input.</p>
+</div>
+<p>The plots at the end of this section illustate visually the differences between these and other time complexities that we will encounter.</p>
 </section>
 <section id="time-complexity-of-vector-and-matrix-operations">
 <h2>Time Complexity of Vector and Matrix Operations<a class="headerlink" href="#time-complexity-of-vector-and-matrix-operations" title="Link to this heading">#</a></h2>
 <p><strong>Example:</strong> The time complexity of adding two vectors of length <span class="math notranslate nohighlight">\(n\)</span> is <span class="math notranslate nohighlight">\(n\)</span>, because adding the vectors requires <span class="math notranslate nohighlight">\(n\)</span> elementary operations, one addition for each component of the new vector. In big-O notation, the time complexity is <span class="math notranslate nohighlight">\(\mathcal{O}(n)\)</span>.</p>
 <p><strong>Example:</strong> The time complexity of the dot product of two vectors of lenth <span class="math notranslate nohighlight">\(n\)</span> is <span class="math notranslate nohighlight">\(2n-1\)</span>. There are <span class="math notranslate nohighlight">\(n\)</span> multiplications to perform, followed by summing the values produced by the multiplication, of which there are <span class="math notranslate nohighlight">\(n\)</span>. Only <span class="math notranslate nohighlight">\(n-1\)</span> additions are required to sum <span class="math notranslate nohighlight">\(n\)</span> elements (check this with an example if it isn’t obvious to you), therefore the time complexity of the dot product is <span class="math notranslate nohighlight">\(n + (n-1) = 2n-1\)</span> or <span class="math notranslate nohighlight">\(\mathcal{O}(n)\)</span>.</p>
+<p><strong>Example:</strong> The time complexity of multiplication of a vector of length <span class="math notranslate nohighlight">\(n\)</span> by an <span class="math notranslate nohighlight">\(n\times n\)</span> matrix is <span class="math notranslate nohighlight">\(\mathcal{O}(n^2)\)</span>. To see this, note that multiplying a matrix and a vector requires <span class="math notranslate nohighlight">\(n\)</span> dot products, one for each row. We just determined that each dot product entails <span class="math notranslate nohighlight">\(2n-1\)</span> elementary operations, so matrix-vector multiplication must require <span class="math notranslate nohighlight">\(n(2n-1) = 2n^2 - n\)</span> or in big-O notation is <span class="math notranslate nohighlight">\(\mathcal{O}(n^2)\)</span>.</p>
+<p><strong>Example:</strong> Building on the last two examples, we can infer that matrix multiplication is <span class="math notranslate nohighlight">\(\mathcal{O}(n^3)\)</span> (assuming the matrices are both <span class="math notranslate nohighlight">\(n\times n\)</span>). We have <span class="math notranslate nohighlight">\(2n^3 - n^2\)</span> operations required for each column of the matrix on the right in the multiplication, and there are <span class="math notranslate nohighlight">\(n\)</span> of those columns, which leads to <span class="math notranslate nohighlight">\(n(2n^2 - n) = 2n^3 - n^2\)</span> operations. <strong>Note:</strong> This cost only applies to matrix multiplication as done using the ‘row method’ that we usually use when working by hand. In fact there are faster, though far less intuitive methods, and you can refer to the optional section on faster matrix multiplication for details on this. Finding still faster ways to multiply matrices is an active area of research in mathematics and computer science.</p>
+</section>
+<section id="time-complexity-of-gaussian-elimination">
+<h2>Time Complexity of Gaussian Elimination<a class="headerlink" href="#time-complexity-of-gaussian-elimination" title="Link to this heading">#</a></h2>
+<p>Gaussian elimination is expensive also: the forward pass (reducing <span class="math notranslate nohighlight">\(A\)</span> to an upper-triangular matrix) is <span class="math notranslate nohighlight">\(\mathcal{O}(n^3)\)</span>. It follows that <span class="math notranslate nohighlight">\(A= LU\)</span> is also <span class="math notranslate nohighlight">\(\mathcal{O}(n^3)\)</span>. To see this, consider the elimination steps that occur at the <span class="math notranslate nohighlight">\(k^{th}\)</span> pivot:</p>
+<ul class="simple">
+<li><p>For each row <span class="math notranslate nohighlight">\(j\)</span> of the <span class="math notranslate nohighlight">\(n-k\)</span> rows below, calculate the multiplier <span class="math notranslate nohighlight">\(m_{jk} = a_{jk}/a_{kk}\)</span> that row <span class="math notranslate nohighlight">\(k\)</span> will be multiplied by to zero out <span class="math notranslate nohighlight">\(a_{jk}\)</span>. (1 division)</p></li>
+<li><p>Multiply all of the <span class="math notranslate nohighlight">\(n-k+1\)</span> nonzero entries in row <span class="math notranslate nohighlight">\(k\)</span> by <span class="math notranslate nohighlight">\(m_{jk}\)</span> (<span class="math notranslate nohighlight">\(n-k + 1\)</span> multiplications)</p></li>
+<li><p>Subtract the nonzero entries produced above from the nonzero entries in row <span class="math notranslate nohighlight">\(j\)</span> (<span class="math notranslate nohighlight">\(n-k + 1\)</span> subtractions)</p></li>
+</ul>
+<p>For a single row <span class="math notranslate nohighlight">\(j\)</span>, then, we have <span class="math notranslate nohighlight">\(2(n-k + 1) + 1\)</span> operations needed in order to eliminate an entry. We have <span class="math notranslate nohighlight">\(n-k\)</span> rows below the <span class="math notranslate nohighlight">\(k^{th}\)</span> pivot, so for this pivot we have a total of <span class="math notranslate nohighlight">\((n-k)(2(n-k+1) + 1)\)</span> operations to perform.</p>
+<p>Finally, we need to do all of these operations for each row, <span class="math notranslate nohighlight">\(1 \leq k \leq n\)</span>. That gives</p>
+<div class="math notranslate nohighlight">
+\[
+    \sum_{k=1}^n (n-k)(2n-2k+3)
+\]</div>
+<p>elementary operations to perform in total.</p>
+<p>There are a few handy formulas that help when evaluating this sum, one of which we used above:</p>
+<div class="math notranslate nohighlight">
+\[
+    \sum_{k=1}^n 1 = n,
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+    \sum_{k=1}^n k = (n(n+1)) / 2,
+\]</div>
+<p>and</p>
+<div class="math notranslate nohighlight">
+\[
+    \sum_{k=1}^n k^2 = (n(n+1)(2n+1) / 6.
+\]</div>
+<p>So</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{align*}
+        \sum_{k=1}^n (n-k)(2n-2k+3) &amp;= \sum_{k=1}^n 2n^2 - 4nk + 2k^2 + 3n - 3k \\
+                                    &amp;= \sum_{k=1}^n (2n^2 + 3n) - (4n + 3)k + 2k^2 \\
+                                    &amp;= (2n^2 + 3n) \sum_{k=1}^n 1 - (4n + 3)\sum_{k=1}^n k + 2\sum_{k=1}^n k^2 \\
+                                    &amp;= (2n^2 + 3n)\cdot n - (4n + 3)\cdot \left(\frac{n(n+1))}{2}\right) + 2\left(\frac{n(n+1)(2n+1)}{6}\right).
+                                    \end{align*}
+\end{split}\]</div>
+<p>We can multiply this all out to find the exact number of elementary operations, but at this point it’s possible to see without any more arithmetic that the highest order terms that occur are <span class="math notranslate nohighlight">\(n^3\)</span>; thus the forward pass of Gaussian elimination is <span class="math notranslate nohighlight">\(\mathcal{O}(n^3)\)</span>.</p>
+</section>
+<section id="time-complexity-of-back-substitution">
+<h2>Time Complexity of Back Substitution<a class="headerlink" href="#time-complexity-of-back-substitution" title="Link to this heading">#</a></h2>
+<p>The backward pass of Gaussian elimination is equivalent to back substitution, which is also equivalent to solving a matrix equation when the equation is triangular (upper or lower is not important here). This is <span class="math notranslate nohighlight">\(\mathcal{O}(2)\)</span>.</p>
+<p>We will illustrate this for <span class="math notranslate nohighlight">\(L\mathbf{y}=\mathbf{b}\)</span>, where <span class="math notranslate nohighlight">\(L\)</span> is a lower triangular matrix. The argument is the same <em>mutatis mutandis</em> for an upper triangular <span class="math notranslate nohighlight">\(U\)</span>. To solve for <span class="math notranslate nohighlight">\(y_k\)</span>, there is one division, <span class="math notranslate nohighlight">\(k-1\)</span> multiplications, and <span class="math notranslate nohighlight">\(k-1\)</span> subtractions required, for <span class="math notranslate nohighlight">\(2k-1\)</span> operations altogether (verify this!). Over all <span class="math notranslate nohighlight">\(k\)</span> entries, then, there are</p>
+<div class="math notranslate nohighlight">
+\[
+    \sum_{k=1}^n 2k-1 = n(n-1) - n = n^2
+\]</div>
+<p>elementary operations required in total.</p>
+<p>This is why <span class="math notranslate nohighlight">\(A=LU\)</span> is used when we need to solve <span class="math notranslate nohighlight">\(A\mathbf{x} = \mathbf{b}\)</span> for one <span class="math notranslate nohighlight">\(A\)</span> but many <span class="math notranslate nohighlight">\(\mathbf{b}\)</span>. Recall the algorithm for solving <span class="math notranslate nohighlight">\(A\mathbf{x} = \mathbf{b}\)</span> given <span class="math notranslate nohighlight">\(A=LU\)</span>:</p>
+<ul class="simple">
+<li><p>Set <span class="math notranslate nohighlight">\(U\mathbf{x} = \mathbf{y}\)</span> (placeholder operation, no computational cost)</p></li>
+<li><p>Solve <span class="math notranslate nohighlight">\(L\mathbf{y} = \mathbf{b}\)</span> (<span class="math notranslate nohighlight">\(\mathcal{O}(n^2)\)</span>)</p></li>
+<li><p>Solve <span class="math notranslate nohighlight">\(U\mathbf{x} = \mathbf{y}\)</span> (<span class="math notranslate nohighlight">\(\mathcal{O}(n^2)\)</span>)</p></li>
+</ul>
+<p>Two <span class="math notranslate nohighlight">\(\mathcal{O}(n^2)\)</span> steps are preferable to one <span class="math notranslate nohighlight">\(\mathcal{O}(n^3)\)</span> step, so we find <span class="math notranslate nohighlight">\(A=LU\)</span> once, then iterate these three steps for each <span class="math notranslate nohighlight">\(\mathbf{b}\)</span> that we need to solve <span class="math notranslate nohighlight">\(A\mathbf{x} = \mathbf{b}\)</span> for. The plot below illustrates how different <span class="math notranslate nohighlight">\(\mathcal{O}(n^2)\)</span> and <span class="math notranslate nohighlight">\(\mathcal{O}(n^3)\)</span> can be.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># Create array of n values</span>
+<span class="n">n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">101</span><span class="p">)</span>
+
+<span class="c1"># Define the complexity functions</span>
+<span class="n">O_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>  <span class="c1"># O(1) - constant</span>
+<span class="n">O_n</span> <span class="o">=</span> <span class="n">n</span>               <span class="c1"># O(n) - linear</span>
+<span class="n">O_n2</span> <span class="o">=</span> <span class="n">n</span><span class="o">**</span><span class="mi">2</span>          <span class="c1"># O(n^2) - quadratic</span>
+<span class="n">O_n3</span> <span class="o">=</span> <span class="n">n</span><span class="o">**</span><span class="mi">3</span>          <span class="c1"># O(n^3) - cubic</span>
+
+<span class="c1"># Create the plot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+
+<span class="c1"># Plot each complexity class</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">O_1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;O(1) - Constant&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">O_n</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;O(n) - Linear&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">O_n2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;O(n²) - Quadratic&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;orange&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">O_n3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;O(n³) - Cubic&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+
+<span class="c1"># Customize the plot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Input Size (n)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Operations (Runtime)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Computational Complexity Comparison</span><span class="se">\n</span><span class="s1">O(1) vs O(n) vs O(n²) vs O(n³)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper right&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+
+<span class="c1"># Set axis limits for better visualization</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">50000</span><span class="p">)</span>
+
+<span class="c1"># Add annotations to highlight key differences</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="s1">&#39;Forward substitution</span><span class="se">\n</span><span class="s1">(solving Ly=b)&#39;</span><span class="p">,</span> 
+             <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">2500</span><span class="p">),</span> <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mi">70</span><span class="p">,</span> <span class="mi">15000</span><span class="p">),</span>
+             <span class="n">arrowprops</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">arrowstyle</span><span class="o">=</span><span class="s1">&#39;-&gt;&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.5</span><span class="p">),</span>
+             <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span>
+             <span class="n">bbox</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">boxstyle</span><span class="o">=</span><span class="s2">&quot;round,pad=0.3&quot;</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;lightblue&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="s1">&#39;Gaussian elimination</span><span class="se">\n</span><span class="s1">(general system)&#39;</span><span class="p">,</span> 
+             <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span> <span class="mi">64000</span><span class="p">),</span> <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="mi">35000</span><span class="p">),</span>
+             <span class="n">arrowprops</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">arrowstyle</span><span class="o">=</span><span class="s1">&#39;-&gt;&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.5</span><span class="p">),</span>
+             <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span>
+             <span class="n">bbox</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">boxstyle</span><span class="o">=</span><span class="s2">&quot;round,pad=0.3&quot;</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;lightcoral&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">))</span>
+
+<span class="c1"># Add text box with key insights</span>
+<span class="n">textstr</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;Key Insights:</span>
+<span class="s1">• O(n²) grows much faster than O(n)</span>
+<span class="s1">• O(n³) becomes prohibitive for large n</span>
+<span class="s1">• This is why triangular systems are preferred!&#39;&#39;&#39;</span>
+<span class="n">props</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">boxstyle</span><span class="o">=</span><span class="s1">&#39;round&#39;</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;lightyellow&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.98</span><span class="p">,</span> <span class="n">textstr</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+         <span class="n">verticalalignment</span><span class="o">=</span><span class="s1">&#39;top&#39;</span><span class="p">,</span> <span class="n">bbox</span><span class="o">=</span><span class="n">props</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># Create a second plot with logarithmic scale for better comparison</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">O_1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;O(1) - Constant&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">O_n</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;O(n) - Linear&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">O_n2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;O(n²) - Quadratic&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;orange&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">O_n3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;O(n³) - Cubic&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Input Size (n)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Operations (Runtime)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Computational Complexity Comparison (Log-Log Scale)</span><span class="se">\n</span><span class="s1">Clearly Shows the Growth Rate Differences&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+
+<span class="c1"># Add slope indicators for log-log plot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="s1">&#39;Slope = 0&#39;</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mi">70</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span>
+             <span class="n">arrowprops</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">arrowstyle</span><span class="o">=</span><span class="s1">&#39;-&gt;&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.5</span><span class="p">),</span>
+             <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="s1">&#39;Slope = 1&#39;</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span> <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span>
+             <span class="n">arrowprops</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">arrowstyle</span><span class="o">=</span><span class="s1">&#39;-&gt;&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.5</span><span class="p">),</span>
+             <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="s1">&#39;Slope = 2&#39;</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">2500</span><span class="p">),</span> <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">1000</span><span class="p">),</span>
+             <span class="n">arrowprops</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">arrowstyle</span><span class="o">=</span><span class="s1">&#39;-&gt;&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.5</span><span class="p">),</span>
+             <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="s1">&#39;Slope = 3&#39;</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">125000</span><span class="p">),</span> <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">50000</span><span class="p">),</span>
+             <span class="n">arrowprops</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">arrowstyle</span><span class="o">=</span><span class="s1">&#39;-&gt;&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.5</span><span class="p">),</span>
+             <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># Print some concrete examples</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Runtime Comparison for Different Input Sizes:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">50</span><span class="p">)</span>
+<span class="n">sizes</span> <span class="o">=</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">1000</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;n&#39;</span><span class="si">:</span><span class="s2">&gt;6</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;O(1)&#39;</span><span class="si">:</span><span class="s2">&gt;10</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;O(n)&#39;</span><span class="si">:</span><span class="s2">&gt;10</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;O(n²)&#39;</span><span class="si">:</span><span class="s2">&gt;12</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;O(n³)&#39;</span><span class="si">:</span><span class="s2">&gt;15</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">55</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">n_val</span> <span class="ow">in</span> <span class="n">sizes</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">n_val</span><span class="si">:</span><span class="s2">&gt;6</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="mi">1</span><span class="si">:</span><span class="s2">&gt;10</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">n_val</span><span class="si">:</span><span class="s2">&gt;10</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">n_val</span><span class="o">**</span><span class="mi">2</span><span class="si">:</span><span class="s2">&gt;12,</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">n_val</span><span class="o">**</span><span class="mi">3</span><span class="si">:</span><span class="s2">&gt;15,</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/6d9765028dd3cd7255dab053891b48cfb3e5a3e62ddc90473dcf652e1b6a1e29.png" src="_images/6d9765028dd3cd7255dab053891b48cfb3e5a3e62ddc90473dcf652e1b6a1e29.png" />
+<img alt="_images/7097049c602e04ee2f7b2f955ab325d474a9566c867fc0c883fad61067854b31.png" src="_images/7097049c602e04ee2f7b2f955ab325d474a9566c867fc0c883fad61067854b31.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Runtime Comparison for Different Input Sizes:
+==================================================
+     n       O(1)       O(n)        O(n²)           O(n³)
+-------------------------------------------------------
+    10          1         10          100           1,000
+    50          1         50        2,500         125,000
+   100          1        100       10,000       1,000,000
+   500          1        500      250,000     125,000,000
+  1000          1       1000    1,000,000   1,000,000,000
+</pre></div>
+</div>
+</div>
+</div>
 </section>
 </section>
 
@@ -680,6 +874,24 @@ document.write(`
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="gaussian-elimination-lu-problem-set.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Problem Set 3: Gaussian Elimination and <span class="math notranslate nohighlight">\(A=LU\)</span></p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="inverse-matrices.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">The Matrix Inverse</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div>
                 </footer>
               
@@ -699,6 +911,8 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#time-complexity">Time Complexity</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#comparing-orders">Comparing Orders</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#time-complexity-of-vector-and-matrix-operations">Time Complexity of Vector and Matrix Operations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#time-complexity-of-gaussian-elimination">Time Complexity of Gaussian Elimination</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#time-complexity-of-back-substitution">Time Complexity of Back Substitution</a></li>
 </ul>
   </nav></div>
 

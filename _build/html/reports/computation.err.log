@@ -51,8 +51,6 @@ Here is a preview of the cell contents:
 -------------------
 %%timeit 
 
-sum = 0
-for i in range(100000000):
-    sum += i
+naive_sum(1000000000)
 -------------------
 

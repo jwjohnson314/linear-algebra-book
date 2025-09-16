@@ -12,4 +12,5 @@ chapters:
 - file: linear-systems-gaussian-elimination
 - file: gaussian-elimination-lu-problem-set
 - file: computation
+- file: bonus-faster-matrix-multiplication
 - file: inverse-matrices

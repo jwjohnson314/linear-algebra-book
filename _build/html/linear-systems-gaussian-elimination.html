@@ -193,6 +193,7 @@
 <li class="toctree-l1"><a class="reference internal" href="computation.html">Computation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bonus-faster-matrix-multiplication.html">Optional: Faster Matrix Multiplication</a></li>
 <li class="toctree-l1"><a class="reference internal" href="inverse-matrices.html">The Matrix Inverse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lu-and-computation-problem-set.html">Problem Set 4: <span class="math notranslate nohighlight">\(A=LU\)</span> and Computation</a></li>
 </ul>
 
     </div>
@@ -1059,6 +1060,7 @@ document.write(`
 </section>
 <section id="the-computational-efficiency-of-a-lu">
 <h2>The Computational Efficiency of <span class="math notranslate nohighlight">\(A=LU\)</span><a class="headerlink" href="#the-computational-efficiency-of-a-lu" title="Link to this heading">#</a></h2>
+<p><em>Note: This section uses big-O notation, which hasn’t been introduced yet. If you aren’t familiar with big-O notation, skip ahead to the section on computation and come back here after you’ve read it.</em></p>
 <p>Calculating an <span class="math notranslate nohighlight">\(LU\)</span> factorization is not generally faster than solving a system using elimination; as the <span class="math notranslate nohighlight">\(LU\)</span> factorization is in effect just the elimination method expressed through matrices the computational cost is the same <span class="math notranslate nohighlight">\(\mathcal{O}(n^3)\)</span> (though there are some practical implementation tricks that are used). The efficiency we gain from it shows up in a specific situation that comes up often in applications: when we have to solve <span class="math notranslate nohighlight">\(A\mathbf{x} = \mathbf{b}\)</span> for one matrix <span class="math notranslate nohighlight">\(A\)</span> but a large number of distinct vectors <span class="math notranslate nohighlight">\(\mathbf{b}\)</span>. This is a quite common real-world scenario. Then, if we have a factorization <span class="math notranslate nohighlight">\(A=LU\)</span>, we can use the following steps to solve the systems:</p>
 <ol class="arabic simple">
 <li><p>Set <span class="math notranslate nohighlight">\(U\mathbf{x} = \mathbf{y}\)</span>. This is a placeholder operation, so no computational cost.</p></li>

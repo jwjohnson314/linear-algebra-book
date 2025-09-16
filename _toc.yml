@@ -14,3 +14,4 @@ chapters:
 - file: computation
 - file: bonus-faster-matrix-multiplication
 - file: inverse-matrices
+- file: lu-and-computation-problem-set

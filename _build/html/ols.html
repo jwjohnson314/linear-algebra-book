@@ -1,0 +1,1013 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Ordinary Least Squares and Linear Regression &#8212; Applied Linear Algebra</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'ols';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Problem Set 4: \(A=LU\) and Computation" href="lu-and-computation-problem-set.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="Applied Linear Algebra - Home"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="Applied Linear Algebra - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    <no title>
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="motivation.html">Motivation</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="vectors.html">Vectors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vectors-problem-set.html">Problem Set 1: Vectors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrices.html">Matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrices-problem-set.html">Problem Set 2: Matrix Arithmetic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="linear-systems-gaussian-elimination.html">Linear Systems and Gaussian Elimination</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gaussian-elimination-lu-problem-set.html">Problem Set 3: Gaussian Elimination and <span class="math notranslate nohighlight">\(A=LU\)</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="computation.html">Computation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bonus-faster-matrix-multiplication.html">Optional: Faster Matrix Multiplication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inverse-matrices.html">The Matrix Inverse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lu-and-computation-problem-set.html">Problem Set 4: <span class="math notranslate nohighlight">\(A=LU\)</span> and Computation</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Ordinary Least Squares and Linear Regression</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fols.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/ols.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Ordinary Least Squares and Linear Regression</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#in-two-dimensions">In Two Dimensions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#higher-dimensions">Higher Dimensions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-real-world-example">A Real-World Example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#measuring-error">Measuring Error</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="ordinary-least-squares-and-linear-regression">
+<h1>Ordinary Least Squares and Linear Regression<a class="headerlink" href="#ordinary-least-squares-and-linear-regression" title="Link to this heading">#</a></h1>
+<p>It is common in many fields to want to fit a line to some data, either to capture a general trend in the data or to use as a model of an underlying process, enabling one to make predictions using data outside of that to which the model was fit.</p>
+<section id="in-two-dimensions">
+<h2>In Two Dimensions<a class="headerlink" href="#in-two-dimensions" title="Link to this heading">#</a></h2>
+<p><strong>Example:</strong> The data below are generated according to the underlying ‘true’ model <span class="math notranslate nohighlight">\(y = 2x + 3 + \mathcal{N}(0, 225)\)</span>, where <span class="math notranslate nohighlight">\(\mathcal{N}(\mu, \sigma^2)\)</span> refers to <a class="reference external" href="https://en.wikipedia.org/wiki/Normal_distribution">normally distributed</a> noise with a mean of <span class="math notranslate nohighlight">\(\mu=0\)</span> and a variance <span class="math notranslate nohighlight">\(\sigma^2=225\)</span> (or equivalently, a standard deviation <span class="math notranslate nohighlight">\(\sigma=15\)</span>).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">IPython.core.pylabtools</span><span class="w"> </span><span class="kn">import</span> <span class="n">figsize</span>
+
+<span class="n">figsize</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+
+<span class="n">xs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+<span class="n">ys</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">xs</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">1000</span><span class="p">,))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/e4f03bebc9bbbc26fe3b5d020a771980f613d9edf27deb566fd3439b115f2379.png" src="_images/e4f03bebc9bbbc26fe3b5d020a771980f613d9edf27deb566fd3439b115f2379.png" />
+</div>
+</div>
+<p>It is obvious that the data in the above plot are not collinear; in general, if <span class="math notranslate nohighlight">\(n\)</span> points <span class="math notranslate nohighlight">\((x_1, y_1), (x_2, y_2), \dots, (x_n, y_n)\)</span> are collinear then there exist parameters <span class="math notranslate nohighlight">\(m\)</span> and <span class="math notranslate nohighlight">\(b\)</span> such that</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{align*}
+        y_1 &amp;= mx_1 + b \\
+        y_2 &amp;= mx_2 + b \\
+        \vdots &amp;  \\
+        y_n &amp;= mx_n + b
+    \end{align*}
+\end{split}\]</div>
+<p>This linear system can be converted to a matrix equation <span class="math notranslate nohighlight">\(\mathbf{y} = X\mathbf{b}\)</span>, where the parameters <span class="math notranslate nohighlight">\(m\)</span> and <span class="math notranslate nohighlight">\(b\)</span> are the components of the vector of unknowns <span class="math notranslate nohighlight">\(\mathbf{b}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix}
+        y_1 \\
+        y_2 \\
+        \vdots \\
+        y_n
+    \end{bmatrix} = 
+    \begin{bmatrix}
+        x_1 &amp; 1 \\
+        x_2 &amp; 1 \\
+        \vdots &amp; \vdots \\
+        x_n &amp; 1 
+    \end{bmatrix}\cdot
+    \begin{bmatrix}
+        m \\
+        b
+    \end{bmatrix}
+\end{split}\]</div>
+<p>Note that the notation here differs slightly from the conventions for matrix equations: in a generic system <span class="math notranslate nohighlight">\(A\mathbf{x}=\mathbf{b}\)</span>, the vector <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> contains the unknowns, while <span class="math notranslate nohighlight">\(\mathbf{b}\)</span> is a constant vector. In <span class="math notranslate nohighlight">\(\mathbf{y} = X\mathbf{b}\)</span>, it is <span class="math notranslate nohighlight">\(\mathbf{y}\)</span> that is constant, and <span class="math notranslate nohighlight">\(\mathbf{b}\)</span> contains the unknowns <span class="math notranslate nohighlight">\(m\)</span> and <span class="math notranslate nohighlight">\(b\)</span>. The matrix <span class="math notranslate nohighlight">\(X\)</span> contains the (constant) input data <span class="math notranslate nohighlight">\(x_1,\dots x_n\)</span> along with a column of <span class="math notranslate nohighlight">\(1\)</span>’s such that the product <span class="math notranslate nohighlight">\(X\mathbf{b}\)</span> produces <span class="math notranslate nohighlight">\(mx_i + b\)</span> in its components for <span class="math notranslate nohighlight">\(1\leq i \leq n\)</span>.</p>
+<p>The lack of collinearity in the above plot corresponds to the <em>overdetermined</em> nature of this system, with <span class="math notranslate nohighlight">\(n\)</span> equations to satisfy and only 2 unknown parameters <span class="math notranslate nohighlight">\(m\)</span> and <span class="math notranslate nohighlight">\(b\)</span> with which to satisfy them, the system is in general not solvable. A trick that we can exploit here is to solve a specific transformed system instead: <span class="math notranslate nohighlight">\(X^T\mathbf{y} = X^TX\mathbf{b}\)</span>, the system that results from multiplying both sides of the above matrix equation by <span class="math notranslate nohighlight">\(X^T\)</span>.</p>
+<p>Why this specific system is the one we should solve requires some additional background to explain in full; for now, it is perhaps enough to note that <span class="math notranslate nohighlight">\(X^TX\)</span> is a <span class="math notranslate nohighlight">\(2\times2\)</span> symmetric matrix with linearly independent columns (assuming the columns of <span class="math notranslate nohighlight">\(x_i\)</span>’s is not a scalar multiple of the column of <span class="math notranslate nohighlight">\(1\)</span>’s), and therefore (a) the new system will have a solution, and (b) <span class="math notranslate nohighlight">\(X^TX\)</span> is nonsingular. Therefore, the solution to the new system can be found using the inverse as follows:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{align*}
+        X\mathbf{b} = \mathbf{y} \\
+        X^TX\mathbf{b} &amp; = X^T\mathbf{y} \\
+        (X^TX)^{-1}X^TX\mathbf{b} &amp;= (X^TX)^{-1}X^T\mathbf{y} \\
+        I\mathbf{b} &amp;= (X^TX)^{-1}X^T\mathbf{y} \\
+        \mathbf{b} &amp;= (X^TX)^{-1}X^T\mathbf{y}.
+    \end{align*}
+\end{split}\]</div>
+<p>The equation above is called the <em>normal equation</em>, and for reasons we will see shortly, this solution produces the parameters of the line that best fits the data.</p>
+<div class="admonition-definition-the-normal-equation admonition">
+<p class="admonition-title">Definition: The Normal Equation</p>
+<p>Given a possibly overdetermined linear system <span class="math notranslate nohighlight">\(\mathbf{y} = X\mathbf{b}\)</span>, the <em>normal equation</em></p>
+<div class="math notranslate nohighlight">
+\[
+    \mathbf{b} = (X^TX)^{-1}X^T\mathbf{y}
+\]</div>
+<p>is the solution that provides a line of best fit to the data.</p>
+</div>
+<p><strong>Example, continued:</strong> Let’s form the matrix <span class="math notranslate nohighlight">\(X\)</span> and calculate <span class="math notranslate nohighlight">\(\mathbf{b}\)</span> according to the following formula:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># start with a 1000 x 2 array of 1&#39;s and fill the first column with the xs</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="n">X</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">xs</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[[  0.          1.       ]
+ [  0.1001001   1.       ]
+ [  0.2002002   1.       ]
+ ...
+ [ 99.7997998   1.       ]
+ [ 99.8998999   1.       ]
+ [100.          1.       ]]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Solve the equation</span>
+<span class="n">bs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">X</span><span class="p">)</span> <span class="o">@</span> <span class="n">X</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">ys</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">bs</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[2.02341382 1.75345652]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># visualize the solution</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">bs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">xs</span> <span class="o">+</span> <span class="n">bs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;line of best fit&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;lower right&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/60cc6228a6d24b53f7aa01881d65b0c76b9c2ba745f09a129436ea65d6499aa5.png" src="_images/60cc6228a6d24b53f7aa01881d65b0c76b9c2ba745f09a129436ea65d6499aa5.png" />
+</div>
+</div>
+<p>The parameters we’ve obtained can be used for <em>inference</em>; that is, to make predictions using data that didn’t appear in our initial dataset.</p>
+<p><strong>Example, continued:</strong> Suppose I would like to estimate <span class="math notranslate nohighlight">\(y\)</span> given <span class="math notranslate nohighlight">\(x=32.745\)</span>. There is no point in the dataset with <span class="math notranslate nohighlight">\(x\)</span>-coordinate <span class="math notranslate nohighlight">\(32.745\)</span>, but I can use the parameters of the line I’ve fit to estimate a suitable <span class="math notranslate nohighlight">\(y\)</span>-coordinate:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">y_pred</span> <span class="o">=</span> <span class="n">bs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mf">32.745</span> <span class="o">+</span> <span class="n">bs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">y_pred</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>68.01014215513149
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="higher-dimensions">
+<h2>Higher Dimensions<a class="headerlink" href="#higher-dimensions" title="Link to this heading">#</a></h2>
+<p>One of the reasons linear algebra is so powerful is that it generalizes to higher dimensions easily. Consider now an <span class="math notranslate nohighlight">\(n\times p\)</span> system of linear equations</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{align*}
+        y_1 &amp;= m_1x_{11} + m_2x_{12} + \cdots + m_px_{1p} + b \\
+        y_2 &amp;= m_1 x_{21} + m_2x_{22} + \cdots + m_px_{2p} + b \\
+        \vdots &amp;  \\
+        y_n &amp;= m_1x_{n1} + m_2x_{n2} + \cdots + m_nx_{np} + b
+    \end{align*}
+\end{split}\]</div>
+<p>such as might result from modeling something that depends on multiple factors. For example, <span class="math notranslate nohighlight">\(y_i\)</span> could represent the closing price of a share of a company’s stock on day <span class="math notranslate nohighlight">\(i\)</span>, while <span class="math notranslate nohighlight">\(x_{i1}, \dots, x_{ip}\)</span> could represent various data believed to impact the company’s share price, such as the price the previous day, analyst sentiment, earnings data, and so on. This converts to a matrix equation <span class="math notranslate nohighlight">\(\mathbf{y} = X\mathbf{b}\)</span> as before:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix}
+        y_1 \\
+        y_2 \\
+        \vdots \\
+        y_n
+    \end{bmatrix} = 
+    \begin{bmatrix}
+        x_{11} &amp; x_{12} &amp; \cdots &amp; x_{1p} &amp; 1 \\
+        x_{21} &amp; x_{22} &amp; \cdots &amp; x_{2p} &amp; 1 \\
+        \vdots &amp; \vdots \\
+        x_{n1} &amp; x_{n2} &amp; \cdots &amp; x_{np} &amp; 1 
+    \end{bmatrix}\cdot
+    \begin{bmatrix}
+        m_1 \\
+        m_2 \\
+        \vdots \\
+        m_p \\
+        b
+    \end{bmatrix}.
+\end{split}\]</div>
+<p>As before, a best solution can be found via the normal equation <span class="math notranslate nohighlight">\(\mathbf{b} = (X^TX)^{-1}X^T\mathbf{y}\)</span>, provided that <span class="math notranslate nohighlight">\(X\)</span> is nonsingular.</p>
+<div class="highlight-admonition notranslate"><div class="highlight"><pre><span></span>:class: important
+
+Note that it can be much more challenging to assess the invertibility of $X$ when the dimension of the problem is higher than 2. In fact,  it is worse than that: if $X$ is &#39;close&#39; to singular, the solution becomes unstable: a small change in the inputs can produce a dramatically different output. 
+</pre></div>
+</div>
+</section>
+<section id="a-real-world-example">
+<h2>A Real-World Example<a class="headerlink" href="#a-real-world-example" title="Link to this heading">#</a></h2>
+<p>The <a class="reference external" href="https://www.kaggle.com/datasets/nikhil7280/student-performance-multiple-linear-regression">Student Performance Dataset</a> is a dataset designed to examine the factors influencing academic student performance. The data is downloadable at the link or in this book’s GitHub repository. The dataset consists of 10,000 student records, with each record containing information about various predictors and a performance index.</p>
+<p>Predictor variables:</p>
+<ul class="simple">
+<li><p><strong>Hours Studied:</strong> The total number of hours spent studying by each student.</p></li>
+<li><p><strong>Previous Scores:</strong> The scores obtained by students in previous tests.</p></li>
+<li><p><strong>Extracurricular Activities:</strong> Whether the student participates in extracurricular activities (Yes or No).</p></li>
+<li><p><strong>Sleep Hours:</strong> The average number of hours of sleep the student had per day.</p></li>
+<li><p><strong>Sample Question Papers Practiced:</strong> The number of sample question papers the student practiced.</p></li>
+</ul>
+<p>Target Variable:</p>
+<ul class="simple">
+<li><p><strong>Performance Index:</strong> A measure of the overall performance of each student. The performance index represents the student’s academic performance and has been rounded to the nearest integer. The index ranges from 10 to 100, with higher values indicating better performance.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;./datasets/Student_Performance.csv&#39;</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Hours Studied</th>
+      <th>Previous Scores</th>
+      <th>Extracurricular Activities</th>
+      <th>Sleep Hours</th>
+      <th>Sample Question Papers Practiced</th>
+      <th>Performance Index</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>7</td>
+      <td>99</td>
+      <td>Yes</td>
+      <td>9</td>
+      <td>1</td>
+      <td>91.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>4</td>
+      <td>82</td>
+      <td>No</td>
+      <td>4</td>
+      <td>2</td>
+      <td>65.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>8</td>
+      <td>51</td>
+      <td>Yes</td>
+      <td>7</td>
+      <td>2</td>
+      <td>45.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>5</td>
+      <td>52</td>
+      <td>Yes</td>
+      <td>5</td>
+      <td>2</td>
+      <td>36.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>7</td>
+      <td>75</td>
+      <td>No</td>
+      <td>8</td>
+      <td>5</td>
+      <td>66.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>The target variable <code class="docutils literal notranslate"><span class="pre">Performance</span> <span class="pre">Index</span></code> will need to be separated from the dataset (this is our <span class="math notranslate nohighlight">\(\mathbf{y}\)</span>). Also, notice that the variable <code class="docutils literal notranslate"><span class="pre">Extracurricular</span> <span class="pre">Activities</span></code> is Boolean (True/False), but is recorded in the data as Yes/No, which Python will treat as strings, so we will need to encode it properly:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">get_dummies</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Hours Studied</th>
+      <th>Previous Scores</th>
+      <th>Sleep Hours</th>
+      <th>Sample Question Papers Practiced</th>
+      <th>Performance Index</th>
+      <th>Extracurricular Activities_No</th>
+      <th>Extracurricular Activities_Yes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>7</td>
+      <td>99</td>
+      <td>9</td>
+      <td>1</td>
+      <td>91.0</td>
+      <td>False</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>4</td>
+      <td>82</td>
+      <td>4</td>
+      <td>2</td>
+      <td>65.0</td>
+      <td>True</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>8</td>
+      <td>51</td>
+      <td>7</td>
+      <td>2</td>
+      <td>45.0</td>
+      <td>False</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>5</td>
+      <td>52</td>
+      <td>5</td>
+      <td>2</td>
+      <td>36.0</td>
+      <td>False</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>7</td>
+      <td>75</td>
+      <td>8</td>
+      <td>5</td>
+      <td>66.0</td>
+      <td>True</td>
+      <td>False</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>Notice that using <code class="docutils literal notranslate"><span class="pre">pd.get_dummies</span></code> produced two new columns: <code class="docutils literal notranslate"><span class="pre">Extracurricular_Activities_No</span></code> and <code class="docutils literal notranslate"><span class="pre">Extracurricular_Activities_Yes</span></code> that are perfectly correlated. In the interest of keeping the columns of our matrix linearly independent, we will drop one of these columns. Finally, we need to add a column of 1’s corresponding to the intercept term in our linear model:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Performance Index&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>  <span class="c1"># separate the target variable from the input data </span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;Intercept&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">10000</span><span class="p">,))</span>  <span class="c1"># add the intercept column of 1&#39;s </span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;Extracurricular Activities_No&#39;</span><span class="p">,</span> <span class="s1">&#39;Performance Index&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># drop the target and the redundant Extracurricular columns</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Finally, we will convert the dataframe to a NumPy array:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="n">X</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[ 7., 99.,  9.,  1.,  1.,  1.],
+       [ 4., 82.,  4.,  2.,  0.,  1.],
+       [ 8., 51.,  7.,  2.,  1.,  1.],
+       ...,
+       [ 6., 83.,  8.,  5.,  1.,  1.],
+       [ 9., 97.,  7.,  0.,  1.,  1.],
+       [ 7., 74.,  8.,  1.,  0.,  1.]])
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">y</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([91., 65., 45., ..., 74., 95., 64.])
+</pre></div>
+</div>
+</div>
+</div>
+<p>We are now ready to fit the model:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">X</span><span class="p">)</span> <span class="o">@</span> <span class="n">X</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">y</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">bs</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[  2.85298205   1.01843419   0.48055975   0.19380214   0.61289758
+ -34.07558809]
+</pre></div>
+</div>
+</div>
+</div>
+<p>The last value in that list is the intercept term. The others are the slopes associated with the corresponding input features.</p>
+</section>
+<section id="measuring-error">
+<h2>Measuring Error<a class="headerlink" href="#measuring-error" title="Link to this heading">#</a></h2>
+<p>The solution to the normal equation is a set of coefficients for a linear model, and if input the original inputs (the <span class="math notranslate nohighlight">\(x\)</span>’s), we get the model’s predictions for the <span class="math notranslate nohighlight">\(y\)</span>’s, which we typically denote <span class="math notranslate nohighlight">\(\mathbf{\hat{y}}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+    \mathbf{\hat{y}} = X^Tb.
+\]</div>
+<p>One way to measure the quality of the model is to calculate the <em>mean squared error</em>: the mean of the squared difference between the actual <span class="math notranslate nohighlight">\(y\)</span>-values and the predicted <span class="math notranslate nohighlight">\(y\)</span>-values.</p>
+<div class="admonition-definition-mean-squared-error admonition">
+<p class="admonition-title">Definition: Mean Squared Error</p>
+<p>Given ground truth data <span class="math notranslate nohighlight">\(y_1, \dots, y_n\)</span> and estimated values or predictions <span class="math notranslate nohighlight">\(\hat{y}_1,\dots, \hat{y}_n\)</span>, the <em>mean squared error</em> is defined as follows:</p>
+<div class="math notranslate nohighlight">
+\[
+    MSE = \frac{1}{n}\sum_{i=1}^n (y_i - \hat{y}_i)^2.
+\]</div>
+</div>
+<p>Notice that the definition of mean squared error can be expressed in terms of the norm of the <em>error</em> vector <span class="math notranslate nohighlight">\(\mathbf{e} = \mathbf{y} - \mathbf{\hat{y}}\)</span>:</p>
+<div class="admonition-definition-root-mean-squared-error-as-norm admonition">
+<p class="admonition-title">Definition: Root Mean Squared Error as Norm</p>
+<p>Given a vector containing ground-truth data <span class="math notranslate nohighlight">\(\mathbf{y}\)</span> and a vector of estimated values or predictions <span class="math notranslate nohighlight">\(\mathbf{\hat{y}}\)</span>, the <em>mean squared error</em> is the normalized squared norm of the vector <span class="math notranslate nohighlight">\(\mathbf{y} - \mathbf{\hat{y}}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+    MSE = \frac{1}{n}||\mathbf{y} - \mathbf{\hat{y}}||^2 = \frac{1}{n}(\mathbf{y} - \mathbf{hat{y}})^T(\mathbf{y} - \mathbf{hat{y}}) = \frac{1}{n}\sum_{i=1}^n (y_i - \hat{y}_i)^2.
+\]</div>
+</div>
+<p>Here is the MSE for the model we have just fit:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">((</span><span class="n">y</span><span class="o">-</span><span class="p">(</span><span class="n">X</span> <span class="o">@</span> <span class="n">bs</span><span class="p">)))</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mse</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>4.151350633946038
+</pre></div>
+</div>
+</div>
+</div>
+<p>Suppose we had asked a different question: assuming a linear model, determine the parameters <span class="math notranslate nohighlight">\(m_1, m_2, \dots, m_p, b\)</span> that minimize the mean squared error. It is possible to show using calculus that the solution produced via the normal equation is the unique solution that minimizes mean squared error.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="lu-and-computation-problem-set.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Problem Set 4: <span class="math notranslate nohighlight">\(A=LU\)</span> and Computation</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#in-two-dimensions">In Two Dimensions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#higher-dimensions">Higher Dimensions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-real-world-example">A Real-World Example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#measuring-error">Measuring Error</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Jeremiah W. Johnson
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <div>
+  <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="jwjohnson314" data-description="Support me on Buy me a coffee!" data-message="Thanks for reading! If you found this useful and want to support this book project, you can Buy Me a Coffee here. Your support helps keep this book free for my students." data-color="#5F7FFF" data-position="Right" data-x_margin="18" data-y_margin="18"></script> 
+</div>
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

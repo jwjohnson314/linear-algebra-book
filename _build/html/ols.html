@@ -393,6 +393,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#higher-dimensions">Higher Dimensions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-real-world-example">A Real-World Example</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#measuring-error">Measuring Error</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-around-the-calculation-of-a-ta-1">Getting Around the Calculation of <span class="math notranslate nohighlight">\((A^TA)^{-1}\)</span></a></li>
 </ul>
             </nav>
         </div>
@@ -427,7 +428,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/14c99a5a8b4bde06e12370a70cdd11df59c4659c38abf62bb35676713b4c8147.png" src="_images/14c99a5a8b4bde06e12370a70cdd11df59c4659c38abf62bb35676713b4c8147.png" />
+<img alt="_images/2f68357f3befd9c46f62d09832bb29a8eff82681cd93f104f5c7cb377e470430.png" src="_images/2f68357f3befd9c46f62d09832bb29a8eff82681cd93f104f5c7cb377e470430.png" />
 </div>
 </div>
 <p>It is obvious that the data in the above plot are not collinear; in general, if <span class="math notranslate nohighlight">\(n\)</span> points <span class="math notranslate nohighlight">\((x_1, y_1), (x_2, y_2), \dots, (x_n, y_n)\)</span> are collinear then there exist parameters <span class="math notranslate nohighlight">\(m\)</span> and <span class="math notranslate nohighlight">\(b\)</span> such that</p>
@@ -516,7 +517,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[2.01295921 3.12010235]
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1.98359375 3.41589164]
 </pre></div>
 </div>
 </div>
@@ -531,7 +532,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/15c26f4886cbc23443ca1bcecb38edb4a1a0982919cc4897280e67545e87fecd.png" src="_images/15c26f4886cbc23443ca1bcecb38edb4a1a0982919cc4897280e67545e87fecd.png" />
+<img alt="_images/127946b65ea2a62af7e4d8100e57a4dc3da01f8bc12957db5b12c39a7dec2595.png" src="_images/127946b65ea2a62af7e4d8100e57a4dc3da01f8bc12957db5b12c39a7dec2595.png" />
 </div>
 </div>
 <p>The parameters we’ve obtained can be used for <em>inference</em>; that is, to make predictions using data that didn’t appear in our initial dataset.</p>
@@ -545,7 +546,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>69.03445182694905
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>68.36866882843799
 </pre></div>
 </div>
 </div>
@@ -589,7 +590,7 @@ document.write(`
 <p>As before, a best solution can be found via the normal equation <span class="math notranslate nohighlight">\(\mathbf{b} = (X^TX)^{-1}X^T\mathbf{y}\)</span>, provided that <span class="math notranslate nohighlight">\(X\)</span> is nonsingular.</p>
 <div class="important admonition">
 <p class="admonition-title">On the Invertibility of <span class="math notranslate nohighlight">\(X\)</span></p>
-<p>Note that it can be much more challenging to assess the invertibility of <span class="math notranslate nohighlight">\(X\)</span> when the dimension of the problem is higher than 2. In fact,  it is worse than that: if <span class="math notranslate nohighlight">\(X\)</span> is ‘close’ to singular, the solution becomes unstable: a small change in the inputs can produce a dramatically different output.</p>
+<p>Note that it can be much more challenging to assess the invertibility of <span class="math notranslate nohighlight">\(X\)</span> when the dimension of the problem is higher than 2. In fact,  it is worse than that: if <span class="math notranslate nohighlight">\(X\)</span> is ‘close’ to singular, the solution becomes unstable: a small change in the inputs can produce a dramatically different output; see below for more detail on this.</p>
 </div>
 </section>
 <section id="a-real-world-example">
@@ -888,6 +889,26 @@ document.write(`
 </div>
 <p>Suppose we had asked a different question: assuming a linear model, determine the parameters <span class="math notranslate nohighlight">\(m_1, m_2, \dots, m_p, b\)</span> that minimize the mean squared error. It is possible to show using calculus that the solution produced via the normal equation is the unique solution that minimizes mean squared error.</p>
 </section>
+<section id="getting-around-the-calculation-of-a-ta-1">
+<h2>Getting Around the Calculation of <span class="math notranslate nohighlight">\((A^TA)^{-1}\)</span><a class="headerlink" href="#getting-around-the-calculation-of-a-ta-1" title="Link to this heading">#</a></h2>
+<p>Apparently crucial to OLS is the calculation of <span class="math notranslate nohighlight">\((A^TA)^{-1}\)</span>, despite the fact that it was indicated earlier that we would try to avoid the calculation of inverse matrices whenever possible. In fact, it is particularly important to do so here, because if there is any ‘instability’ in <span class="math notranslate nohighlight">\(A\)</span>, it propogates in <span class="math notranslate nohighlight">\(A^TA\)</span>. There is a construct called the <em>condition number</em> of a matrix that gives a bound on how inaccurate the solution <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> to <span class="math notranslate nohighlight">\(A\mathbf{x}=\mathbf{b}\)</span> will be assuming approximation in <span class="math notranslate nohighlight">\(\mathbf{b}\)</span>, and this translates directly to matrix inversion, which amounts to solving <span class="math notranslate nohighlight">\(n\)</span> linear systems <span class="math notranslate nohighlight">\(A\mathbf{x} = \mathbf{e}_i\)</span>, <span class="math notranslate nohighlight">\(1\leq i\leq n\)</span> simultaneously (subtle detail: the condition number is purely a property of the matrix, it does not depend on <span class="math notranslate nohighlight">\(\mathbf{b}\)</span> in any way).</p>
+<p>While we don’t yet have the background yet to go into detail on how condition number are calculated, it is worth pointing out that if the condition number of <span class="math notranslate nohighlight">\(A\)</span> is <span class="math notranslate nohighlight">\(\kappa(A)\)</span>, the condition number of <span class="math notranslate nohighlight">\(A^TA\)</span> is <span class="math notranslate nohighlight">\(\kappa(A)^2\)</span>, making it especially important to avoid the calculation of <span class="math notranslate nohighlight">\((A^TA)^{-1}\)</span> whenever we can.</p>
+<p>To do this, we need to develop another matrix factorization: <span class="math notranslate nohighlight">\(A=QR\)</span>. In this factorization, <span class="math notranslate nohighlight">\(Q\)</span> has the property that <span class="math notranslate nohighlight">\(Q^T=Q^{-1}\)</span>, so <span class="math notranslate nohighlight">\(Q^TQ=I\)</span>, and <span class="math notranslate nohighlight">\(R\)</span> is upper triangular. If we had such a factorization for <span class="math notranslate nohighlight">\(X\)</span> in OLS, then</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{align*}
+        \mathbf{y} &amp;= X\mathbf{b} \\
+        X^T\mathbf{y} &amp;= X^TX\mathbf{b} \\
+        (QR)^T\mathbf{y} &amp;= (QR)^T(QR)\mathbf{b} \\
+        (R^TQ^T)\mathbf{y} &amp;= (R^TQ^T)(QR)\mathbf{b} \\
+        R^TQ^T\mathbf{y} &amp;= R^T(Q^TQ)R\mathbf{b} \\
+        R^TQ^T\mathbf{y} &amp;= R^TIR\mathbf{b} \\
+        Q^T\mathbf{y} &amp;= R\mathbf{b},
+    \end{align*}
+\end{split}\]</div>
+<p>where in the last step <span class="math notranslate nohighlight">\(R^T\)</span> has been cancelled from both sides of the equation. <span class="math notranslate nohighlight">\(R\)</span> is upper triangular, so we can calculate <span class="math notranslate nohighlight">\(Q^T\mathbf{y}\)</span> on the left and then back-substitute to solve for <span class="math notranslate nohighlight">\(\mathbf{b}\)</span> on the right without any matrix inversion calculations required at all.</p>
+<p>Of course, that all depends on (a) the existence of a factorization <span class="math notranslate nohighlight">\(A=QR\)</span> where <span class="math notranslate nohighlight">\(Q\)</span> has the property that <span class="math notranslate nohighlight">\(Q^TQ=I\)</span>, and (b) our ability to compute this factorization efficiently. Both will be the subject of the next section.</p>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -949,6 +970,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#higher-dimensions">Higher Dimensions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-real-world-example">A Real-World Example</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#measuring-error">Measuring Error</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-around-the-calculation-of-a-ta-1">Getting Around the Calculation of <span class="math notranslate nohighlight">\((A^TA)^{-1}\)</span></a></li>
 </ul>
   </nav></div>
 

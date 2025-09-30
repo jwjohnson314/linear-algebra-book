@@ -16,3 +16,5 @@ chapters:
 - file: inverse-matrices
 - file: lu-and-computation-problem-set
 - file: ols
+- file: aqr
+- file: projection-qr-problem-set

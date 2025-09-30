@@ -1,0 +1,866 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Projection and \(A=QR\) &#8212; Applied Linear Algebra</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'aqr';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Problem Set 5: Projections and \(A=QR\)" href="projection-qr-problem-set.html" />
+    <link rel="prev" title="Ordinary Least Squares and Linear Regression" href="ols.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="Applied Linear Algebra - Home"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="Applied Linear Algebra - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    <no title>
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="motivation.html">Motivation</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="vectors.html">Vectors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vectors-problem-set.html">Problem Set 1: Vectors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrices.html">Matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrices-problem-set.html">Problem Set 2: Matrix Arithmetic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="linear-systems-gaussian-elimination.html">Linear Systems and Gaussian Elimination</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gaussian-elimination-lu-problem-set.html">Problem Set 3: Gaussian Elimination and <span class="math notranslate nohighlight">\(A=LU\)</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="computation.html">Computation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bonus-faster-matrix-multiplication.html">Optional: Faster Matrix Multiplication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inverse-matrices.html">The Matrix Inverse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lu-and-computation-problem-set.html">Problem Set 4: <span class="math notranslate nohighlight">\(A=LU\)</span> and Computation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ols.html">Ordinary Least Squares and Linear Regression</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Projection and <span class="math notranslate nohighlight">\(A=QR\)</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="projection-qr-problem-set.html">Problem Set 5: Projections and <span class="math notranslate nohighlight">\(A=QR\)</span></a></li>
+
+
+
+
+
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Faqr.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/aqr.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Projection and A=QR</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#projection-onto-a-single-vector">Projection onto a Single Vector</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#similarity-to-the-normal-equation-from-ols">Similarity to the Normal Equation from OLS</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gram-schmidt-orthogonalization">Gram-Schmidt Orthogonalization</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-qr-via-gram-schmidt"><span class="math notranslate nohighlight">\(A = QR\)</span> via Gram-Schmidt</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#orthogonal-matrices">Orthogonal Matrices</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="projection-and-a-qr">
+<h1>Projection and <span class="math notranslate nohighlight">\(A=QR\)</span><a class="headerlink" href="#projection-and-a-qr" title="Link to this heading">#</a></h1>
+<div class="admonition-definition-span admonition">
+<p class="admonition-title">Definition: Span</p>
+<p>The <em>span</em> of a set of vectors <span class="math notranslate nohighlight">\(\{\mathbf{v}_1, \dots, \mathbf{v}_k\}\)</span> is the set of all linear combinations <span class="math notranslate nohighlight">\(c_1\mathbf{v_1} + \cdots + c_k\mathbf{v}_k\)</span>.</p>
+</div>
+<p>The span of a set of vectors is a geometric object.</p>
+<p><strong>Example:</strong> The span of a single vector <span class="math notranslate nohighlight">\(\mathbf{v}\)</span> is the line in the direction of <span class="math notranslate nohighlight">\(\mathbf{v}\)</span>. A linear combination in the case of a single vector is just a scalar multiple of the vector, and that will point either in the same direction or the exact opposite direction if the sign of the scalar is negative.</p>
+<p><strong>Example:</strong> The span of two linearly independent vectors three dimensional vectors is a plane. We can see this easily, for example, with vectors like</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \mathbf{e}_1 = \begin{bmatrix}
+                        1 \\
+                        0 \\
+                        0
+                    \end{bmatrix}\text{ and }
+    \mathbf{e}_2 = \begin{bmatrix}
+                        0 \\
+                        1 \\
+                        0
+                    \end{bmatrix}
+\end{split}\]</div>
+<p>whose linear combinations produce all vectors in the <span class="math notranslate nohighlight">\(x\)</span>-<span class="math notranslate nohighlight">\(y\)</span> plane and none that are not in the <span class="math notranslate nohighlight">\(x\)</span>-<span class="math notranslate nohighlight">\(y\)</span> plane because of the 0 in the third component.</p>
+<p>Given a set of vectors <span class="math notranslate nohighlight">\(\{\mathbf{v}_1,\dots, \mathbf{v}_k\}\)</span> and another vector <span class="math notranslate nohighlight">\(\mathbf{b}\)</span> that is not in their span, one can ask for the vector in the span of <span class="math notranslate nohighlight">\(\{\mathbf{v}_1,\dots, \mathbf{v}_k\}\)</span> ‘nearest’ to <span class="math notranslate nohighlight">\(\mathbf{b}\)</span>. We define the nearest vector to <span class="math notranslate nohighlight">\(\mathbf{b}\)</span> in the span of <span class="math notranslate nohighlight">\(\{\mathbf{v}_1,\dots, \mathbf{v}_k\}\)</span> to be the vector <span class="math notranslate nohighlight">\(\mathbf{p}\)</span> for which the distance from the terminus of <span class="math notranslate nohighlight">\(\mathbf{b}\)</span> to the terminus of <span class="math notranslate nohighlight">\(\mathbf{p}\)</span> is as small as possible. This is sketched in two and three dimensions below.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mpl_toolkits.mplot3d</span><span class="w"> </span><span class="kn">import</span> <span class="n">Axes3D</span>
+
+<span class="c1"># Create figure with two subplots</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+
+<span class="c1"># Left plot: 2D vector projection of b onto a</span>
+<span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
+
+<span class="c1"># Define vectors - make &#39;a&#39; significantly longer</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">6</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.5</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+
+<span class="c1"># Calculate projection of b onto a</span>
+<span class="n">proj_b_onto_a</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">a</span><span class="p">))</span> <span class="o">*</span> <span class="n">a</span>
+
+<span class="c1"># Plot vectors</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">quiver</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">angles</span><span class="o">=</span><span class="s1">&#39;xy&#39;</span><span class="p">,</span> <span class="n">scale_units</span><span class="o">=</span><span class="s1">&#39;xy&#39;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">0.005</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Vector a&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">quiver</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">angles</span><span class="o">=</span><span class="s1">&#39;xy&#39;</span><span class="p">,</span> <span class="n">scale_units</span><span class="o">=</span><span class="s1">&#39;xy&#39;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">0.005</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Vector b&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">quiver</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">proj_b_onto_a</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">proj_b_onto_a</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">angles</span><span class="o">=</span><span class="s1">&#39;xy&#39;</span><span class="p">,</span> <span class="n">scale_units</span><span class="o">=</span><span class="s1">&#39;xy&#39;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">0.005</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;proj_a(b)&#39;</span><span class="p">)</span>
+
+<span class="c1"># Draw the perpendicular line from b to its projection</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">proj_b_onto_a</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="p">[</span><span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">proj_b_onto_a</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> <span class="s1">&#39;k--&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Add right angle marker</span>
+<span class="n">perp_vec</span> <span class="o">=</span> <span class="n">b</span> <span class="o">-</span> <span class="n">proj_b_onto_a</span>
+<span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">perp_vec</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="c1"># Create a small square to show right angle</span>
+    <span class="n">corner_size</span> <span class="o">=</span> <span class="mf">0.3</span>
+    <span class="n">corner_start</span> <span class="o">=</span> <span class="n">proj_b_onto_a</span>
+    <span class="n">a_unit</span> <span class="o">=</span> <span class="n">a</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="n">perp_unit</span> <span class="o">=</span> <span class="n">perp_vec</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">perp_vec</span><span class="p">)</span>
+    
+    <span class="n">corner_points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+        <span class="n">corner_start</span><span class="p">,</span>
+        <span class="n">corner_start</span> <span class="o">+</span> <span class="n">corner_size</span> <span class="o">*</span> <span class="n">a_unit</span><span class="p">,</span>
+        <span class="n">corner_start</span> <span class="o">+</span> <span class="n">corner_size</span> <span class="o">*</span> <span class="n">a_unit</span> <span class="o">+</span> <span class="n">corner_size</span> <span class="o">*</span> <span class="n">perp_unit</span><span class="p">,</span>
+        <span class="n">corner_start</span> <span class="o">+</span> <span class="n">corner_size</span> <span class="o">*</span> <span class="n">perp_unit</span><span class="p">,</span>
+        <span class="n">corner_start</span>
+    <span class="p">])</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">corner_points</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">corner_points</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;k-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
+
+<span class="c1"># Set equal aspect ratio and add grid</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Projection of Vector b onto Vector a&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+
+<span class="c1"># Add vector labels</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span> <span class="o">-</span> <span class="mf">0.2</span><span class="p">,</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span> <span class="o">+</span> <span class="mf">0.2</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span> <span class="o">+</span> <span class="mf">0.2</span><span class="p">,</span> <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span> <span class="o">+</span> <span class="mf">0.2</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">proj_b_onto_a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">proj_b_onto_a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span> <span class="o">-</span> <span class="mf">0.3</span><span class="p">,</span> <span class="s1">&#39;proj_a(b)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+
+<span class="c1"># Right plot: 3D vector projection onto xy-plane</span>
+<span class="n">ax2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+
+<span class="c1"># Define a 3D vector - moved to better show basis vectors</span>
+<span class="n">v_3d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.5</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+
+<span class="c1"># Projection onto xy-plane (z=0)</span>
+<span class="n">v_proj_xy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">v_3d</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">v_3d</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">])</span>
+
+<span class="c1"># Plot the original 3D vector</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">quiver</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">v_3d</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">v_3d</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">v_3d</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">arrow_length_ratio</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Vector v&#39;</span><span class="p">)</span>
+
+<span class="c1"># Plot the projection onto xy-plane</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">quiver</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">v_proj_xy</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">v_proj_xy</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">v_proj_xy</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">arrow_length_ratio</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;proj_xy(v)&#39;</span><span class="p">)</span>
+
+<span class="c1"># Add basis vectors e1 and e2 for the xy-plane</span>
+<span class="n">e1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>  <span class="c1"># x-axis basis vector</span>
+<span class="n">e2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>  <span class="c1"># y-axis basis vector</span>
+
+<span class="n">ax2</span><span class="o">.</span><span class="n">quiver</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">e1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">e1</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">e1</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="n">arrow_length_ratio</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;e₁&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">quiver</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">e2</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">e2</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">e2</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;purple&#39;</span><span class="p">,</span> <span class="n">arrow_length_ratio</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;e₂&#39;</span><span class="p">)</span>
+
+<span class="c1"># Draw the perpendicular line from vector tip to its projection</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">v_3d</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">v_proj_xy</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="p">[</span><span class="n">v_3d</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">v_proj_xy</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> <span class="p">[</span><span class="n">v_3d</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">v_proj_xy</span><span class="p">[</span><span class="mi">2</span><span class="p">]],</span> <span class="s1">&#39;k--&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># Create xy-plane as a transparent surface</span>
+<span class="n">xx</span><span class="p">,</span> <span class="n">yy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">zz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">xx</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">plot_surface</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">yy</span><span class="p">,</span> <span class="n">zz</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+
+<span class="c1"># Add plane outline</span>
+<span class="n">plane_x</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">plane_y</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">plane_z</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">plane_x</span><span class="p">,</span> <span class="n">plane_y</span><span class="p">,</span> <span class="n">plane_z</span><span class="p">,</span> <span class="s1">&#39;k-&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Set labels and title</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Projection of 3D Vector onto xy-plane&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+<span class="c1"># Set equal aspect ratio for 3D plot</span>
+<span class="n">max_range</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_range</span><span class="p">])</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_range</span><span class="p">])</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_zlim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_range</span><span class="p">])</span>
+
+<span class="c1"># Add vector labels</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">v_3d</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span> <span class="o">+</span> <span class="mf">0.2</span><span class="p">,</span> <span class="n">v_3d</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">v_3d</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span> <span class="o">+</span> <span class="mf">0.2</span><span class="p">,</span> <span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">v_proj_xy</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">v_proj_xy</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span> <span class="o">+</span> <span class="mf">0.2</span><span class="p">,</span> <span class="n">v_proj_xy</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="s1">&#39;proj_xy(v)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">e1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">e1</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">e1</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.1</span><span class="p">,</span> <span class="s1">&#39;e₁&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">e2</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">e2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">e2</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.1</span><span class="p">,</span> <span class="s1">&#39;e₂&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;purple&#39;</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="s1">&#39;xy-plane&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s1">&#39;italic&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/2cabe8f60d9aa0ac1572cc66551afe152aa4dc2f2c5b18b164a417a8c397e02c.png" src="_images/2cabe8f60d9aa0ac1572cc66551afe152aa4dc2f2c5b18b164a417a8c397e02c.png" />
+</div>
+</div>
+<section id="projection-onto-a-single-vector">
+<h2>Projection onto a Single Vector<a class="headerlink" href="#projection-onto-a-single-vector" title="Link to this heading">#</a></h2>
+<p>In the example illustrated above on the right, <span class="math notranslate nohighlight">\(\mathbf{b}\)</span> is being projected onto the span of <span class="math notranslate nohighlight">\(\mathbf{a}\)</span>, which is simply the line in the direction that <span class="math notranslate nohighlight">\(\mathbf{a}\)</span> points. So <span class="math notranslate nohighlight">\(\mathbf{p}\)</span> must be a scalar multiple of <span class="math notranslate nohighlight">\(\mathbf{a}\)</span>; that is, <span class="math notranslate nohighlight">\(\mathbf{p} = x\mathbf{a}\)</span>, and determining <span class="math notranslate nohighlight">\(\mathbf{p}\)</span> amounts simply to determining the correct scalar <span class="math notranslate nohighlight">\(x\)</span>.</p>
+<p>To determine <span class="math notranslate nohighlight">\(x\)</span>, note that the distance between the termini of the two vectors is shortest when a ray drawn from the tip of <span class="math notranslate nohighlight">\(\mathbf{b}\)</span> forms a right angle with <span class="math notranslate nohighlight">\(\mathbf{a}\)</span>. This coincides with the terminus of the projection <span class="math notranslate nohighlight">\(\mathbf{p}\)</span> that we are trying to determine, and the ray can be expressed as a vector <span class="math notranslate nohighlight">\(\mathbf{e} = \mathbf{b} - \mathbf{p}\)</span> (sketch this yourself using the parallelogram rule for vector addition if you’re not convinced). Vectors at right angles have a dot product of 0.</p>
+<div class="admonition-definition-orthogonality admonition">
+<p class="admonition-title">Definition: Orthogonality</p>
+<p>Vectors <span class="math notranslate nohighlight">\(\mathbf{v}_1\)</span>, <span class="math notranslate nohighlight">\(\mathbf{v}_2\)</span> are said to be <em>orthogonal</em> if <span class="math notranslate nohighlight">\(\mathbf{v}_1^T\mathbf{v}_2 = 0\)</span>. A set of vectors <span class="math notranslate nohighlight">\(\mathbf{v}_1, \dots, \mathbf{v}_k\)</span> is <em>orthogonal</em> if <span class="math notranslate nohighlight">\(mathbf{v}_i^T\mathbf{v}_j = 0\)</span> for all <span class="math notranslate nohighlight">\(1\leq i, j \leq k\)</span> such that <span class="math notranslate nohighlight">\(i \neq j\)</span>. If all of the vectors are unit vectors, we call the set <em>orthonormal</em>.</p>
+</div>
+<p>‘Orthogonal’ is a term that means the same thing as ‘perpendicular’ when working with lines, planes, and so on, but is also used more generally to describe similar notions with things that are non necessarily linear (see, for example, <a class="reference external" href="https://en.wikipedia.org/wiki/Orthogonal_functions">orthogonal functions</a>).</p>
+<p>The vectors <span class="math notranslate nohighlight">\(\mathbf{e}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{a}\)</span> are orthogonal, so <span class="math notranslate nohighlight">\(\mathbf{a}^T\mathbf{e} = 0\)</span>. We can use this to solve for <span class="math notranslate nohighlight">\(x\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{align*}
+        \mathbf{a}^T\mathbf{e} &amp;= 0 \\
+        \mathbf{a}^T(\mathbf{b} - \mathbf{p}) &amp;= 0 \\
+        \mathbf{a}^T(\mathbf{b} - x\mathbf{a}) &amp;= 0 \\
+        \mathbf{a}^T\mathbf{b} - x\mathbf{a}^T\mathbf{a} &amp;= 0 \\
+        \mathbf{a}^T\mathbf{b} &amp;= x\mathbf{a}^T\mathbf{a} \\
+        \frac{\mathbf{a}^T\mathbf{b}}{\mathbf{a}^T\mathbf{a}} &amp;= x,
+    \end{align*}
+\end{split}\]</div>
+<p>and once we know <span class="math notranslate nohighlight">\(x\)</span> we know <span class="math notranslate nohighlight">\(\mathbf{p} = x\mathbf{a}\)</span>.</p>
+<p><strong>Example:</strong> Given <span class="math notranslate nohighlight">\(\mathbf{u}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{v}\)</span>, below, we will calculate the projection <span class="math notranslate nohighlight">\(\mathbf{p}\)</span> of <span class="math notranslate nohighlight">\(\mathbf{u}\)</span> onto the line spanned by <span class="math notranslate nohighlight">\(\mathbf{v}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \mathbf{u} = \begin{bmatrix}
+                    2 \\
+                    1 \\
+                    1 \\
+                    2
+                \end{bmatrix}\text{, }
+    \mathbf{v} = \begin{bmatrix}
+                    0 \\
+                    -1 \\
+                    1 \\
+                    2
+                \end{bmatrix}.
+\end{split}\]</div>
+<p>Then</p>
+<div class="math notranslate nohighlight">
+\[
+    x = \frac{\mathbf{v}^T\mathbf{u}}{\mathbf{v}^T\mathbf{v}} = \frac{2\cdot0 + 1\cdot (-1) + 1\cdot 1 + 2\cdot 2}{0^2 + (-1)^2 + 1^2 +2^2} = \frac{4}{6} = \frac{2}{3},
+\]</div>
+<p>and</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \mathbf{p} = x\mathbf{v} = \frac{2}{3}\begin{bmatrix}
+                    0 \\
+                    -1 \\
+                    1 \\
+                    2
+                \end{bmatrix} = 
+                \begin{bmatrix}
+                    0 \\
+                    -2/3 \\
+                    2/3 \\
+                    4/3
+                \end{bmatrix}.
+\end{split}\]</div>
+<p>Now suppose that instead of projecting onto a line spanned by a single vector, we want to project a vector <span class="math notranslate nohighlight">\(\mathbf{b}\)</span> onto the span of several vectors <span class="math notranslate nohighlight">\(A_1, \dots, A_n\)</span>. As you can probably guess from the choice of notation, these vectors are going to end up in the columns of a matrix shortly, but for the moment we will simply set the same ‘nearness’ condition for the projection; that is, for each <span class="math notranslate nohighlight">\(A_i\)</span>, <span class="math notranslate nohighlight">\(1\leq i\leq n\)</span> we want to determine <span class="math notranslate nohighlight">\(x_i\)</span> so that <span class="math notranslate nohighlight">\(A_i^T(\mathbf{b} - xA_i) = 0\)</span>. This gives us a system:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{align*}
+        A_1^T(\mathbf{b} - x_1A_1) &amp;= 0 \\
+        \vdots &amp; \\
+        A_n^T(\mathbf{b} - x_nA_n) &amp;= 0
+    \end{align*}
+\end{split}\]</div>
+<p>This system can be better written as the matrix equation</p>
+<div class="math notranslate nohighlight">
+\[
+    A^T(\mathbf{b} - A\mathbf{x}) = 0,
+\]</div>
+<p>and this can be solved for <span class="math notranslate nohighlight">\(\mathbf{x}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{align*}
+        A^T(\mathbf{b} - A\mathbf{x}) &amp;= 0 \\
+        A^T\mathbf{b} - A^TA\mathbf{x} &amp;= 0 \\
+        A^T\mathbf{b} &amp;= A^TA\mathbf{x} \\
+        (A^TA)^{-1}A^T\mathbf{b} &amp;= \mathbf{x}.
+    \end{align*}
+\end{split}\]</div>
+<p>Then, as in the single-vector case, the projection can be found by multiplying the <span class="math notranslate nohighlight">\(A_i\)</span>’s by <span class="math notranslate nohighlight">\(\mathbf{x}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+    \mathbf{p} = A\mathbf{x} = A(A^TA)^{-1}A^T\mathbf{b}.
+\]</div>
+<section id="similarity-to-the-normal-equation-from-ols">
+<h3>Similarity to the Normal Equation from OLS<a class="headerlink" href="#similarity-to-the-normal-equation-from-ols" title="Link to this heading">#</a></h3>
+<p>Before going further, note the similarity with the normal equation <span class="math notranslate nohighlight">\(\mathbf{b} = (X^TX)^{-1}X^T\mathbf{y}\)</span> from the last section. In the normal equation, <span class="math notranslate nohighlight">\(X\)</span> contains our input data, <span class="math notranslate nohighlight">\(\mathbf{y}\)</span> is a vector of known values, and <span class="math notranslate nohighlight">\(\mathbf{b}\)</span> represents a vector of unknowns, and these can be translated to the projection formula’s <span class="math notranslate nohighlight">\(A\)</span>, <span class="math notranslate nohighlight">\(\mathbf{b}\)</span>, and <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> respectively. Aside from the different choice of variable names, we have the same formula for the unknowns: <span class="math notranslate nohighlight">\((A^TA)^{-1}A^T\mathbf{b} = \mathbf{x}\)</span>, and we derive the predictions in OLS in the same way we obtain the projection vector once we have <span class="math notranslate nohighlight">\(\mathbf{x}\)</span>: <span class="math notranslate nohighlight">\(X\mathbf{b} = X(X^TX)^{-1}X^T\mathbf{y}\)</span> for OLS or <span class="math notranslate nohighlight">\(A\mathbf{x} = A(A^TA)^{-1}A^T\mathbf{b}\)</span> for projection. This provides a geometric explanation for why the normal equation is the right solution to the problem of fitting a line: the normal equation produces the coefficients that map <span class="math notranslate nohighlight">\(\mathbf{y}\)</span> into the span of the data in the columns of <span class="math notranslate nohighlight">\(X\)</span> so that we land on the nearest vector to <span class="math notranslate nohighlight">\(\mathbf{y}\)</span> that is in the span of the columns of <span class="math notranslate nohighlight">\(X\)</span>.</p>
+<p>Since we have arrived back at the normal equation, we have also arrived back at the question we ended the last section with: how can we compute these quantities without inverting <span class="math notranslate nohighlight">\(A^TA\)</span>?</p>
+</section>
+</section>
+<section id="gram-schmidt-orthogonalization">
+<h2>Gram-Schmidt Orthogonalization<a class="headerlink" href="#gram-schmidt-orthogonalization" title="Link to this heading">#</a></h2>
+<p>Given a set of vectors <span class="math notranslate nohighlight">\(\mathbf{v}_1,\dots, \mathbf{v}_k\)</span>, it is possible to algorithmically produce a set of vectors <span class="math notranslate nohighlight">\(\mathbf{q}_1,\dots,\mathbf{q}_k\)</span> that have the same span but are orthogonal to each other. The process of doing so it called <em>Gram-Schmidt orthogonalization</em>.</p>
+<p><strong>The Gram-Schmidt Orthogonalization Algorithm</strong></p>
+<ol class="arabic simple">
+<li><p>Set <span class="math notranslate nohighlight">\(\mathbf{q_1} = \mathbf{v_1}\)</span>.</p></li>
+<li><p>Set <span class="math notranslate nohighlight">\(\mathbf{q_2} = \mathbf{v}_2 - \text{proj}_{\mathbf{q}_1}(\mathbf{v}_2)\)</span>, where <span class="math notranslate nohighlight">\(\text{proj}_{\mathbf{q}_1}(\mathbf{v}_2)\)</span> denotes the projection of <span class="math notranslate nohighlight">\(\mathbf{v}_2\)</span> in the direction of <span class="math notranslate nohighlight">\(\mathbf{q}_1\)</span>.</p></li>
+<li><p>Set <span class="math notranslate nohighlight">\(\mathbf{q_3} = \mathbf{v_3} - \text{proj}_{\mathbf{q}_1}(\mathbf{v}_3) - \text{proj}_{\mathbf{q}_2}(\mathbf{v}_3)\)</span>.</p></li>
+<li><p>Continue this process until you have produced <span class="math notranslate nohighlight">\(k\)</span> orthogonal vectors <span class="math notranslate nohighlight">\(\mathbf{q}_1,\dots,\mathbf{q}_k\)</span>.</p></li>
+</ol>
+<p>It is common to extend this process slightly to produce an orthonormal set by dividing each <span class="math notranslate nohighlight">\(\mathbf{q}_i\)</span> by its length after obtaining it from the above process. Doing so is then called the Gram-Schmidt orthonormalization process.</p>
+<p>We can verify (somewhat tediously) that the process above produces vectors that are orthogonal to each other. What about their span?  When <span class="math notranslate nohighlight">\(\mathbf{q}_2\)</span> is formed following the algorithm above, we have simply produced a vector analagous to the vector <span class="math notranslate nohighlight">\(\mathbf{e} = \mathbf{b} - \mathbf{p}\)</span> from our earlier derivation of the projection formula. This changes <span class="math notranslate nohighlight">\(\mathbf{v}_2\)</span>, but not the directional piece of <span class="math notranslate nohighlight">\(\mathbf{v}_2\)</span> that differs from the direction of <span class="math notranslate nohighlight">\(\mathbf{v}_1\)</span>, and this means that the result is a set of vectors <span class="math notranslate nohighlight">\(\mathbf{q}_1, \mathbf{q}_2\)</span> that span the same space as the original <span class="math notranslate nohighlight">\(\mathbf{v}_1, \mathbf{v}_2\)</span>. Further iterations of the process are messier but follow the same logic.</p>
+<p>More formally, note that each <span class="math notranslate nohighlight">\(\mathbf{q}_i\)</span> is simply a linear combination of the <span class="math notranslate nohighlight">\(\mathbf{v}_j\)</span>’s, which means that each <span class="math notranslate nohighlight">\(\mathbf{q}_i\)</span> is in the span of the <span class="math notranslate nohighlight">\(\mathbf{v}_j\)</span>’s, and so any linear combination of the <span class="math notranslate nohighlight">\(\mathbf{q}_i\)</span>’s must also be in the span of the <span class="math notranslate nohighlight">\(\mathbf{v}_j\)</span>’s. Conversely, suppose <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> is a vector in the span of the <span class="math notranslate nohighlight">\(\mathbf{v}_i\)</span>’s. In the above algorithm, move each of the proj<span class="math notranslate nohighlight">\(_{\mathbf{q}_i}(\mathbf{v}_j)\)</span>’s to the left-hand side: each such projection is by definition a scalar multiple of the vector <span class="math notranslate nohighlight">\(\mathbf{q}_i\)</span> being projected onto, so the <span class="math notranslate nohighlight">\(\mathbf{v}_j\)</span>’s are in the span of the <span class="math notranslate nohighlight">\(\mathbf{q}_i\)</span>’s also. Thus, the spans must be the same.</p>
+</section>
+<section id="a-qr-via-gram-schmidt">
+<h2><span class="math notranslate nohighlight">\(A = QR\)</span> via Gram-Schmidt<a class="headerlink" href="#a-qr-via-gram-schmidt" title="Link to this heading">#</a></h2>
+<p>The above algorithm extends naturally to the factorization that is our goal: <span class="math notranslate nohighlight">\(A = QR\)</span>. We just showed that given a set of vectors <span class="math notranslate nohighlight">\(\mathbf{v}_1,\dots, \mathbf{v}_k\)</span>, it is possible to algorithmically produce a set of vectors <span class="math notranslate nohighlight">\(\mathbf{q}_1,\dots,\mathbf{q}_k\)</span> that have the same span but are orthogonal to each other. In showing this, we noted that each <span class="math notranslate nohighlight">\(\mathbf{v}_j\)</span> is expressible as a linear combination of the <span class="math notranslate nohighlight">\(\mathbf{q}_i\)</span>’s; in particular,</p>
+<div class="math notranslate nohighlight">
+\[
+    \mathbf{v}_i = \sum_{j=1}^i r_{ji}\mathbf{q}_j,
+\]</div>
+<p>where the <span class="math notranslate nohighlight">\(r_j\)</span>’s are corresponding projection coefficients. So let’s do this using the columns of a matrix <span class="math notranslate nohighlight">\(A\)</span> as the <span class="math notranslate nohighlight">\(\mathbf{v}_i\)</span>’s, and write all of these linear combinations in a matrix multiplication:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix}
+        \vdots &amp; \vdots &amp; \vdots \\
+        A_1 &amp; \vdots &amp; A_n \\
+        \vdots &amp; \vdots &amp; \vdots
+    \end{bmatrix} = 
+    \begin{bmatrix}
+        \vdots &amp; \vdots &amp; \vdots \\
+        \mathbf{q}_1 &amp; \vdots &amp; \mathbf{q}_n \\
+        \vdots &amp; \vdots &amp; \vdots
+    \end{bmatrix}
+    \begin{bmatrix}
+        r_{11} &amp; r_{12} &amp; \dots &amp; r_{1n} \\
+        0 &amp; r_{22} &amp; \dots &amp; r_{2n} \\
+        \vdots &amp; &amp; &amp; \\
+        0 &amp; 0 &amp; \dots &amp; r_{nn}
+    \end{bmatrix}.
+\end{split}\]</div>
+<p>Go one step further and for each <span class="math notranslate nohighlight">\(j\)</span>, <span class="math notranslate nohighlight">\(1\leq j \leq n\)</span>, multiply each column <span class="math notranslate nohighlight">\(\mathbf{q}_j\)</span> in the matrix on the left by <span class="math notranslate nohighlight">\(1/||\mathbf{q}_j||\)</span>, and each column in the matrix on the right by <span class="math notranslate nohighlight">\(||\mathbf{q}_j||\)</span>. Now <span class="math notranslate nohighlight">\(A = QR\)</span> and <span class="math notranslate nohighlight">\(Q\)</span> is a matrix with not just orthogonal but orthonormal columns.</p>
+</section>
+<section id="orthogonal-matrices">
+<h2>Orthogonal Matrices<a class="headerlink" href="#orthogonal-matrices" title="Link to this heading">#</a></h2>
+<div class="admonition-definition-orthogonal-matrix admonition">
+<p class="admonition-title">Definition: Orthogonal Matrix</p>
+<p>A matrix <span class="math notranslate nohighlight">\(Q\)</span> is an <em>orthogonal matrix</em> if the columns of <span class="math notranslate nohighlight">\(Q\)</span> are orthonormal</p>
+</div>
+<p>You will have to put up with the inconsistency in the language, because it is standard. The orthonormality of the columns of an orthogonal matrix leads to some important characteristics:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(Q^{-1} = Q^T\)</span> (so <span class="math notranslate nohighlight">\(Q^TQ=I\)</span>)</p></li>
+<li><p><span class="math notranslate nohighlight">\((Q\mathbf{x})^T(Q\mathbf{y}) = \mathbf{x}^T\mathbf{y}\)</span> (multiplication by <span class="math notranslate nohighlight">\(Q\)</span> preserves dot products)</p></li>
+<li><p><span class="math notranslate nohighlight">\(||Q\mathbf{x}|| = ||\mathbf{x}||\)</span> (multiplication by <span class="math notranslate nohighlight">\(Q\)</span> preserves norms)</p></li>
+</ul>
+<p>These are all easily proved in order from the definitions and their proofs are left as an exercise.</p>
+<p>Going back to the normal equations from OLS, you can recognize the <span class="math notranslate nohighlight">\(QR\)</span> factorization as the one that will allow us to get around having to calculate <span class="math notranslate nohighlight">\((A^TA)^{-1}\)</span>. The argument from the conclusion of the previous section is reproduced below:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{align*}
+        \mathbf{y} &amp;= X\mathbf{b} \\
+        X^T\mathbf{y} &amp;= X^TX\mathbf{b} \\
+        (QR)^T\mathbf{y} &amp;= (QR)^T(QR)\mathbf{b} \\
+        (R^TQ^T)\mathbf{y} &amp;= (R^TQ^T)(QR)\mathbf{b} \\
+        R^TQ^T\mathbf{y} &amp;= R^T(Q^TQ)R\mathbf{b} \\
+        R^TQ^T\mathbf{y} &amp;= R^TIR\mathbf{b} \\
+        Q^T\mathbf{y} &amp;= R\mathbf{b},
+    \end{align*}
+\end{split}\]</div>
+<p>This works because <span class="math notranslate nohighlight">\(Q\)</span> is orthogonal, so it is its own inverse. <span class="math notranslate nohighlight">\(R\)</span> is upper triangular, so solving from <span class="math notranslate nohighlight">\(Q^T\mathbf{y} = R\mathbf{b}\)</span> only requires back substitution.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="ols.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Ordinary Least Squares and Linear Regression</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="projection-qr-problem-set.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Problem Set 5: Projections and <span class="math notranslate nohighlight">\(A=QR\)</span></p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#projection-onto-a-single-vector">Projection onto a Single Vector</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#similarity-to-the-normal-equation-from-ols">Similarity to the Normal Equation from OLS</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gram-schmidt-orthogonalization">Gram-Schmidt Orthogonalization</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-qr-via-gram-schmidt"><span class="math notranslate nohighlight">\(A = QR\)</span> via Gram-Schmidt</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#orthogonal-matrices">Orthogonal Matrices</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Jeremiah W. Johnson
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <div>
+  <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="jwjohnson314" data-description="Support me on Buy me a coffee!" data-message="Thanks for reading! If you found this useful and want to support this book project, you can Buy Me a Coffee here. Your support helps keep this book free for my students." data-color="#5F7FFF" data-position="Right" data-x_margin="18" data-y_margin="18"></script> 
+</div>
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

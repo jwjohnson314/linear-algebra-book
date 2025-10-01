@@ -405,6 +405,9 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gram-schmidt-orthogonalization">Gram-Schmidt Orthogonalization</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-qr-via-gram-schmidt"><span class="math notranslate nohighlight">\(A = QR\)</span> via Gram-Schmidt</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#orthogonal-matrices">Orthogonal Matrices</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-thin-qr-factorization">The Thin <span class="math notranslate nohighlight">\(QR\)</span>-Factorization</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#an-example-by-hand">An Example ‘by Hand’</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-real-world-example">A Real-World Example</a></li>
 </ul>
             </nav>
         </div>
@@ -445,6 +448,7 @@ document.write(`
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">mpl_toolkits.mplot3d</span><span class="w"> </span><span class="kn">import</span> <span class="n">Axes3D</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;bmh&#39;</span><span class="p">)</span>
 
 <span class="c1"># Create figure with two subplots</span>
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
@@ -562,16 +566,16 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/2cabe8f60d9aa0ac1572cc66551afe152aa4dc2f2c5b18b164a417a8c397e02c.png" src="_images/2cabe8f60d9aa0ac1572cc66551afe152aa4dc2f2c5b18b164a417a8c397e02c.png" />
+<img alt="_images/32b106e9f06fc90c2c01c7f2d3ad5f665be2ff58ddc24aef53f2d2711b277c4b.png" src="_images/32b106e9f06fc90c2c01c7f2d3ad5f665be2ff58ddc24aef53f2d2711b277c4b.png" />
 </div>
 </div>
 <section id="projection-onto-a-single-vector">
 <h2>Projection onto a Single Vector<a class="headerlink" href="#projection-onto-a-single-vector" title="Link to this heading">#</a></h2>
-<p>In the example illustrated above on the right, <span class="math notranslate nohighlight">\(\mathbf{b}\)</span> is being projected onto the span of <span class="math notranslate nohighlight">\(\mathbf{a}\)</span>, which is simply the line in the direction that <span class="math notranslate nohighlight">\(\mathbf{a}\)</span> points. So <span class="math notranslate nohighlight">\(\mathbf{p}\)</span> must be a scalar multiple of <span class="math notranslate nohighlight">\(\mathbf{a}\)</span>; that is, <span class="math notranslate nohighlight">\(\mathbf{p} = x\mathbf{a}\)</span>, and determining <span class="math notranslate nohighlight">\(\mathbf{p}\)</span> amounts simply to determining the correct scalar <span class="math notranslate nohighlight">\(x\)</span>.</p>
+<p>In the example illustrated above on the left, <span class="math notranslate nohighlight">\(\mathbf{b}\)</span> is being projected onto the span of <span class="math notranslate nohighlight">\(\mathbf{a}\)</span>, which is simply the line in the direction that <span class="math notranslate nohighlight">\(\mathbf{a}\)</span> points. So <span class="math notranslate nohighlight">\(\mathbf{p}\)</span> must be a scalar multiple of <span class="math notranslate nohighlight">\(\mathbf{a}\)</span>; that is, <span class="math notranslate nohighlight">\(\mathbf{p} = x\mathbf{a}\)</span>, and determining <span class="math notranslate nohighlight">\(\mathbf{p}\)</span> amounts simply to determining the correct scalar <span class="math notranslate nohighlight">\(x\)</span>.</p>
 <p>To determine <span class="math notranslate nohighlight">\(x\)</span>, note that the distance between the termini of the two vectors is shortest when a ray drawn from the tip of <span class="math notranslate nohighlight">\(\mathbf{b}\)</span> forms a right angle with <span class="math notranslate nohighlight">\(\mathbf{a}\)</span>. This coincides with the terminus of the projection <span class="math notranslate nohighlight">\(\mathbf{p}\)</span> that we are trying to determine, and the ray can be expressed as a vector <span class="math notranslate nohighlight">\(\mathbf{e} = \mathbf{b} - \mathbf{p}\)</span> (sketch this yourself using the parallelogram rule for vector addition if you’re not convinced). Vectors at right angles have a dot product of 0.</p>
 <div class="admonition-definition-orthogonality admonition">
 <p class="admonition-title">Definition: Orthogonality</p>
-<p>Vectors <span class="math notranslate nohighlight">\(\mathbf{v}_1\)</span>, <span class="math notranslate nohighlight">\(\mathbf{v}_2\)</span> are said to be <em>orthogonal</em> if <span class="math notranslate nohighlight">\(\mathbf{v}_1^T\mathbf{v}_2 = 0\)</span>. A set of vectors <span class="math notranslate nohighlight">\(\mathbf{v}_1, \dots, \mathbf{v}_k\)</span> is <em>orthogonal</em> if <span class="math notranslate nohighlight">\(mathbf{v}_i^T\mathbf{v}_j = 0\)</span> for all <span class="math notranslate nohighlight">\(1\leq i, j \leq k\)</span> such that <span class="math notranslate nohighlight">\(i \neq j\)</span>. If all of the vectors are unit vectors, we call the set <em>orthonormal</em>.</p>
+<p>Vectors <span class="math notranslate nohighlight">\(\mathbf{v}_1\)</span>, <span class="math notranslate nohighlight">\(\mathbf{v}_2\)</span> are said to be <em>orthogonal</em> if <span class="math notranslate nohighlight">\(\mathbf{v}_1^T\mathbf{v}_2 = 0\)</span>. A set of vectors <span class="math notranslate nohighlight">\(\mathbf{v}_1, \dots, \mathbf{v}_k\)</span> is <em>orthogonal</em> if <span class="math notranslate nohighlight">\(\mathbf{v}_i^T\mathbf{v}_j = 0\)</span> for all <span class="math notranslate nohighlight">\(1\leq i, j \leq k\)</span> such that <span class="math notranslate nohighlight">\(i \neq j\)</span>. If all of the vectors are unit vectors, we call the set <em>orthonormal</em>.</p>
 </div>
 <p>‘Orthogonal’ is a term that means the same thing as ‘perpendicular’ when working with lines, planes, and so on, but is also used more generally to describe similar notions with things that are non necessarily linear (see, for example, <a class="reference external" href="https://en.wikipedia.org/wiki/Orthogonal_functions">orthogonal functions</a>).</p>
 <p>The vectors <span class="math notranslate nohighlight">\(\mathbf{e}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{a}\)</span> are orthogonal, so <span class="math notranslate nohighlight">\(\mathbf{a}^T\mathbf{e} = 0\)</span>. We can use this to solve for <span class="math notranslate nohighlight">\(x\)</span>:</p>
@@ -636,14 +640,14 @@ document.write(`
 <p>This system can be better written as the matrix equation</p>
 <div class="math notranslate nohighlight">
 \[
-    A^T(\mathbf{b} - A\mathbf{x}) = 0,
+    A^T(\mathbf{b} - A\mathbf{x}) = \mathbf{0},
 \]</div>
 <p>and this can be solved for <span class="math notranslate nohighlight">\(\mathbf{x}\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
     \begin{align*}
-        A^T(\mathbf{b} - A\mathbf{x}) &amp;= 0 \\
-        A^T\mathbf{b} - A^TA\mathbf{x} &amp;= 0 \\
+        A^T(\mathbf{b} - A\mathbf{x}) &amp;= \mathbf{0} \\
+        A^T\mathbf{b} - A^TA\mathbf{x} &amp;= \mathbf{0} \\
         A^T\mathbf{b} &amp;= A^TA\mathbf{x} \\
         (A^TA)^{-1}A^T\mathbf{b} &amp;= \mathbf{x}.
     \end{align*}
@@ -680,7 +684,7 @@ document.write(`
 \[
     \mathbf{v}_i = \sum_{j=1}^i r_{ji}\mathbf{q}_j,
 \]</div>
-<p>where the <span class="math notranslate nohighlight">\(r_j\)</span>’s are corresponding projection coefficients. So let’s do this using the columns of a matrix <span class="math notranslate nohighlight">\(A\)</span> as the <span class="math notranslate nohighlight">\(\mathbf{v}_i\)</span>’s, and write all of these linear combinations in a matrix multiplication:</p>
+<p>where the <span class="math notranslate nohighlight">\(r_j\)</span>’s are corresponding projection coefficients. So let’s do this using the columns of a square <span class="math notranslate nohighlight">\(n\times n\)</span> matrix <span class="math notranslate nohighlight">\(A\)</span> as the <span class="math notranslate nohighlight">\(\mathbf{v}_i\)</span>’s, and write all of these linear combinations in a matrix multiplication:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
     \begin{bmatrix}
@@ -708,13 +712,16 @@ document.write(`
 <p class="admonition-title">Definition: Orthogonal Matrix</p>
 <p>A matrix <span class="math notranslate nohighlight">\(Q\)</span> is an <em>orthogonal matrix</em> if the columns of <span class="math notranslate nohighlight">\(Q\)</span> are orthonormal</p>
 </div>
-<p>You will have to put up with the inconsistency in the language, because it is standard. The orthonormality of the columns of an orthogonal matrix leads to some important characteristics:</p>
+<p>You will have to put up with the inconsistency in the language, because it is standard. The orthonormality of the columns of an orthogonal matrix leads to some important characteristics.</p>
+<div class="important admonition">
+<p class="admonition-title">Properties of Orthogonal Matrices</p>
 <ul class="simple">
 <li><p><span class="math notranslate nohighlight">\(Q^{-1} = Q^T\)</span> (so <span class="math notranslate nohighlight">\(Q^TQ=I\)</span>)</p></li>
 <li><p><span class="math notranslate nohighlight">\((Q\mathbf{x})^T(Q\mathbf{y}) = \mathbf{x}^T\mathbf{y}\)</span> (multiplication by <span class="math notranslate nohighlight">\(Q\)</span> preserves dot products)</p></li>
 <li><p><span class="math notranslate nohighlight">\(||Q\mathbf{x}|| = ||\mathbf{x}||\)</span> (multiplication by <span class="math notranslate nohighlight">\(Q\)</span> preserves norms)</p></li>
 </ul>
-<p>These are all easily proved in order from the definitions and their proofs are left as an exercise.</p>
+</div>
+<p>The properties above are all easily proved in order from the definitions and their proofs are left as an exercise.</p>
 <p>Going back to the normal equations from OLS, you can recognize the <span class="math notranslate nohighlight">\(QR\)</span> factorization as the one that will allow us to get around having to calculate <span class="math notranslate nohighlight">\((A^TA)^{-1}\)</span>. The argument from the conclusion of the previous section is reproduced below:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
@@ -728,7 +735,323 @@ document.write(`
         Q^T\mathbf{y} &amp;= R\mathbf{b},
     \end{align*}
 \end{split}\]</div>
-<p>This works because <span class="math notranslate nohighlight">\(Q\)</span> is orthogonal, so it is its own inverse. <span class="math notranslate nohighlight">\(R\)</span> is upper triangular, so solving from <span class="math notranslate nohighlight">\(Q^T\mathbf{y} = R\mathbf{b}\)</span> only requires back substitution.</p>
+<p>This works because <span class="math notranslate nohighlight">\(Q\)</span> is orthogonal, so it is its own inverse. <span class="math notranslate nohighlight">\(R\)</span> is upper triangular, so solving from <span class="math notranslate nohighlight">\(Q^T\mathbf{y} = R\mathbf{b}\)</span> only requires back substitution. However, there is still one issue: the <span class="math notranslate nohighlight">\(QR\)</span>-factorization for a square matrix is slightly different that the <span class="math notranslate nohighlight">\(QR\)</span>-factorization of a nonsquare matrix, and <span class="math notranslate nohighlight">\(X\)</span> in OLS is <span class="math notranslate nohighlight">\(m\times n\)</span>, typically with <span class="math notranslate nohighlight">\(m &gt;&gt; n\)</span>.</p>
+</section>
+<section id="the-thin-qr-factorization">
+<h2>The Thin <span class="math notranslate nohighlight">\(QR\)</span>-Factorization<a class="headerlink" href="#the-thin-qr-factorization" title="Link to this heading">#</a></h2>
+<p>If <span class="math notranslate nohighlight">\(A\)</span> is <span class="math notranslate nohighlight">\(m\times n\)</span> and <span class="math notranslate nohighlight">\(m\neq n\)</span>, then we can still obtain a <span class="math notranslate nohighlight">\(QR\)</span>-factorization of <span class="math notranslate nohighlight">\(A\)</span>, but it will not be unique. It is easiest to express the factorization using block matrices. Block matrices are simply a conceptualization of a matrix as a collection of compatible submatrices; for example, I could write a <span class="math notranslate nohighlight">\(4\times4\)</span> matrix <span class="math notranslate nohighlight">\(A\)</span> using <span class="math notranslate nohighlight">\(2\times2\)</span> blocks:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    A = \begin{bmatrix}
+            a_{11} &amp; a_{12} &amp; a_{13} &amp; a_{14} \\
+            a_{21} &amp; a_{22} &amp; a_{23} &amp; a_{24} \\
+            a_{31} &amp; a_{32} &amp; a_{33} &amp; a_{34} \\
+            a_{41} &amp; a_{42} &amp; a_{43} &amp; a_{44}
+        \end{bmatrix}=
+        \begin{bmatrix}
+            A_{11} &amp; A_{12} \\
+            A_{21} &amp; A_{22}
+        \end{bmatrix}.
+\end{split}\]</div>
+<p>Here each <span class="math notranslate nohighlight">\(A_{ij}\)</span> is a <span class="math notranslate nohighlight">\(2\times2\)</span> matrix; in particular,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    A_{11}=\begin{bmatrix}
+        a_{11} &amp; a_{12} \\
+        a_{21} &amp; a_{22}
+        \end{bmatrix}\text{ and }
+    A_{22} = \begin{bmatrix}
+        a_{33} &amp; a_{34} \\
+        a_{43} &amp; a_{44}
+        \end{bmatrix}.
+\end{split}\]</div>
+<p>the components in the ‘upper left corner’ and ‘lower right corner’ of <span class="math notranslate nohighlight">\(A\)</span> itself. Now, it is important to know that multiplication with compatible block matrices is the same as multiplication with ordinary matrices; for example,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix}
+        A &amp; B \\
+        C &amp; D
+    \end{bmatrix}
+    \begin{bmatrix}
+        E &amp; F \\
+        G &amp; H
+    \end{bmatrix}=
+    \begin{bmatrix}
+        AE + BG &amp; AF + BH \\
+        CE + DG &amp; CF + DH
+    \end{bmatrix}
+\end{split}\]</div>
+<p>using the standard row method.</p>
+<p>If we compute a <span class="math notranslate nohighlight">\(QR\)</span>-factorization of an <span class="math notranslate nohighlight">\(m\times n\)</span> matrix <span class="math notranslate nohighlight">\(A\)</span> with <span class="math notranslate nohighlight">\(m \geq n\)</span> the result can be expressed in the following block form:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    A = QR = 
+    \begin{bmatrix}
+        Q_1 &amp; Q_2
+    \end{bmatrix}
+    \begin{bmatrix}
+        R_1 \\
+        0
+    \end{bmatrix},
+\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(Q\)</span> is <span class="math notranslate nohighlight">\(m\times m\)</span>, <span class="math notranslate nohighlight">\(R\)</span> is <span class="math notranslate nohighlight">\(m\times n\)</span>, <span class="math notranslate nohighlight">\(Q_1\)</span> is <span class="math notranslate nohighlight">\(m\times n\)</span>, <span class="math notranslate nohighlight">\(Q_2\)</span> is <span class="math notranslate nohighlight">\(m\times (m-n)\)</span>, <span class="math notranslate nohighlight">\(R_1\)</span> is <span class="math notranslate nohighlight">\(n\times n\)</span>, and the zero in <span class="math notranslate nohighlight">\(R\)</span> represents an <span class="math notranslate nohighlight">\((m-n) \times n\)</span> zero matrix. In this scenario, under reasonable hypotheses <span class="math notranslate nohighlight">\(Q_1\)</span> and <span class="math notranslate nohighlight">\(R_1\)</span> are unique but <span class="math notranslate nohighlight">\(Q_2\)</span> is not, hence our phrasing of this as <em>a</em> <span class="math notranslate nohighlight">\(QR\)</span>-factorization rather than <em>the</em> <span class="math notranslate nohighlight">\(QR\)</span> factorization. For OLS, <span class="math notranslate nohighlight">\(Q_1\)</span> and <span class="math notranslate nohighlight">\(R_1\)</span> are where we want to focus.</p>
+<div class="important admonition">
+<p class="admonition-title">Calculation of Thin QR</p>
+<p>The Gram-Schmidt process is not typically used to produce the thin <span class="math notranslate nohighlight">\(QR\)</span> factorization. Later on we will show how it is calculated using <em>Householder reflections</em>.</p>
+</div>
+</section>
+<section id="an-example-by-hand">
+<h2>An Example ‘by Hand’<a class="headerlink" href="#an-example-by-hand" title="Link to this heading">#</a></h2>
+<p>Consider a simple case where we can perform OLS by hand (Python will do the computations). We will use only three points that are not collinear and we will find the parameters of the line of best fit using <span class="math notranslate nohighlight">\(Q^T\mathbf{y} = R\mathbf{b}\)</span> instead of <span class="math notranslate nohighlight">\(\mathbf{b} = (A^TA)^{-1}A^T\mathbf{y}\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">]])</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">y</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/f43bbe120593d67070fff8e380ec06c90456e14e6082678e0ce46f3a4b5189c2.png" src="_images/f43bbe120593d67070fff8e380ec06c90456e14e6082678e0ce46f3a4b5189c2.png" />
+</div>
+</div>
+<p>The data are already separated into the vector <span class="math notranslate nohighlight">\(\mathbf{y}\)</span> and matrix <span class="math notranslate nohighlight">\(X\)</span> with column of ones corresponding to the intercept. We will solve using <span class="math notranslate nohighlight">\(Q^T\mathbf{y} = R\mathbf{b}\)</span>, so we need the <span class="math notranslate nohighlight">\(QR\)</span>-factorization of <span class="math notranslate nohighlight">\(X\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">linalg</span> <span class="k">as</span> <span class="n">linalg</span>
+
+<span class="n">Q</span><span class="p">,</span> <span class="n">R</span> <span class="o">=</span> <span class="n">linalg</span><span class="o">.</span><span class="n">qr</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">Q</span><span class="p">,</span> <span class="n">R</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(array([[-0.26726124,  0.87287156,  0.40824829],
+        [-0.53452248,  0.21821789, -0.81649658],
+        [-0.80178373, -0.43643578,  0.40824829]]),
+ array([[-3.74165739, -1.60356745],
+        [ 0.        ,  0.65465367],
+        [ 0.        ,  0.        ]]))
+</pre></div>
+</div>
+</div>
+</div>
+<p>As can be seen, <span class="math notranslate nohighlight">\(Q\)</span> is <span class="math notranslate nohighlight">\(3\times 3\)</span>, while <span class="math notranslate nohighlight">\(R\)</span> is <span class="math notranslate nohighlight">\(3\times 2\)</span> with the last row consisting solely of zeros. Let’s partition <span class="math notranslate nohighlight">\(R\)</span> into <span class="math notranslate nohighlight">\(R_1\)</span> (the important part) and what will be called the <code class="docutils literal notranslate"><span class="pre">zero_part_of_R</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">R1</span> <span class="o">=</span> <span class="n">R</span><span class="p">[:</span><span class="mi">2</span><span class="p">,</span> <span class="p">:]</span>
+<span class="n">zero_part_of_R</span> <span class="o">=</span> <span class="n">R</span><span class="p">[</span><span class="mi">2</span><span class="p">:,</span> <span class="p">:]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">R1</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[-3.74165739, -1.60356745],
+       [ 0.        ,  0.65465367]])
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">zero_part_of_R</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[0., 0.]])
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now we partition <span class="math notranslate nohighlight">\(Q\)</span> into <span class="math notranslate nohighlight">\(Q_1\)</span> (the unique and important part) and <span class="math notranslate nohighlight">\(Q_2\)</span> (the not necessarily unique and unimportant part).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Q1</span> <span class="o">=</span> <span class="n">Q</span><span class="p">[:,</span> <span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">Q2</span> <span class="o">=</span> <span class="n">Q</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">:]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Q1</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[-0.26726124,  0.87287156],
+       [-0.53452248,  0.21821789],
+       [-0.80178373, -0.43643578]])
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Q2</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[ 0.40824829],
+       [-0.81649658],
+       [ 0.40824829]])
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now, we use only <span class="math notranslate nohighlight">\(Q_1\)</span> and <span class="math notranslate nohighlight">\(R_1\)</span> in <span class="math notranslate nohighlight">\(Q^T\mathbf{y} = R\mathbf{b}\)</span>, not the full matrices. First, get <span class="math notranslate nohighlight">\(Q_1^T\mathbf{y}\)</span>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">LHS</span> <span class="o">=</span> <span class="n">Q1</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">y</span>
+<span class="n">LHS</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[-2.40535118],
+       [ 0.21821789]])
+</pre></div>
+</div>
+</div>
+</div>
+<p>And then backsubstitute in upper-triangular <span class="math notranslate nohighlight">\(R_1\)</span> to find <span class="math notranslate nohighlight">\(\mathbf{b}\)</span> (we will use a solver routine for this):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">b</span> <span class="o">=</span> <span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">R1</span><span class="p">,</span> <span class="n">LHS</span><span class="p">)</span>
+<span class="n">b</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[0.5       ],
+       [0.33333333]])
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s plot the line:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">y</span><span class="p">)</span>
+
+<span class="n">xs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">xs</span> <span class="o">+</span> <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;line of best fit&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;best&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/da9ca50536eae7c46c9f8494a85fc7b81d3aa77fb8c837cd8811215e46235c3c.png" src="_images/da9ca50536eae7c46c9f8494a85fc7b81d3aa77fb8c837cd8811215e46235c3c.png" />
+</div>
+</div>
+<p>It looks good, but how does it compare with the solution obtained using the normal equation?</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="nd">@X</span><span class="p">)</span> <span class="o">@</span> <span class="n">X</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">y</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[0.5       ],
+       [0.33333333]])
+</pre></div>
+</div>
+</div>
+</div>
+<p>That is the same vector <span class="math notranslate nohighlight">\(\mathbf{b}\)</span>, but we were able to avoid computing <span class="math notranslate nohighlight">\((A^TA)^{-1}\)</span> by instead calculating <span class="math notranslate nohighlight">\(A=QR\)</span>.</p>
+</section>
+<section id="a-real-world-example">
+<h2>A Real-World Example<a class="headerlink" href="#a-real-world-example" title="Link to this heading">#</a></h2>
+<p>Let’s use the student performance data from the last section. Below are the same preprocessing steps:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;./datasets/Student_Performance.csv&#39;</span><span class="p">)</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">get_dummies</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Performance Index&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>  <span class="c1"># separate the target variable from the input data </span>
+
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;Intercept&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">10000</span><span class="p">,))</span>  <span class="c1"># add the intercept column of 1&#39;s </span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;Extracurricular Activities_No&#39;</span><span class="p">,</span> <span class="s1">&#39;Performance Index&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># drop the target and the redundant Extracurricular columns</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(10000, 6)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Note the difference in the number of rows and columns of <span class="math notranslate nohighlight">\(X\)</span>. Let’s run through the same steps as above to obtain the solution <span class="math notranslate nohighlight">\(\mathbf{b}\)</span> using <span class="math notranslate nohighlight">\(Q^T\mathbf{y} = R\mathbf{b}\)</span> instead of the normal equation.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Q</span><span class="p">,</span> <span class="n">R</span> <span class="o">=</span> <span class="n">linalg</span><span class="o">.</span><span class="n">qr</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+<span class="n">Q1</span> <span class="o">=</span> <span class="n">Q</span><span class="p">[:</span><span class="mi">10000</span><span class="p">,</span> <span class="p">:</span><span class="mi">6</span><span class="p">]</span>
+<span class="n">Q2</span> <span class="o">=</span> <span class="n">Q</span><span class="p">[:</span><span class="mi">10000</span><span class="p">,</span> <span class="mi">6</span><span class="p">:]</span>
+
+<span class="n">R1</span> <span class="o">=</span> <span class="n">R</span><span class="p">[:</span><span class="mi">6</span><span class="p">,</span> <span class="p">:</span><span class="mi">6</span><span class="p">]</span>
+<span class="n">zero_part_of_R</span> <span class="o">=</span> <span class="n">R</span><span class="p">[</span><span class="mi">6</span><span class="p">:,</span> <span class="p">:</span><span class="mi">6</span><span class="p">]</span>
+
+<span class="n">zero_part_of_R</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[0., 0., 0., 0., 0., 0.],
+       [0., 0., 0., 0., 0., 0.],
+       [0., 0., 0., 0., 0., 0.],
+       ...,
+       [0., 0., 0., 0., 0., 0.],
+       [0., 0., 0., 0., 0., 0.],
+       [0., 0., 0., 0., 0., 0.]])
+</pre></div>
+</div>
+</div>
+</div>
+<p>Note that <code class="docutils literal notranslate"><span class="pre">zero_part_of_R</span></code> is most of the matrix, but it is indeed just <span class="math notranslate nohighlight">\(0\)</span>. All the important information is in the much smaller upper triangular square <span class="math notranslate nohighlight">\(R_1\)</span>. Let’s solve.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">LHS</span> <span class="o">=</span> <span class="n">Q1</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">y</span>
+
+<span class="n">b</span> <span class="o">=</span> <span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">R1</span><span class="p">,</span> <span class="n">LHS</span><span class="p">)</span>
+<span class="n">b</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([  2.85298205,   1.01843419,   0.48055975,   0.19380214,
+         0.61289758, -34.07558809])
+</pre></div>
+</div>
+</div>
+</div>
+<p>Finally, let’s verify that these are the same values obtained previously using the normal equations.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">X</span><span class="p">)</span> <span class="o">@</span> <span class="n">X</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([ True,  True,  True,  True,  True,  True])
+</pre></div>
+</div>
+</div>
+</div>
 </section>
 </section>
 
@@ -803,6 +1126,9 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gram-schmidt-orthogonalization">Gram-Schmidt Orthogonalization</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-qr-via-gram-schmidt"><span class="math notranslate nohighlight">\(A = QR\)</span> via Gram-Schmidt</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#orthogonal-matrices">Orthogonal Matrices</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-thin-qr-factorization">The Thin <span class="math notranslate nohighlight">\(QR\)</span>-Factorization</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#an-example-by-hand">An Example ‘by Hand’</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-real-world-example">A Real-World Example</a></li>
 </ul>
   </nav></div>
 

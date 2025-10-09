@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Problem Set 2: Matrix Arithmetic &#8212; Applied Linear Algebra</title>
+    <title>Problem Set 6: Vector Spaces and Bases &#8212; Applied Linear Algebra</title>
   
   
   
@@ -59,11 +59,10 @@
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'matrices-problem-set';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'vector-space-problem-set';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Linear Systems and Gaussian Elimination" href="linear-systems-gaussian-elimination.html" />
-    <link rel="prev" title="Matrices" href="matrices.html" />
+    <link rel="prev" title="Problem Set 5: Projections and \(A=QR\)" href="projection-qr-problem-set.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -187,7 +186,7 @@
 <li class="toctree-l1"><a class="reference internal" href="vectors.html">Vectors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vectors-problem-set.html">Problem Set 1: Vectors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="matrices.html">Matrices</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Problem Set 2: Matrix Arithmetic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrices-problem-set.html">Problem Set 2: Matrix Arithmetic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="linear-systems-gaussian-elimination.html">Linear Systems and Gaussian Elimination</a></li>
 <li class="toctree-l1"><a class="reference internal" href="gaussian-elimination-lu-problem-set.html">Problem Set 3: Gaussian Elimination and <span class="math notranslate nohighlight">\(A=LU\)</span></a></li>
 <li class="toctree-l1"><a class="reference internal" href="computation.html">Computation</a></li>
@@ -203,7 +202,7 @@
 
 
 
-<li class="toctree-l1"><a class="reference internal" href="vector-space-problem-set.html">Problem Set 6: Vector Spaces and Bases</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Problem Set 6: Vector Spaces and Bases</a></li>
 </ul>
 
     </div>
@@ -275,7 +274,7 @@
       
       
       
-      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fmatrices-problem-set.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fvector-space-problem-set.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -305,7 +304,7 @@
       
       
       
-      <li><a href="_sources/matrices-problem-set.ipynb" target="_blank"
+      <li><a href="_sources/vector-space-problem-set.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -389,7 +388,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Problem Set 2: Matrix Arithmetic</h1>
+    <h1>Problem Set 6: Vector Spaces and Bases</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -399,12 +398,13 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section-a-basic-matrix-operations">Section A: Basic Matrix Operations</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section-b-matrix-vector-multiplication">Section B: Matrix-Vector Multiplication</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section-c-matrix-matrix-multiplication">Section C: Matrix-Matrix Multiplication</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section-d-dot-product-as-matrix-multiplication">Section D: Dot Product as Matrix Multiplication</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section-e-dimensional-analysis-and-undefined-operations">Section E: Dimensional Analysis and Undefined Operations</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section-f-mixed-applications">Section F: Mixed Applications</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-1-vector-space-verification">Problem 1: Vector Space Verification</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-2-vector-membership">Problem 2: Vector Membership</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-3-subspace-verification">Problem 3: Subspace Verification</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-4-orthogonal-subspaces">Problem 4: Orthogonal Subspaces</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-5-basis-and-spanning-sets">Problem 5: Basis and Spanning Sets</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-6-column-space-and-nullspace">Problem 6: Column Space and Nullspace</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-7-challenge-problem">Problem 7: Challenge Problem</a></li>
 </ul>
             </nav>
         </div>
@@ -416,62 +416,69 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="problem-set-2-matrix-arithmetic">
-<h1>Problem Set 2: Matrix Arithmetic<a class="headerlink" href="#problem-set-2-matrix-arithmetic" title="Link to this heading">#</a></h1>
-<section id="section-a-basic-matrix-operations">
-<h2>Section A: Basic Matrix Operations<a class="headerlink" href="#section-a-basic-matrix-operations" title="Link to this heading">#</a></h2>
-<p><strong>Problem 1:</strong> Given matrices <span class="math notranslate nohighlight">\(A = \begin{bmatrix} 2 &amp; -1 \\ 3 &amp; 4 \end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(B = \begin{bmatrix} 1 &amp; 5 \\ -2 &amp; 3 \end{bmatrix}\)</span>, compute <span class="math notranslate nohighlight">\(A + B\)</span>.</p>
-<p><strong>Problem 2:</strong> Using the same matrices from Problem 1, compute <span class="math notranslate nohighlight">\(A - B\)</span>.</p>
-<p><strong>Problem 3:</strong> Given <span class="math notranslate nohighlight">\(C = \begin{bmatrix} 3 &amp; 0 &amp; -2 \\ 1 &amp; 4 &amp; 5 \end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(D = \begin{bmatrix} -1 &amp; 2 &amp; 3 \\ 6 &amp; -3 &amp; 1 \end{bmatrix}\)</span>, find <span class="math notranslate nohighlight">\(2C - 3D\)</span>.</p>
-<p><strong>Problem 4:</strong> Compute <span class="math notranslate nohighlight">\(3A^T\)</span> where <span class="math notranslate nohighlight">\(A = \begin{bmatrix} 1 &amp; -2 &amp; 4 \\ 0 &amp; 3 &amp; -1 \end{bmatrix}\)</span>.</p>
-<p><strong>Problem 5:</strong> Given <span class="math notranslate nohighlight">\(E = \begin{bmatrix} 2 &amp; -1 \\ 0 &amp; 3 \\ 4 &amp; 1 \end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(F = \begin{bmatrix} 1 &amp; 2 &amp; -1 \\ 3 &amp; 0 &amp; 4 \end{bmatrix}\)</span>, determine if <span class="math notranslate nohighlight">\(E + F\)</span> is defined. If not, explain why.</p>
-<p><strong>Problem 6:</strong> Find the scalar <span class="math notranslate nohighlight">\(k\)</span> such that <span class="math notranslate nohighlight">\(k\begin{bmatrix} 2 &amp; -4 \\ 6 &amp; 8 \end{bmatrix} = \begin{bmatrix} 1 &amp; -2 \\ 3 &amp; 4 \end{bmatrix}\)</span>.</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="problem-set-6-vector-spaces-and-bases">
+<h1>Problem Set 6: Vector Spaces and Bases<a class="headerlink" href="#problem-set-6-vector-spaces-and-bases" title="Link to this heading">#</a></h1>
+<section id="problem-1-vector-space-verification">
+<h2>Problem 1: Vector Space Verification<a class="headerlink" href="#problem-1-vector-space-verification" title="Link to this heading">#</a></h2>
+<p>Determine whether each of the following sets forms a vector space under the standard operations of addition and scalar multiplication. If not, identify which axiom(s) fail.</p>
+<p><strong>(a)</strong> <span class="math notranslate nohighlight">\(V = \{(x, y) \in \mathbb{R}^2 : x \geq 0\}\)</span></p>
+<p><strong>(b)</strong> <span class="math notranslate nohighlight">\(V = \{(x, y, z) \in \mathbb{R}^3 : 2x - y + 3z = 0\}\)</span></p>
+<p><strong>(c)</strong> <span class="math notranslate nohighlight">\(V = \{f : \mathbb{R} \to \mathbb{R} : f(0) = 1\}\)</span> with pointwise addition and scalar multiplication</p>
+<p><strong>(d)</strong> <span class="math notranslate nohighlight">\(V = \{A \in M_{2 \times 2}(\mathbb{R}) : A^T = A\}\)</span> (the set of <span class="math notranslate nohighlight">\(2 \times 2\)</span> symmetric matrices)</p>
 </section>
-<section id="section-b-matrix-vector-multiplication">
-<h2>Section B: Matrix-Vector Multiplication<a class="headerlink" href="#section-b-matrix-vector-multiplication" title="Link to this heading">#</a></h2>
-<p><strong>Problem 7:</strong> Compute <span class="math notranslate nohighlight">\(\begin{bmatrix} 1 &amp; 2 &amp; -1 \\ 3 &amp; 0 &amp; 4 \end{bmatrix} \begin{bmatrix} 2 \\ -1 \\ 3 \end{bmatrix}\)</span>.</p>
-<p><strong>Problem 8:</strong> Given <span class="math notranslate nohighlight">\(A = \begin{bmatrix} 2 &amp; -1 &amp; 3 \\ 0 &amp; 4 &amp; -2 \\ 1 &amp; 1 &amp; 5 \end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{x} = \begin{bmatrix} 1 \\ -2 \\ 3 \end{bmatrix}\)</span>, find <span class="math notranslate nohighlight">\(A\mathbf{x}\)</span>.</p>
-<p><strong>Problem 9:</strong> Determine if the product <span class="math notranslate nohighlight">\(\begin{bmatrix} 1 &amp; 2 \\ 3 &amp; 4 \\ 5 &amp; 6 \end{bmatrix} \begin{bmatrix} 2 \\ -1 \\ 3 \end{bmatrix}\)</span> is defined. If not, explain the dimensional incompatibility.</p>
-<p><strong>Problem 10:</strong> Compute <span class="math notranslate nohighlight">\(\begin{bmatrix} 3 &amp; -2 &amp; 1 &amp; 4 \end{bmatrix} \begin{bmatrix} 2 \\ 0 \\ -1 \\ 3 \end{bmatrix}\)</span>.</p>
-<p><strong>Problem 11:</strong> Given <span class="math notranslate nohighlight">\(\mathbf{b} = \begin{bmatrix} 5 \\ -2 \\ 1 \end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(A = \begin{bmatrix} 1 &amp; 0 &amp; 2 \\ -1 &amp; 3 &amp; 1 \\ 2 &amp; -1 &amp; 0 \end{bmatrix}\)</span>, solve for <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> in the equation <span class="math notranslate nohighlight">\(A\mathbf{x} = \mathbf{b}\)</span> (if possible).</p>
+<hr class="docutils" />
+<section id="problem-2-vector-membership">
+<h2>Problem 2: Vector Membership<a class="headerlink" href="#problem-2-vector-membership" title="Link to this heading">#</a></h2>
+<p>For each vector space <span class="math notranslate nohighlight">\(V\)</span> and vector <span class="math notranslate nohighlight">\(\mathbf{v}\)</span>, determine whether <span class="math notranslate nohighlight">\(\mathbf{v} \in V\)</span>.</p>
+<p><strong>(a)</strong> <span class="math notranslate nohighlight">\(V = \{(x, y, z) \in \mathbb{R}^3 : x + 2y - z = 0\}\)</span>, <span class="math notranslate nohighlight">\(\mathbf{v} = (1, -1, -1)\)</span></p>
+<p><strong>(b)</strong> <span class="math notranslate nohighlight">\(V = \text{span}\left\{\begin{bmatrix} 1 \\ 2 \\ 0 \end{bmatrix}, \begin{bmatrix} 0 \\ 1 \\ 1 \end{bmatrix}, \begin{bmatrix} 2 \\ 3 \\ -1 \end{bmatrix}\right\}\)</span>, <span class="math notranslate nohighlight">\(\mathbf{v} = \begin{bmatrix} 3 \\ 7 \\ 2 \end{bmatrix}\)</span></p>
+<p><strong>(c)</strong> <span class="math notranslate nohighlight">\(V = \{p(x) \in P_3 : p(1) = 0\}\)</span> (polynomials of degree at most 3), <span class="math notranslate nohighlight">\(\mathbf{v} = 2x^3 - 3x^2 + x\)</span></p>
 </section>
-<section id="section-c-matrix-matrix-multiplication">
-<h2>Section C: Matrix-Matrix Multiplication<a class="headerlink" href="#section-c-matrix-matrix-multiplication" title="Link to this heading">#</a></h2>
-<p><strong>Problem 12:</strong> Compute <span class="math notranslate nohighlight">\(\begin{bmatrix} 1 &amp; 2 \\ 3 &amp; -1 \end{bmatrix} \begin{bmatrix} 4 &amp; 0 \\ -2 &amp; 5 \end{bmatrix}\)</span>.</p>
-<p><strong>Problem 13:</strong> Given <span class="math notranslate nohighlight">\(P = \begin{bmatrix} 2 &amp; -1 &amp; 3 \\ 0 &amp; 4 &amp; -2 \end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(Q = \begin{bmatrix} 1 &amp; 2 \\ -3 &amp; 1 \\ 2 &amp; 0 \end{bmatrix}\)</span>, find <span class="math notranslate nohighlight">\(PQ\)</span>.</p>
-<p><strong>Problem 14:</strong> Compute <span class="math notranslate nohighlight">\(QP\)</span> using the matrices from Problem 13.</p>
-<p><strong>Problem 15:</strong> Determine if <span class="math notranslate nohighlight">\(\begin{bmatrix} 1 &amp; 2 &amp; 3 \\ 4 &amp; 5 &amp; 6 \end{bmatrix} \begin{bmatrix} 7 &amp; 8 \\ 9 &amp; 10 \end{bmatrix}\)</span> is defined. Explain your reasoning.</p>
-<p><strong>Problem 16:</strong> Find <span class="math notranslate nohighlight">\(AB\)</span> and <span class="math notranslate nohighlight">\(BA\)</span> where <span class="math notranslate nohighlight">\(A = \begin{bmatrix} 1 &amp; 2 \\ 0 &amp; -1 \end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(B = \begin{bmatrix} 3 &amp; 1 \\ -2 &amp; 4 \end{bmatrix}\)</span>. Are they equal?</p>
-<p><strong>Problem 17:</strong> Compute <span class="math notranslate nohighlight">\(\begin{bmatrix} 2 &amp; -1 &amp; 0 \\ 1 &amp; 3 &amp; 2 \\ -1 &amp; 0 &amp; 4 \end{bmatrix}^2\)</span>.</p>
+<hr class="docutils" />
+<section id="problem-3-subspace-verification">
+<h2>Problem 3: Subspace Verification<a class="headerlink" href="#problem-3-subspace-verification" title="Link to this heading">#</a></h2>
+<p>Determine whether each of the following subsets is a subspace of the given vector space.</p>
+<p><strong>(a)</strong> <span class="math notranslate nohighlight">\(W = \left\{\begin{bmatrix} a \\ b \\ c \end{bmatrix} : a + b + c = 0\right\}\)</span> in <span class="math notranslate nohighlight">\(\mathbb{R}^3\)</span></p>
+<p><strong>(b)</strong> <span class="math notranslate nohighlight">\(W = \left\{\begin{bmatrix} a \\ b \\ c \\ d \end{bmatrix} : a = 2b \text{ and } c = d^2\right\}\)</span> in <span class="math notranslate nohighlight">\(\mathbb{R}^4\)</span></p>
+<p><strong>(c)</strong> <span class="math notranslate nohighlight">\(W = \{p(x) \in P_2 : p'(0) = 0\}\)</span> in <span class="math notranslate nohighlight">\(P_2\)</span> (polynomials of degree at most 2)</p>
+<p><strong>(d)</strong> <span class="math notranslate nohighlight">\(W = \{A \in M_{3 \times 3}(\mathbb{R}) : \text{det}(A) = 0\}\)</span> in <span class="math notranslate nohighlight">\(M_{3 \times 3}(\mathbb{R})\)</span></p>
 </section>
-<section id="section-d-dot-product-as-matrix-multiplication">
-<h2>Section D: Dot Product as Matrix Multiplication<a class="headerlink" href="#section-d-dot-product-as-matrix-multiplication" title="Link to this heading">#</a></h2>
-<p><strong>Problem 18:</strong> Express the dot product <span class="math notranslate nohighlight">\(\mathbf{u} \cdot \mathbf{v}\)</span> as a matrix multiplication where <span class="math notranslate nohighlight">\(\mathbf{u} = \begin{bmatrix} 3 \\ -2 \\ 1 \end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{v} = \begin{bmatrix} 4 \\ 1 \\ -3 \end{bmatrix}\)</span>.</p>
-<p><strong>Problem 19:</strong> Compute the dot product <span class="math notranslate nohighlight">\(\begin{bmatrix} 2 &amp; -1 &amp; 3 &amp; 0 \end{bmatrix} \begin{bmatrix} 1 \\ 4 \\ -2 \\ 5 \end{bmatrix}\)</span>.</p>
-<p><strong>Problem 20:</strong> Given vectors <span class="math notranslate nohighlight">\(\mathbf{a} = \begin{bmatrix} 1 \\ 2 \\ -1 \end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{b} = \begin{bmatrix} 3 \\ 0 \\ 4 \end{bmatrix}\)</span>, compute <span class="math notranslate nohighlight">\(\mathbf{a}^T\mathbf{b}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{a}\mathbf{b}^T\)</span>.</p>
-<p><strong>Problem 21:</strong> Show that <span class="math notranslate nohighlight">\((\mathbf{u} \cdot \mathbf{v})^2 = (\mathbf{u}^T\mathbf{v})(\mathbf{v}^T\mathbf{u})\)</span> for <span class="math notranslate nohighlight">\(\mathbf{u} = \begin{bmatrix} 2 \\ -3 \end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{v} = \begin{bmatrix} 1 \\ 4 \end{bmatrix}\)</span>.</p>
+<hr class="docutils" />
+<section id="problem-4-orthogonal-subspaces">
+<h2>Problem 4: Orthogonal Subspaces<a class="headerlink" href="#problem-4-orthogonal-subspaces" title="Link to this heading">#</a></h2>
+<p><strong>(a)</strong> Determine whether the following subspaces of <span class="math notranslate nohighlight">\(\mathbb{R}^4\)</span> are orthogonal:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}W_1 = \text{span}\left\{\begin{bmatrix} 1 \\ 0 \\ 1 \\ 0 \end{bmatrix}, \begin{bmatrix} 0 \\ 1 \\ 0 \\ 1 \end{bmatrix}\right\}, \quad W_2 = \text{span}\left\{\begin{bmatrix} 1 \\ 0 \\ -1 \\ 0 \end{bmatrix}, \begin{bmatrix} 0 \\ 1 \\ 0 \\ -1 \end{bmatrix}\right\}\end{split}\]</div>
+<p><strong>(b)</strong> Let <span class="math notranslate nohighlight">\(W_1 = \left\{\begin{bmatrix} x \\ y \\ z \end{bmatrix} : x + y + z = 0\right\}\)</span> and <span class="math notranslate nohighlight">\(W_2 = \text{span}\left\{\begin{bmatrix} 1 \\ 1 \\ 1 \end{bmatrix}\right\}\)</span> in <span class="math notranslate nohighlight">\(\mathbb{R}^3\)</span>. Are <span class="math notranslate nohighlight">\(W_1\)</span> and <span class="math notranslate nohighlight">\(W_2\)</span> orthogonal subspaces?</p>
 </section>
-<section id="section-e-dimensional-analysis-and-undefined-operations">
-<h2>Section E: Dimensional Analysis and Undefined Operations<a class="headerlink" href="#section-e-dimensional-analysis-and-undefined-operations" title="Link to this heading">#</a></h2>
-<p><strong>Problem 22:</strong> Explain why <span class="math notranslate nohighlight">\(\begin{bmatrix} 1 &amp; 2 &amp; 3 \end{bmatrix} + \begin{bmatrix} 4 \\ 5 \\ 6 \end{bmatrix}\)</span> is undefined.</p>
-<p><strong>Problem 23:</strong> Determine which of the following matrix products are defined and state the dimensions of the result:</p>
+<hr class="docutils" />
+<section id="problem-5-basis-and-spanning-sets">
+<h2>Problem 5: Basis and Spanning Sets<a class="headerlink" href="#problem-5-basis-and-spanning-sets" title="Link to this heading">#</a></h2>
+<p><strong>(a)</strong> Determine whether <span class="math notranslate nohighlight">\(S = \left\{\begin{bmatrix} 1 \\ 2 \\ 1 \end{bmatrix}, \begin{bmatrix} 2 \\ 1 \\ 3 \end{bmatrix}, \begin{bmatrix} 1 \\ -1 \\ 2 \end{bmatrix}\right\}\)</span> is a basis for <span class="math notranslate nohighlight">\(\mathbb{R}^3\)</span>.</p>
+<p><strong>(b)</strong> Does <span class="math notranslate nohighlight">\(S = \{1 + x, 1 - x, x + x^2, 2 + x^2\}\)</span> span <span class="math notranslate nohighlight">\(P_2\)</span>? Is it a basis for <span class="math notranslate nohighlight">\(P_2\)</span>?</p>
+<p><strong>(c)</strong> Determine whether the set <span class="math notranslate nohighlight">\(S = \left\{\begin{bmatrix} 1 \\ 1 \\ 0 \\ 0 \end{bmatrix}, \begin{bmatrix} 0 \\ 1 \\ 1 \\ 0 \end{bmatrix}, \begin{bmatrix} 0 \\ 0 \\ 1 \\ 1 \end{bmatrix}\right\}\)</span> spans <span class="math notranslate nohighlight">\(\mathbb{R}^4\)</span>. If not, describe the subspace it spans.</p>
+<p><strong>(d)</strong> Find a basis for the subspace <span class="math notranslate nohighlight">\(W = \left\{\begin{bmatrix} a \\ b \\ c \\ d \end{bmatrix} : a - 2b + c = 0 \text{ and } b + d = 0\right\}\)</span> of <span class="math notranslate nohighlight">\(\mathbb{R}^4\)</span>.</p>
+</section>
+<hr class="docutils" />
+<section id="problem-6-column-space-and-nullspace">
+<h2>Problem 6: Column Space and Nullspace<a class="headerlink" href="#problem-6-column-space-and-nullspace" title="Link to this heading">#</a></h2>
+<p>For each matrix below, find:</p>
 <ul class="simple">
-<li><p>a) <span class="math notranslate nohighlight">\((2 \times 3)(3 \times 4)\)</span></p></li>
-<li><p>b) <span class="math notranslate nohighlight">\((4 \times 2)(3 \times 2)\)</span></p></li>
-<li><p>c) <span class="math notranslate nohighlight">\((1 \times 5)(5 \times 1)\)</span></p></li>
-<li><p>d) <span class="math notranslate nohighlight">\((3 \times 3)(2 \times 3)\)</span></p></li>
+<li><p><strong>(i)</strong> A basis for the column space <span class="math notranslate nohighlight">\(\text{Col}(A)\)</span></p></li>
+<li><p><strong>(ii)</strong> A basis for the nullspace <span class="math notranslate nohighlight">\(\text{Null}(A)\)</span></p></li>
+<li><p><strong>(iii)</strong> The dimensions of both spaces</p></li>
 </ul>
-<p><strong>Problem 24:</strong> Given matrices <span class="math notranslate nohighlight">\(A_{2 \times 4}\)</span>, <span class="math notranslate nohighlight">\(B_{4 \times 3}\)</span>, and <span class="math notranslate nohighlight">\(C_{3 \times 2}\)</span>, determine if <span class="math notranslate nohighlight">\((AB)C\)</span> and <span class="math notranslate nohighlight">\(A(BC)\)</span> are both defined and have the same dimensions.</p>
-<p><strong>Problem 25:</strong> Explain why the equation <span class="math notranslate nohighlight">\(A\mathbf{x} = \mathbf{b}\)</span> has no solution when <span class="math notranslate nohighlight">\(A = \begin{bmatrix} 1 &amp; 2 \\ 3 &amp; 4 \end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{b} = \begin{bmatrix} 1 \\ 2 \\ 3 \end{bmatrix}\)</span> from a dimensional perspective.</p>
-<p><strong>Problem 26:</strong> State the conditions under which <span class="math notranslate nohighlight">\(AB = BA\)</span> is possible for matrices <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span> in terms of their dimensions.</p>
+<p><strong>(a)</strong> <span class="math notranslate nohighlight">\(A = \begin{bmatrix} 1 &amp; 2 &amp; 3 &amp; 4 \\ 2 &amp; 4 &amp; 6 &amp; 8 \\ 1 &amp; 3 &amp; 5 &amp; 7 \end{bmatrix}\)</span></p>
+<p><strong>(b)</strong> <span class="math notranslate nohighlight">\(A = \begin{bmatrix} 1 &amp; 0 &amp; 2 &amp; -1 \\ 2 &amp; 1 &amp; 3 &amp; 0 \\ 1 &amp; 1 &amp; 1 &amp; 1 \\ 0 &amp; -1 &amp; 1 &amp; -2 \end{bmatrix}\)</span></p>
+<p><strong>(c)</strong> <span class="math notranslate nohighlight">\(A = \begin{bmatrix} 1 &amp; 2 &amp; 0 &amp; 1 \\ 0 &amp; 1 &amp; 1 &amp; 2 \\ 1 &amp; 3 &amp; 1 &amp; 3 \\ 2 &amp; 5 &amp; 1 &amp; 4 \end{bmatrix}\)</span></p>
 </section>
-<section id="section-f-mixed-applications">
-<h2>Section F: Mixed Applications<a class="headerlink" href="#section-f-mixed-applications" title="Link to this heading">#</a></h2>
-<p><strong>Problem 27:</strong> Given <span class="math notranslate nohighlight">\(A = \begin{bmatrix} 1 &amp; 0 &amp; -1 \\ 2 &amp; 1 &amp; 3 \end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{x} = \begin{bmatrix} 2 \\ -1 \\ 1 \end{bmatrix}\)</span>, find the unit vector in the direction of <span class="math notranslate nohighlight">\(A\mathbf{x}\)</span>.</p>
-<p><strong>Problem 28:</strong> Compute <span class="math notranslate nohighlight">\(\|A\mathbf{x}\|_2\)</span> where <span class="math notranslate nohighlight">\(A = \begin{bmatrix} 3 &amp; -1 \\ 2 &amp; 4 \\ 0 &amp; 1 \end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{x} = \begin{bmatrix} 2 \\ 1 \end{bmatrix}\)</span>.</p>
-<p><strong>Problem 29:</strong> For the matrix <span class="math notranslate nohighlight">\(M = \begin{bmatrix} 1/3 &amp; 2/3 &amp; 2/3 \\ 2/3 &amp; 1/3 &amp; -2/3 \\ 2/3 &amp; -2/3 &amp; 1/3 \end{bmatrix}\)</span>, verify that each column is a unit vector and that the columns are mutually <em>orthogonal</em>; that is, their dot products are zero.</p>
-<p><strong>Problem 30:</strong> Given vectors <span class="math notranslate nohighlight">\(\mathbf{u} = \begin{bmatrix} 1 \\ 2 \\ 1 \end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{v} = \begin{bmatrix} 2 \\ -1 \\ 0 \end{bmatrix}\)</span>, find scalars <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span> such that <span class="math notranslate nohighlight">\(\|a\mathbf{u} + b\mathbf{v}\| = 1\)</span> and <span class="math notranslate nohighlight">\(a + b = 1\)</span>.</p>
-<p><strong>Problem 31:</strong> Show that for any matrix <span class="math notranslate nohighlight">\(A\)</span> and compatible vectors <span class="math notranslate nohighlight">\(\mathbf{u}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{v}\)</span>, the triangle inequality holds: <span class="math notranslate nohighlight">\(\|A(\mathbf{u} + \mathbf{v})\|_2 \leq \|A\mathbf{u}\|_2 + \|A\mathbf{v}\|_2\)</span>. Verify with <span class="math notranslate nohighlight">\(A = \begin{bmatrix} 1 &amp; 2 \\ 0 &amp; 1 \end{bmatrix}\)</span>, <span class="math notranslate nohighlight">\(\mathbf{u} = \begin{bmatrix} 1 \\ 0 \end{bmatrix}\)</span>, and <span class="math notranslate nohighlight">\(\mathbf{v} = \begin{bmatrix} 0 \\ 1 \end{bmatrix}\)</span>.</p>
+<hr class="docutils" />
+<section id="problem-7-challenge-problem">
+<h2>Problem 7: Challenge Problem<a class="headerlink" href="#problem-7-challenge-problem" title="Link to this heading">#</a></h2>
+<p>Let <span class="math notranslate nohighlight">\(V = \{(x, y, z) \in \mathbb{R}^3 : x + y + 2z = 0\}\)</span> and let <span class="math notranslate nohighlight">\(W = \text{span}\left\{\begin{bmatrix} 1 \\ 1 \\ -1 \end{bmatrix}, \begin{bmatrix} 2 \\ 0 \\ -1 \end{bmatrix}\right\}\)</span>.</p>
+<p><strong>(a)</strong> Show that <span class="math notranslate nohighlight">\(W \subseteq V\)</span>.</p>
+<p><strong>(b)</strong> Is <span class="math notranslate nohighlight">\(W = V\)</span>? Justify your answer.</p>
+<p><strong>(c)</strong> Find a basis for <span class="math notranslate nohighlight">\(W^\perp\)</span> (the orthogonal complement of <span class="math notranslate nohighlight">\(W\)</span> in <span class="math notranslate nohighlight">\(\mathbb{R}^3\)</span>).</p>
 </section>
 </section>
 
@@ -506,22 +513,13 @@ document.write(`
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="matrices.html"
+       href="projection-qr-problem-set.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Matrices</p>
+        <p class="prev-next-title">Problem Set 5: Projections and <span class="math notranslate nohighlight">\(A=QR\)</span></p>
       </div>
-    </a>
-    <a class="right-next"
-       href="linear-systems-gaussian-elimination.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Linear Systems and Gaussian Elimination</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
     </a>
 </div>
                 </footer>
@@ -539,12 +537,13 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section-a-basic-matrix-operations">Section A: Basic Matrix Operations</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section-b-matrix-vector-multiplication">Section B: Matrix-Vector Multiplication</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section-c-matrix-matrix-multiplication">Section C: Matrix-Matrix Multiplication</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section-d-dot-product-as-matrix-multiplication">Section D: Dot Product as Matrix Multiplication</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section-e-dimensional-analysis-and-undefined-operations">Section E: Dimensional Analysis and Undefined Operations</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section-f-mixed-applications">Section F: Mixed Applications</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-1-vector-space-verification">Problem 1: Vector Space Verification</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-2-vector-membership">Problem 2: Vector Membership</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-3-subspace-verification">Problem 3: Subspace Verification</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-4-orthogonal-subspaces">Problem 4: Orthogonal Subspaces</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-5-basis-and-spanning-sets">Problem 5: Basis and Spanning Sets</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-6-column-space-and-nullspace">Problem 6: Column Space and Nullspace</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-7-challenge-problem">Problem 7: Challenge Problem</a></li>
 </ul>
   </nav></div>
 

@@ -62,6 +62,8 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'vector-spaces';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Problem Set 6: Vector Spaces and Bases" href="vector-space-problem-set.html" />
+    <link rel="prev" title="Problem Set 5: Projections and \(A=QR\)" href="projection-qr-problem-set.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -124,8 +126,6 @@
       
       
       
-        
-      
       <div class="bd-sidebar-primary bd-sidebar">
         
 
@@ -181,7 +181,7 @@
                 </a>
             </li>
         </ul>
-        <ul class="nav bd-sidenav">
+        <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="motivation.html">Motivation</a></li>
 
 <li class="toctree-l1"><a class="reference internal" href="vectors.html">Vectors</a></li>
@@ -203,6 +203,7 @@
 
 
 
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Vector Spaces</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vector-space-problem-set.html">Problem Set 6: Vector Spaces and Bases</a></li>
 </ul>
 
@@ -376,7 +377,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -392,6 +395,18 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#spans-and-bases">Spans and Bases</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#determining-if-a-set-is-a-basis">Determining if a Set is a Basis</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reduced-row-echelon-form-of-a-matrix">Reduced Row Echelon Form of a Matrix</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#column-space">Column Space</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#null-space">Null Space</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -403,14 +418,18 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="vector-spaces">
 <h1>Vector Spaces<a class="headerlink" href="#vector-spaces" title="Link to this heading">#</a></h1>
+<div class="important admonition">
+<p class="admonition-title">Caution</p>
+<p>This section is a little more abstract than those that preceded it, and is filled with definitions that need to be read very carefully.</p>
+</div>
 <div class="admonition-definition-vector-space admonition">
 <p class="admonition-title">Definition: Vector Space</p>
 <p>A <em>vector space</em> <span class="math notranslate nohighlight">\(V\)</span> is a set satisfying the condition that if <span class="math notranslate nohighlight">\(\mathbf{u}, \mathbf{v} \in V\)</span>, then any linear combination <span class="math notranslate nohighlight">\(c_1\mathbf{u} + c_2\mathbf{v} \in V\)</span> also. As usual, here <span class="math notranslate nohighlight">\(c_1\)</span> and <span class="math notranslate nohighlight">\(c_2\)</span> represent scalars that for this course are assumed to be real numbers.</p>
 </div>
 <p>In the above definition, note that the elements of a vector space <span class="math notranslate nohighlight">\(V\)</span> don’t necessarily have to be Euclidean vectors; that is, <span class="math notranslate nohighlight">\(n\times 1\)</span> arrays of real numbers. Spaces of Euclidean vectors will be the focus in this book, but there are many mathematical objects that satisfy this definition and lead to interesting vector spaces.</p>
-<div class="admonition-definition-mathbb-r-n admonition">
-<p class="admonition-title">Definition: <span class="math notranslate nohighlight">\(\mathbb{R}^n\)</span></p>
-<p>Given a positive integer <span class="math notranslate nohighlight">\(n\)</span>, we use <span class="math notranslate nohighlight">\(\mathbb{R}^n\)</span> to denote the vector space consisting of Euclidean vectors wisth <span class="math notranslate nohighlight">\(n\)</span> components.</p>
+<div class="admonition-definition-euclidean-vector-space admonition">
+<p class="admonition-title">Definition: Euclidean Vector Space</p>
+<p>Given a positive integer <span class="math notranslate nohighlight">\(n\)</span>, we use <span class="math notranslate nohighlight">\(\mathbb{R}^n\)</span> to denote the vector space consisting of Euclidean vectors wisth <span class="math notranslate nohighlight">\(n\)</span> components. This space is called <span class="math notranslate nohighlight">\(n\)</span>-dimensional Euclidean space, but we usually just say ‘R-N’.</p>
 </div>
 <p><strong>Example:</strong></p>
 <div class="math notranslate nohighlight">
@@ -424,10 +443,430 @@ document.write(`
 <li><p>Most vector spaces will contain infinitely many vectors, because we can form infinitely many linear combinations of any vectors they contain.</p></li>
 <li><p>The zero vector <span class="math notranslate nohighlight">\(\mathbf{0}\)</span> is contained in every vector space, because given any vector <span class="math notranslate nohighlight">\(\mathbf{v}, 0\cdot\mathbf{v} = \mathbf{0}\)</span> produces the zero vector as a scalar multiple or ‘trivial’ linear combination of <span class="math notranslate nohighlight">\(\mathbf{v}\)</span>.</p></li>
 </ul>
+<p>Furthermore, many vector spaces exist that are not Euclidean; in fact, much of mathematics is done in vector spaces of one sort or another.</p>
+<p><strong>Example:</strong> Let <span class="math notranslate nohighlight">\(\mathcal{F} = \{f:\mathbb{R}\to\mathbb{R}\}\)</span> (that is, the set of all real-valued functions). This is a vector space, because given any two real-valued functions <span class="math notranslate nohighlight">\(f(x), g(x) \in \mathcal{F}\)</span> and scalars <span class="math notranslate nohighlight">\(c_1, c_2\)</span>, the linear combination <span class="math notranslate nohighlight">\(c_1f(x) + c_2g(x)\)</span> is also a real-valued function and thus a member of <span class="math notranslate nohighlight">\(\mathcal{F}\)</span>. To take a specific example, <span class="math notranslate nohighlight">\(f(x) = e^x\)</span> and <span class="math notranslate nohighlight">\(g(x)=x^2\)</span> are in <span class="math notranslate nohighlight">\(\mathcal{F}\)</span>, and any arbitrary linear combination of them such as <span class="math notranslate nohighlight">\(2e^x - 7x^2\)</span> is still a real-valued function and thus also a member of <span class="math notranslate nohighlight">\(\mathcal{F}\)</span>.</p>
 <div class="admonition-definition-subspace admonition">
 <p class="admonition-title">Definition: Subspace</p>
 <p><span class="math notranslate nohighlight">\(S\)</span> is a <em>subspace</em> of a vector space <span class="math notranslate nohighlight">\(V\)</span> if <span class="math notranslate nohighlight">\(S\)</span> is a subset of <span class="math notranslate nohighlight">\(V\)</span> and if <span class="math notranslate nohighlight">\(\mathbf{s}_1, \mathbf{s}_2 \in S\)</span>, then any linear combination <span class="math notranslate nohighlight">\(c_1\mathbf{s}_1 + c_2\mathbf{s}_2 \in V\)</span> also.</p>
 </div>
+<p><strong>Example, continued:</strong> Let <span class="math notranslate nohighlight">\(\mathcal{P}_2 = \{p:\mathbb{R}\to\mathbb{R} | p\text{ is a polynomial of degree at most 2}\}\)</span>. This set is a subspace of the vector space <span class="math notranslate nohighlight">\(\mathcal{F}\)</span> from the previous example. (Verify that <span class="math notranslate nohighlight">\(\mathcal{P}_2\)</span> is closed under linear combination as an exercise!)</p>
+<p><strong>Example:</strong> Let <span class="math notranslate nohighlight">\(P = \{\mathbf{v} \in \mathbb{R}^3| v_3 = 0\}\)</span>. Then <span class="math notranslate nohighlight">\(P\)</span> is a subspace of <span class="math notranslate nohighlight">\(\mathbb{R}^3\)</span>: if we take any two vectors <span class="math notranslate nohighlight">\(\mathbf{u}, \mathbf{v} \in P\)</span> and arbitrary scalars <span class="math notranslate nohighlight">\(c_1, c_2\)</span>, The linear combination</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    c_1\begin{bmatrix}
+        u_1 \\
+        u_2 \\
+        0
+    \end{bmatrix} + 
+    c_2\begin{bmatrix}
+        v_1 \\
+        v_2 \\
+        0
+    \end{bmatrix} = 
+    \begin{bmatrix}
+    c_1u_1 + c_2v_1 \\
+    c_1u_2 + c_2v_2 \\
+        0
+    \end{bmatrix}
+\end{split}\]</div>
+<p>has third component equal to zero and thus meets the requirement to be a member of <span class="math notranslate nohighlight">\(P\)</span>. Thus, <span class="math notranslate nohighlight">\(P\)</span> is closed under linear combination and is a vector subspace of <span class="math notranslate nohighlight">\(\mathbb{R}^3\)</span>; in fact <span class="math notranslate nohighlight">\(P\)</span> is the <span class="math notranslate nohighlight">\(x-y\)</span> plane, viewed now as a subspace of <span class="math notranslate nohighlight">\(\mathbb{R}^3\)</span>.</p>
+<p><strong>Example:</strong> Let <span class="math notranslate nohighlight">\(S =\{ \mathbf{v}\in\mathbb{R}^3| v_3 = 1\}\)</span>. Although this set is a subset of <span class="math notranslate nohighlight">\(\mathbb{R}^3\)</span>, it is not a vector space: take any two vectors <span class="math notranslate nohighlight">\(\mathbf{u}, \mathbf{v} \in S\)</span>. Their sum will be</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix}
+        u_1 \\
+        u_2 \\
+        1
+    \end{bmatrix} + 
+    \begin{bmatrix}
+        v_1 \\
+        v_2 \\
+        1
+    \end{bmatrix} = 
+    \begin{bmatrix}
+    u_1 + v_1 \\
+    u_2 + v_2 \\
+        2
+    \end{bmatrix},
+\end{split}\]</div>
+<p>and the third component of this vector is not <span class="math notranslate nohighlight">\(1\)</span>, so it doesn’t satisfy the condition it needs to in order to be a member of <span class="math notranslate nohighlight">\(S\)</span>. Thus <span class="math notranslate nohighlight">\(S\)</span> is not closed under linear combination.</p>
+<section id="spans-and-bases">
+<h2>Spans and Bases<a class="headerlink" href="#spans-and-bases" title="Link to this heading">#</a></h2>
+<p>The examples given above define vector spaces as sets on which some constraints are imposed. This is fine, but defining a vector space this way (a) require us to verify somewhat tediously that the set does in fact meet the requirements to be a vector space, and (b) doesn’t provide much insight into what the vector space really looks like. Another way to specify a vector space is by defining it as the span of a set of vectors: given vectors <span class="math notranslate nohighlight">\(\mathbf{v}_1,\dots,\mathbf{v}_k\)</span>, the set <span class="math notranslate nohighlight">\(V=span(\mathbf{v}_1,\dots,\mathbf{v}_k)\)</span> is by definition the set of all possible linear combinations of <span class="math notranslate nohighlight">\(\mathbf{v}_1,\dots,\mathbf{v}_k\)</span>, and therefore is necessarily closed under linear combination.</p>
+<p><strong>Example:</strong> Let <span class="math notranslate nohighlight">\(V = span([1\hspace{1em} 0\hspace{1em} 0]^T, [0\hspace{1em} 1\hspace{1em} 0]^T)\)</span>. Then <span class="math notranslate nohighlight">\(V \subseteq \mathbb{R}^3\)</span>, but <span class="math notranslate nohighlight">\(V\neq \mathbb{R}^3\)</span> because no linear combination of the vectors spanning <span class="math notranslate nohighlight">\(V\)</span> have a nonzero third component, so their linear combinations cannot have a nonzero third component either. In fact, <span class="math notranslate nohighlight">\(V\)</span> corresponds to the <span class="math notranslate nohighlight">\(x-y\)</span> plane, a subspace of <span class="math notranslate nohighlight">\(\mathbb{R}^3\)</span> that is equivalent (‘isomorphic’) to <span class="math notranslate nohighlight">\(\mathbb{R}^2\)</span>.</p>
+<p>Using spans to specify a vector space is an improvement over imposing conditions on a set because there is no need to verify that the span forms a vector space, but it still isn’t ideal because a spanning set can contain redundancies.</p>
+<p><strong>Example, continued:</strong> The set</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix}
+        1 \\
+        -1 \\
+        0
+    \end{bmatrix},
+    \begin{bmatrix}
+        1 \\
+        1 \\
+        0
+    \end{bmatrix},
+    \begin{bmatrix}
+        2/3 \\
+        0 \\
+        0
+    \end{bmatrix}
+\end{split}\]</div>
+<p>spans the same subspace of <span class="math notranslate nohighlight">\(\mathbb{R}^3\)</span> as <span class="math notranslate nohighlight">\(V\)</span> in the previous example (the <span class="math notranslate nohighlight">\(x-y\)</span> plane). To see that this is the case, note that</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \dfrac{1}{2}
+    \begin{bmatrix}
+        1 \\
+        -1 \\
+        0
+    \end{bmatrix} + \dfrac{1}{2}
+    \begin{bmatrix}
+        1 \\
+        1 \\
+        0
+    \end{bmatrix} = 
+    \begin{bmatrix}
+        1 \\
+        0 \\
+        0
+    \end{bmatrix}
+\end{split}\]</div>
+<p>and</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    -\dfrac{1}{2}
+    \begin{bmatrix}
+        1 \\
+        -1 \\
+        0
+    \end{bmatrix} + \dfrac{1}{2}
+    \begin{bmatrix}
+        1 \\
+        1 \\
+        0
+    \end{bmatrix} = 
+    \begin{bmatrix}
+        0 \\
+        1 \\
+        0
+    \end{bmatrix},
+\end{split}\]</div>
+<p>so the vectors spanning <span class="math notranslate nohighlight">\(V\)</span> are linear combinations of these vectors. Conversely, we can easily produce each of these three vectors as a linear combination of the vectors spanning <span class="math notranslate nohighlight">\(V\)</span> (verify this!), so it must be the case that the span of these three vectors equal <span class="math notranslate nohighlight">\(V\)</span> also. But then we have two different sets of vectors that span <span class="math notranslate nohighlight">\(V\)</span>, one set consisting of two vectors and a second set consisting of three vectors. The latter contains a redundancy: the three vectors given are linearly dependent.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \dfrac{1}{3}
+    \begin{bmatrix}
+        1 \\
+        -1 \\
+        0
+    \end{bmatrix} + \dfrac{1}{3}
+    \begin{bmatrix}
+        1 \\
+        1 \\
+        0
+    \end{bmatrix} = 
+    \begin{bmatrix}
+        2/3 \\
+        0 \\
+        0
+    \end{bmatrix}.
+\end{split}\]</div>
+<div class="admonition-definition-basis admonition">
+<p class="admonition-title">Definition: Basis</p>
+<p>A <em>basis</em> for a vector space is a linearly independent set of vectors that span the space.</p>
+</div>
+<p>A basis is in a sense a minimal spanning set: remove a vector and you no longer span the space, but add a vector and you no longer have linear independence. In the preceding example, the first spanning set given is a basis, while the second is not because the three vectors are not linearly independent.</p>
+<p>We say <em>a</em> basis for a vector space rather than <em>the</em> basis because bases are not unique. For example, both</p>
+<div class="math notranslate nohighlight">
+\[\begin{split} \{
+    \begin{bmatrix}
+        1 \\
+        1
+    \end{bmatrix},
+    \begin{bmatrix}
+        -1 \\
+        1
+    \end{bmatrix}
+    \}
+\end{split}\]</div>
+<p>and</p>
+<div class="math notranslate nohighlight">
+\[\begin{split} \{
+    \begin{bmatrix}
+        2 \\
+        3
+    \end{bmatrix},
+    \begin{bmatrix}
+        4 \\
+        2
+    \end{bmatrix}
+    \}
+\end{split}\]</div>
+<p>are bases for <span class="math notranslate nohighlight">\(\mathbb{R}^2\)</span>. While bases are not unique, the number of vectors in any basis is unique.</p>
+<p>The proof of this relies on the <a class="reference external" href="https://en.wikipedia.org/wiki/Steinitz_exchange_lemma">Steinitz Exchange Lemma</a>.</p>
+<div class="admonition-the-steinitz-exchange-lemma admonition">
+<p class="admonition-title">The Steinitz Exchange Lemma</p>
+<p>If <span class="math notranslate nohighlight">\(\{\mathbf{v}_1, \dots, \mathbf{v}_k\}\)</span> are linearly independent vectors and <span class="math notranslate nohighlight">\(\{\mathbf{w}_1, \dots, \mathbf{w}_m\}\)</span> spans a vector space <span class="math notranslate nohighlight">\(V\)</span>, then <span class="math notranslate nohighlight">\(k \leq m\)</span>.</p>
+</div>
+<p><strong>Proof:</strong> Since <span class="math notranslate nohighlight">\(\{\mathbf{w}_1, \dots, \mathbf{w}_m\}\)</span> spans <span class="math notranslate nohighlight">\(V\)</span>, we can write <span class="math notranslate nohighlight">\(\mathbf{v}_1\)</span> as a linear combination of the <span class="math notranslate nohighlight">\(\mathbf{w}\)</span>’s. At least one coefficient must be nonzero (say for <span class="math notranslate nohighlight">\(\mathbf{w}_1\)</span>), so we can solve for <span class="math notranslate nohighlight">\(\mathbf{w}_1\)</span> in terms of <span class="math notranslate nohighlight">\(\mathbf{v}_1\)</span> and the other <span class="math notranslate nohighlight">\(\mathbf{w}\)</span>’s. This means <span class="math notranslate nohighlight">\(\{\mathbf{v}_1, \mathbf{w}_2, \dots, \mathbf{w}_m\}\)</span> still spans <span class="math notranslate nohighlight">\(V\)</span>.
+Repeating this process for <span class="math notranslate nohighlight">\(\mathbf{v}_2, \dots, \mathbf{v}_k\)</span>, we can replace <span class="math notranslate nohighlight">\(k\)</span> of the <span class="math notranslate nohighlight">\(\mathbf{w}\)</span>’s with the <span class="math notranslate nohighlight">\(\mathbf{v}\)</span>’s while maintaining a spanning set. This is only possible if <span class="math notranslate nohighlight">\(k \leq m\)</span>. <span class="math notranslate nohighlight">\(\blacksquare\)</span></p>
+<div class="admonition-theorem-invariant-basis-number admonition">
+<p class="admonition-title">Theorem: Invariant Basis Number</p>
+<p>Any two bases of a finite-dimensional vector space have the same cardinality.</p>
+</div>
+<p>(<em>Cardinality</em> is a term for the number of elements in a set).</p>
+<p><strong>Proof:</strong> Suppose that <span class="math notranslate nohighlight">\(A = \{\mathbf{a}_1, \dots, \mathbf{a}_n\}\)</span> and <span class="math notranslate nohighlight">\(B=\{\mathbf{b}_1, \dots, \mathbf{b}_m\}\)</span> are both bases for a vector space <span class="math notranslate nohighlight">\(V\)</span>. Because <span class="math notranslate nohighlight">\(A\)</span> is a basis, its vectors are linearly independent, and because <span class="math notranslate nohighlight">\(B\)</span> is a basis, its vectors span <span class="math notranslate nohighlight">\(V\)</span>, therefore according to the Steinitz Exchange Lemma, <span class="math notranslate nohighlight">\(n \leq m\)</span>. Conversely, because <span class="math notranslate nohighlight">\(B\)</span> is a basis, its vectors are linearly independent, and because <span class="math notranslate nohighlight">\(A\)</span> is a basis, its vectors span <span class="math notranslate nohighlight">\(V\)</span>, therefore according to the Steinitz Exchange Lemma, <span class="math notranslate nohighlight">\(m \leq n\)</span>, and thus <span class="math notranslate nohighlight">\(m=n\)</span>. <span class="math notranslate nohighlight">\(\blacksquare\)</span></p>
+<div class="admonition-definition-dimension admonition">
+<p class="admonition-title">Definition: Dimension</p>
+<p>The <em>dimension</em> of a vector space <span class="math notranslate nohighlight">\(V\)</span> is written <span class="math notranslate nohighlight">\(dim(V)\)</span> and is the number of vectors in a basis for <span class="math notranslate nohighlight">\(V\)</span>.</p>
+</div>
+<p><strong>Note:</strong> This definition only makes sense because the previous theorem guarantees that the cardinality of any basis for <span class="math notranslate nohighlight">\(V\)</span> is the same as the cardinality of any other basis for <span class="math notranslate nohighlight">\(V\)</span>.</p>
+</section>
+<section id="determining-if-a-set-is-a-basis">
+<h2>Determining if a Set is a Basis<a class="headerlink" href="#determining-if-a-set-is-a-basis" title="Link to this heading">#</a></h2>
+<p>It is often the case that we need to determine if a given set is a basis for a vector space. If the set is not linearly independent, we are done: a set cannot be a basis if it is linearly dependent. If a set does not span the space, we are also done: a set cannot be a basis for a vector space unless it spans the space. Unfortunately, whether a set is linearly dependent or not and whether a set spans a space or not may not be obvious. The easiest way to determine the answers to these questions is to turn them into questions about linear systems, because linear combinations always lead to linear systems thanks to our definition of matrix-vector multiplication.</p>
+<p>Let’s start with linear independence. Suppose that I am given some vectors <span class="math notranslate nohighlight">\(A_1,\dots, A_n\)</span> and asked to determine if they are a basis for some vector space. These vectors will be linearly dependent if there exists scalars <span class="math notranslate nohighlight">\(x_1,\dots,x_n\)</span> not all equal to <span class="math notranslate nohighlight">\(0\)</span> such that the linear combination <span class="math notranslate nohighlight">\(x_1A_1 + \cdots + x_nA_n = 0\)</span>, but this is equivalent to the matrix equation <span class="math notranslate nohighlight">\(A\mathbf{x}=\mathbf{0}\)</span>, where</p>
+<div class="math notranslate nohighlight">
+\[
+    A = \begin{bmatrix} A_1 &amp; \cdots &amp; A_n \end{bmatrix}
+\]</div>
+<p>is the matrix with <span class="math notranslate nohighlight">\(i^{th}\)</span> column <span class="math notranslate nohighlight">\(A_i\)</span>. If this equation has a unique solution other than <span class="math notranslate nohighlight">\(\mathbf{x} = \mathbf{0}\)</span>, then the <span class="math notranslate nohighlight">\(A_i\)</span>’s are linearly dependent and the set cannot form a basis.</p>
+<p>Now let’s turn to span, and suppose again that I am given some vectors <span class="math notranslate nohighlight">\(A_1,\dots, A_n\)</span> and asked to determine if they are a basis for some vector space. These vectors will span the vector space if given any vector <span class="math notranslate nohighlight">\(\mathbf{b}\)</span> in the space, I can produce scalars <span class="math notranslate nohighlight">\(x_1,\dots,x_n\)</span> to realize <span class="math notranslate nohighlight">\(\mathbf{b}\)</span> as a linear combination of the <span class="math notranslate nohighlight">\(A_i\)</span>’s; that is, such that <span class="math notranslate nohighlight">\(x_1A_1 + \cdots + x_nA_n = \mathbf{b}\)</span>. But this is equivalent to being able to solve the matrix equation <span class="math notranslate nohighlight">\(A\mathbf{x} = \mathbf{b}\)</span> for any vector <span class="math notranslate nohighlight">\(\mathbf{b}\)</span> in the vector space.</p>
+<p>These two questions - whether <span class="math notranslate nohighlight">\(A\mathbf{x} = \mathbf{0}\)</span> has a unique solution and whether <span class="math notranslate nohighlight">\(A\mathbf{x} = \mathbf{b}\)</span> has a solution for any vector <span class="math notranslate nohighlight">\(\mathbf{b}\)</span> in some vector space - can be viewed as questions about the matrix itself. If <span class="math notranslate nohighlight">\(A\)</span> has the right number of pivots (<span class="math notranslate nohighlight">\(n\)</span> exactly, one in each column and row), then for any <span class="math notranslate nohighlight">\(\mathbf{b}\)</span>, including <span class="math notranslate nohighlight">\(\mathbf{b}=\mathbf{0}\)</span>, the equation <span class="math notranslate nohighlight">\(A\mathbf{x} = \mathbf{b}\)</span> has a unique solution that we can obtain by augmenting <span class="math notranslate nohighlight">\(A\)</span> with <span class="math notranslate nohighlight">\(\mathbf{b}\)</span> and chasing through Gaussian elimination. In the case where <span class="math notranslate nohighlight">\(\mathbf{b} = \mathbf{0}\)</span>, the unique solution will be <span class="math notranslate nohighlight">\(\mathbf{0}\)</span> itself, and that proves linear independence in the columns of <span class="math notranslate nohighlight">\(A\)</span>. This implies, then, that the <span class="math notranslate nohighlight">\(A_i\)</span>’s are a basis for the vector space containing the <span class="math notranslate nohighlight">\(\mathbf{b}\)</span>’s.</p>
+<p>Having exactly one pivot in each column and row of a matrix constrains the matrix’s shape: it cannot have any ‘extra’ columns or rows. In particular, if we are given <span class="math notranslate nohighlight">\(n\)</span> vectors that have <span class="math notranslate nohighlight">\(m\)</span> components and <span class="math notranslate nohighlight">\(m \leq n\)</span>, we know immediately that the vectors will be linearly dependent and cannot be a basis for any vector space (though they may span the space). Conversely, if <span class="math notranslate nohighlight">\(m \geq n\)</span>, we may have linear independence, but the space we span will be unclear; if the space is <span class="math notranslate nohighlight">\(\mathbb{R}^m\)</span>, we certainly won’t have enough vectors to span it.</p>
+<div class="important admonition">
+<p class="admonition-title">Bases for <span class="math notranslate nohighlight">\(\mathbb{R}^n\)</span></p>
+<p>Any linearly independent set of <span class="math notranslate nohighlight">\(n\)</span> vectors in <span class="math notranslate nohighlight">\(\mathbb{R}^n\)</span> is a basis for <span class="math notranslate nohighlight">\(\mathbb{R}^n\)</span>. In particular, the <span class="math notranslate nohighlight">\(n\)</span> vectors</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix}
+    1 \\
+    0 \\
+    \vdots \\
+    0
+    \end{bmatrix},
+    \begin{bmatrix}
+    0 \\
+    1 \\
+    \vdots \\
+    0
+    \end{bmatrix},
+    \dots,
+    \begin{bmatrix}
+    0 \\
+    0 \\
+    \vdots \\
+    1
+    \end{bmatrix}
+\end{split}\]</div>
+<p>are linearly independent and span the space; these vectors are often referred to as the <em>standard</em> basis vectors.</p>
+<p>Given another set of <span class="math notranslate nohighlight">\(n\)</span> linearly independent vectors in <span class="math notranslate nohighlight">\(\mathbb{R}^n\)</span>, we can show that they span <span class="math notranslate nohighlight">\(\mathbb{R}^n\)</span> also, because Gaussian elimination will reduce them to these vectors.</p>
+</div>
+</section>
+<section id="reduced-row-echelon-form-of-a-matrix">
+<h2>Reduced Row Echelon Form of a Matrix<a class="headerlink" href="#reduced-row-echelon-form-of-a-matrix" title="Link to this heading">#</a></h2>
+<p>Below we are going to consider several vector spaces associated with a matrix. In order to analyze these vector spaces, and in particular, to determine bases for them, it is helpful to put the matrix into a reduced form that we can obtain from Gaussian elimination called <em>reduced row echelon form</em>.</p>
+<div class="admonition-definition-reduced-row-echelon-form admonition">
+<p class="admonition-title">Definition: Reduced Row Echelon Form</p>
+<p>A matrix <span class="math notranslate nohighlight">\(R\)</span> is said to be in reduced row echelon form if:</p>
+<ul class="simple">
+<li><p>All rows containing only zeros are below any row containing a nonzero entry</p></li>
+<li><p>The first nonzero entry in each row is 1</p></li>
+<li><p>The first nonzero entry in each row occurs strictly to the right of the first nonzero entry in the row above</p></li>
+<li><p>Each column containing the first nonzero entry in a row contains no other nonzero entries.</p></li>
+</ul>
+<p>We can use Gaussian elimination to find a reduced row echelon form matrix <span class="math notranslate nohighlight">\(R\)</span> that is row equivalent to <span class="math notranslate nohighlight">\(A\)</span>, and we write <span class="math notranslate nohighlight">\(R=rref(A)\)</span> to indicate this matrix.</p>
+</div>
+<p><strong>Example:</strong> The matrix</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    R = \begin{bmatrix}
+            1 &amp; 0 &amp; 2 &amp; 3 &amp; 0 \\
+            0 &amp; 1 &amp; 4 &amp; 1 &amp; 0 \\
+            0 &amp; 0 &amp; 0 &amp; 0 &amp; 1 \\
+            0 &amp; 0 &amp; 0 &amp; 0 &amp; 0
+        \end{bmatrix}
+\end{split}\]</div>
+<p>is in reduced row echelon form.</p>
+<p><strong>Example:</strong> The matrix</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    S = \begin{bmatrix}
+            1 &amp; 0 &amp; 2 &amp; 3 &amp; 0 \\
+            0 &amp; 1 &amp; 4 &amp; 1 &amp; 0 \\
+            0 &amp; 0 &amp; 0 &amp; 1 &amp; 1 \\
+            0 &amp; 0 &amp; 0 &amp; 0 &amp; 0
+        \end{bmatrix}
+\end{split}\]</div>
+<p>is not in reduced row echelon form, because the first nonzero entry in row three has other nonzero entries in its column.</p>
+</section>
+<section id="column-space">
+<h2>Column Space<a class="headerlink" href="#column-space" title="Link to this heading">#</a></h2>
+<p>Matrices have several vector spaces associated with them. The first of these that we will study is called the <em>column space</em>.</p>
+<div class="admonition-definition-column-space admonition">
+<p class="admonition-title">Definition: Column Space</p>
+<p>The column space of a matrix <span class="math notranslate nohighlight">\(A\)</span>, written <span class="math notranslate nohighlight">\(col(A)\)</span>, is the vector space spanned by its columns.</p>
+</div>
+<p>The column space is important because whenever a matrix multiplies a vector, the result is a linear combination of the columns of the matrix: <span class="math notranslate nohighlight">\(A\mathbf{x} = \mathbf{b}\)</span> is a terse way of saying that <span class="math notranslate nohighlight">\(\mathbf{b}\)</span> is a linear combination of the columns of <span class="math notranslate nohighlight">\(A\)</span>.</p>
+<p>Often the columns of <span class="math notranslate nohighlight">\(A\)</span> do not form a basis for <span class="math notranslate nohighlight">\(col(A)\)</span> because they are not linearly independent, and in order to better understand the column space we want to find a basis for it. To do this, we can reduce <span class="math notranslate nohighlight">\(A\)</span> to <span class="math notranslate nohighlight">\(rref(A)\)</span> using Gaussian elimination. In the reduced row echelon form of <span class="math notranslate nohighlight">\(A\)</span>, the columns that contain pivots are independent of the other columns containing pivots, and we can map the column indices back to the original columns of <span class="math notranslate nohighlight">\(A\)</span> to identify a suitable basis for <span class="math notranslate nohighlight">\(col(A)\)</span>.</p>
+<p><strong>Example:</strong> Suppose that we wish to find a basis for the column space of <span class="math notranslate nohighlight">\(A\)</span> given below:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    A = \begin{bmatrix}
+            1 &amp; 1 &amp; 2 &amp; 4 &amp; 0 \\
+            1 &amp; 1 &amp; 3 &amp; 6 &amp; 1 \\
+            2 &amp; 2 &amp; 4 &amp; 8 &amp; 0
+        \end{bmatrix}.
+\end{split}\]</div>
+<p>First, note that the columns of <span class="math notranslate nohighlight">\(A\)</span> have three components, so <span class="math notranslate nohighlight">\(col(A) \subseteq \mathbb{R}^3\)</span>. Let’s go through Gaussian elimination to the furthest extent possible:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix}
+        1 &amp; 1 &amp; 2 &amp; 4 &amp; 0 \\
+        1 &amp; 1 &amp; 3 &amp; 6 &amp; 1 \\
+        2 &amp; 2 &amp; 4 &amp; 8 &amp; 0
+    \end{bmatrix} \sim
+    \begin{bmatrix}
+        1 &amp; 1 &amp; 2 &amp; 4 &amp; 0 \\
+        0 &amp; 0 &amp; 1 &amp; 2 &amp; 1 \\
+        0 &amp; 0 &amp; 0 &amp; 0 &amp; 0
+    \end{bmatrix} \sim
+    \begin{bmatrix}
+        1 &amp; 1 &amp; 0 &amp; 0 &amp; -2 \\
+        0 &amp; 0 &amp; 1 &amp; 2 &amp; 0 \\
+        0 &amp; 0 &amp; 0 &amp; 0 &amp; 0
+    \end{bmatrix}.
+\end{split}\]</div>
+<p>In <span class="math notranslate nohighlight">\(rref(A)\)</span>, we find pivots in columns 1 and 3. The other columns are ‘free’ columns. Mapping back to the original columns of <span class="math notranslate nohighlight">\(A\)</span>, we can say that the column vectors</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    A_1 = \begin{bmatrix}
+        1 \\
+        1 \\
+        2 
+    \end{bmatrix},
+    A_3 =     
+    \begin{bmatrix}
+        2 \\
+        3 \\
+        4
+    \end{bmatrix}
+\end{split}\]</div>
+<p>are a basis for <span class="math notranslate nohighlight">\(col(A)\)</span>. Geometrically, <span class="math notranslate nohighlight">\(col(A)\)</span> is a plane in <span class="math notranslate nohighlight">\(\mathbb{R}^3\)</span>. Algebraically, note that <span class="math notranslate nohighlight">\(A_2 = A_1\)</span>, <span class="math notranslate nohighlight">\(A_4 = 2A_3\)</span>, and <span class="math notranslate nohighlight">\(A_5 = A_3 - 2A_1\)</span>. When we put <span class="math notranslate nohighlight">\(A\)</span> in <span class="math notranslate nohighlight">\(rref(A)\)</span>, these dependencies lead to the lack of pivots in columns 2, 4, and 5, and this is why we can map the indices of the pivot columns in <span class="math notranslate nohighlight">\(rref(A)\)</span> back to <span class="math notranslate nohighlight">\(A\)</span> to identify the linearly independent basis vectors of <span class="math notranslate nohighlight">\(col(A)\)</span>.</p>
+<p><strong>Example:</strong> Here is an example that is simpler in some ways but leads to a subtle and important idea. Let</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    A = \begin{bmatrix}
+            1 &amp; 1 &amp; -1 \\
+            2 &amp; 1 &amp; 2 \\
+            -1 &amp; 0 &amp; 1
+        \end{bmatrix}.
+\end{split}\]</div>
+<p>Note that again <span class="math notranslate nohighlight">\(col(A) \subseteq \mathbb{R}^3\)</span>. As an exercise, go through the Gaussian elimination to find <span class="math notranslate nohighlight">\(rref(A)\)</span>. You will find that it is simply <span class="math notranslate nohighlight">\(I\)</span>, the <span class="math notranslate nohighlight">\(3\times 3\)</span> identity matrix. That means every column of <span class="math notranslate nohighlight">\(A\)</span> is a pivot column, and thus <span class="math notranslate nohighlight">\(col(A)\)</span> is a three-dimensional ‘subspace’ of <span class="math notranslate nohighlight">\(\mathbb{R}^3\)</span>. That implies that <span class="math notranslate nohighlight">\(col(A) = \mathbb{R}^3\)</span>, and we can use the pivot columns of <span class="math notranslate nohighlight">\(A\)</span> as a basis (as in the previous example) or we can just use the standard basis of <span class="math notranslate nohighlight">\(\mathbb{R}^3\)</span>; that is, we can <em>change</em> the basis if we find that one is easier to use than another for downstream tasks.</p>
+<p>The column space of a matrix is so important that its dimension gets its own definition as a key characteristic of the matrix:</p>
+<div class="admonition-definition-rank admonition">
+<p class="admonition-title">Definition: Rank</p>
+<p>The <em>rank</em> of a matrix <span class="math notranslate nohighlight">\(A\)</span>, written <span class="math notranslate nohighlight">\(rank(A)\)</span>, is the dimension of the column space of <span class="math notranslate nohighlight">\(A\)</span>: <span class="math notranslate nohighlight">\(rank(A) = dim(col(A))\)</span>.</p>
+</div>
+</section>
+<section id="null-space">
+<h2>Null Space<a class="headerlink" href="#null-space" title="Link to this heading">#</a></h2>
+<p>The null space of a matrix is the vector space consisting of vectors <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> such that <span class="math notranslate nohighlight">\(A\mathbf{x} = \mathbf{0}\)</span>.</p>
+<div class="admonition-definition-null-space admonition">
+<p class="admonition-title">Definition: Null Space</p>
+<p>Given a matrix <span class="math notranslate nohighlight">\(A\)</span>, the <em>null space</em> of <span class="math notranslate nohighlight">\(A\)</span> is written <span class="math notranslate nohighlight">\(N(A)\)</span> and defined as follows:</p>
+<div class="math notranslate nohighlight">
+\[
+    N(A) = \{\mathbf{x} \in \mathbb{R}^n | A\mathbf{x} = \mathbf{0}\}.
+\]</div>
+</div>
+<p>The null space may initially seem like a somewhat uninteresting vector space, but it turns out that many applications lead us into the null space of some matrix. To verify that the null space is indeed a vector space, note that the distributive property of matrix-vector multiplication insures that the null space is closed under linear combination. More precisely, if we let <span class="math notranslate nohighlight">\(\mathbf{u},\mathbf{v} \in N(A)\)</span> and let <span class="math notranslate nohighlight">\(c_1, c_2\)</span> be arbitrary scalars, then the linear combination <span class="math notranslate nohighlight">\(c_1\mathbf{u} + c_2\mathbf{v} \in N(A)\)</span>, because</p>
+<div class="math notranslate nohighlight">
+\[
+    A(c_1\mathbf{u} + c_2\mathbf{v}) = c_1A\mathbf{u} + c_2\mathbf{v} = c_1\mathbf{0} + c_2\mathbf{0} = \mathbf{0}.
+\]</div>
+<p>Finding a basis for <span class="math notranslate nohighlight">\(N(A)\)</span> revolves around <span class="math notranslate nohighlight">\(rref(A)\)</span> also. First, note that if <span class="math notranslate nohighlight">\(rref(A) = I\)</span> (that is, every column of a square matrix <span class="math notranslate nohighlight">\(A\)</span> is a pivot column), then <span class="math notranslate nohighlight">\(N(A)\)</span> is what is known as the <em>trivial</em> vector space: the vector space containing only the zero vector. We are generally interested in the null space when <span class="math notranslate nohighlight">\(A\)</span> doesn’t have enough pivots. In this case, we have non-pivot columns referred to as <em>free</em> columns, and we can use these to construct a basis for <span class="math notranslate nohighlight">\(N(A)\)</span>.</p>
+<p><strong>Example:</strong> Take the <span class="math notranslate nohighlight">\(3\times 5\)</span> matrix <span class="math notranslate nohighlight">\(A\)</span> from the earlier example, for which we have already obtained <span class="math notranslate nohighlight">\(rref(A)\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    rref(A) =     
+    \begin{bmatrix}
+        1 &amp; 1 &amp; 0 &amp; 0 &amp; -2 \\
+        0 &amp; 0 &amp; 1 &amp; 2 &amp; 0 \\
+        0 &amp; 0 &amp; 0 &amp; 0 &amp; 0
+    \end{bmatrix}.
+\end{split}\]</div>
+<p>Suppose that above we had tried to solve <span class="math notranslate nohighlight">\(A\mathbf{x} = \mathbf{0}\)</span> instead of finding <span class="math notranslate nohighlight">\(rref(A)\)</span>: we would have performed the same Gaussian elimination steps, but our matrix would have been augmented with a column of 0’s, which would not change the calculations at all (none of the row operations ever change the column of zeros). So let’s write the augmented reduced <span class="math notranslate nohighlight">\(A\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    [rref(A) | \mathbf{0}] =     
+    \begin{bmatrix}
+        1 &amp; 1 &amp; 0 &amp; 0 &amp; -2 &amp; | &amp; 0 \\
+        0 &amp; 0 &amp; 1 &amp; 2 &amp; 0 &amp; | &amp; 0 \\
+        0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; | &amp; 0
+    \end{bmatrix}.
+\end{split}\]</div>
+<p>Now, consider that each we are looking at an augmented matrix that represents a linear system with infinitely many solutions. If we write down the equations explicitly, we have</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{align*}
+        x_1 + x_2 - 2x_5 &amp;= 0 \\
+        x_3 + 2x_4 &amp;= 0 \\
+    \end{align*}
+\end{split}\]</div>
+<p>We will refer to the variables <span class="math notranslate nohighlight">\(x_i\)</span> corresponding to the free columns (the non-pivot columns in <span class="math notranslate nohighlight">\(rref(A)\)</span>) as <em>free variables</em>, and the variables in pivot columns will be called <em>pivot variables</em>. The terminology here comes from the fact that we have the freedom to choose any values we want for free variables and then we can calculate the pivot variable values that lead to a solution to the system.</p>
+<p>Although we have the freedom to choose the free variable values, some choices are better than others. With the goal in mind of obtaining a set of basis vectors, we will do the following: for each free variable <span class="math notranslate nohighlight">\(x_i\)</span>:</p>
+<ol class="arabic simple">
+<li><p>Set <span class="math notranslate nohighlight">\(x_i = 1\)</span>  and set every other free variable equal to <span class="math notranslate nohighlight">\(0\)</span>.</p></li>
+<li><p>Solve for the pivot variables.</p></li>
+<li><p>Put the values into a vector. This vector is a basis vector for <span class="math notranslate nohighlight">\(N(A)\)</span>.</p></li>
+</ol>
+<p>Continuing the example, we first set <span class="math notranslate nohighlight">\(x_2 = 1\)</span> and <span class="math notranslate nohighlight">\(x_4 = x_5 = 0\)</span>. Then <span class="math notranslate nohighlight">\(x_1 = -1\)</span> and <span class="math notranslate nohighlight">\(x_3 = 0\)</span>, and we have a basis vector</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \mathbf{x}_1 = \begin{bmatrix}
+                        -1 \\
+                        1 \\
+                        0 \\
+                        0 \\
+                        0
+                    \end{bmatrix}.
+\end{split}\]</div>
+<p>Now set <span class="math notranslate nohighlight">\(x_4 = 1\)</span> and <span class="math notranslate nohighlight">\(x_2 = x_5 = 0\)</span>. Then <span class="math notranslate nohighlight">\(x_1 = 0\)</span> and <span class="math notranslate nohighlight">\(x_3 = -2\)</span>, and we have a second basis vector</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \mathbf{x}_2 = \begin{bmatrix}
+                        0 \\
+                        0 \\
+                        -2 \\
+                        1 \\
+                        0
+                    \end{bmatrix}.
+\end{split}\]</div>
+<p>Finally, set <span class="math notranslate nohighlight">\(x_5 = 1\)</span> and <span class="math notranslate nohighlight">\(x_2 = x_4 = 0\)</span>. Then <span class="math notranslate nohighlight">\(x_1 = 2\)</span> and <span class="math notranslate nohighlight">\(x_3 = 0\)</span>, and we have a third basis vector</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \mathbf{x}_3 = \begin{bmatrix}
+                        2 \\
+                        0 \\
+                        0 \\
+                        0 \\
+                        1
+                    \end{bmatrix}.
+\end{split}\]</div>
+<p>There are no more free variables, so we stop here and assert that the three vectors <span class="math notranslate nohighlight">\(\mathbf{x}_1, \mathbf{x}_2, \mathbf{x}_3\)</span> form a basis for <span class="math notranslate nohighlight">\(N(A)\)</span>.</p>
+<p>The previous statement is as yet unsupported. As an exercise, it is worthwhile to go back and verify that <span class="math notranslate nohighlight">\(A\mathbf{x}_i = \mathbf{0}\)</span> for the three vectors we just produced, so they are definitely in the <span class="math notranslate nohighlight">\(N(A)\)</span>. Building on that, note that the choices we made in constructing these three vectors force them to be linearly independent (observe the pattern of zeros in the free variable positions). The only remaining question is whether these vectors span <span class="math notranslate nohighlight">\(N(A)\)</span>, or more precisely, is <span class="math notranslate nohighlight">\(dim(N(A)) = 3\)</span>? We can see that <span class="math notranslate nohighlight">\(N(A) \subseteq \mathbb{R}^3\)</span>, but how do we know that it is a three-dimensional subspace of <span class="math notranslate nohighlight">\(\mathbb{R}^3\)</span> and not larger, perhaps all of <span class="math notranslate nohighlight">\(\mathbb{R}^3\)</span> itself?</p>
+<p>There is an important theorem that will answer this question precisely.</p>
+<div class="admonition-theorem admonition">
+<p class="admonition-title">Theorem</p>
+<p>Let <span class="math notranslate nohighlight">\(A\)</span> be an <span class="math notranslate nohighlight">\(m\times n\)</span> matrix. Then <span class="math notranslate nohighlight">\(dim(col(A)) + dim(N(A)) = n\)</span>. Equivalently using rank, <span class="math notranslate nohighlight">\(rank(A) = n - dim(N(A))\)</span>.</p>
+</div>
+<p>Note that for the preceding example, the theorem establishes that <span class="math notranslate nohighlight">\(dim(N(A)) = 3\)</span>, as we know already that <span class="math notranslate nohighlight">\(rank(A) = 2\)</span>, answering the only remaining question about our proposed basis for <span class="math notranslate nohighlight">\(N(A)\)</span>.</p>
+<p>We will prove this theorem in a subsequent section after we have considered two other vector spaces associated with a matrix.</p>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -460,12 +899,49 @@ document.write(`
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="projection-qr-problem-set.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Problem Set 5: Projections and <span class="math notranslate nohighlight">\(A=QR\)</span></p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="vector-space-problem-set.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Problem Set 6: Vector Spaces and Bases</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div>
                 </footer>
               
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#spans-and-bases">Spans and Bases</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#determining-if-a-set-is-a-basis">Determining if a Set is a Basis</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reduced-row-echelon-form-of-a-matrix">Reduced Row Echelon Form of a Matrix</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#column-space">Column Space</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#null-space">Null Space</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>

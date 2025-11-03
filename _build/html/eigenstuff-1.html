@@ -62,6 +62,8 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'eigenstuff-1';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Problem Set 7: Eigenvalues and Eigenvectors of \(2\times2\) Matrices" href="eigenstuff-problem-set-1.html" />
+    <link rel="prev" title="Problem Set 6: Vector Spaces and Bases" href="vector-space-problem-set.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -124,8 +126,6 @@
       
       
       
-        
-      
       <div class="bd-sidebar-primary bd-sidebar">
         
 
@@ -181,7 +181,7 @@
                 </a>
             </li>
         </ul>
-        <ul class="nav bd-sidenav">
+        <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="motivation.html">Motivation</a></li>
 
 <li class="toctree-l1"><a class="reference internal" href="vectors.html">Vectors</a></li>
@@ -205,6 +205,7 @@
 
 <li class="toctree-l1"><a class="reference internal" href="vector-spaces.html">Vector Spaces</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vector-space-problem-set.html">Problem Set 6: Vector Spaces and Bases</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Introduction to Eigenvalues and Eigenvectors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="eigenstuff-problem-set-1.html">Problem Set 7: Eigenvalues and Eigenvectors of <span class="math notranslate nohighlight">\(2\times2\)</span> Matrices</a></li>
 </ul>
 
@@ -378,7 +379,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -394,6 +397,19 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-mousetrap-problem">The Mousetrap Problem</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ignore-the-initial-state">Ignore the Initial State</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eigenvalues-and-eigenvectors">Eigenvalues and Eigenvectors</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calculating-eigenvalues-and-eigenvectors-preliminaries">Calculating Eigenvalues and Eigenvectors - Preliminaries</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calculating-eigenvalues-and-eigenvectors-process-by-hand">Calculating Eigenvalues and Eigenvectors - Process (By Hand)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#markov-processes-and-markov-matrices">Markov Processes and Markov Matrices</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -405,14 +421,17 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="introduction-to-eigenvalues-and-eigenvectors">
 <h1>Introduction to Eigenvalues and Eigenvectors<a class="headerlink" href="#introduction-to-eigenvalues-and-eigenvectors" title="Link to this heading">#</a></h1>
+<section id="the-mousetrap-problem">
+<h2>The Mousetrap Problem<a class="headerlink" href="#the-mousetrap-problem" title="Link to this heading">#</a></h2>
 <p>Consider the following problem: a mouse is set loose in a house with the floorplan pictured below, and we are going to track the mouse’s movements over time. At each time step, the mouse will exit the room it currently occupies, and it will choose an adjacent room to enter uniformly at random. Now, Room 1 contains a mousetrap. If the mouse enters room 1, then it will with probability 10% be caught in the trap in the next time step; if not caught it again exits the room, choosing which adjacent room to enter again uniformly at random. The question we would like to answer is: what happens over the long-term? Is the mouse guaranteed to eventually get caught in the trap? Or could it end up wandering the house forever, always avoiding the trap in room 1?</p>
 <p><img alt="Floorplan" src="_images/mousetrap.png" /></p>
-<p>This is a problem where the outcomes are probabilistic, and we can use a type of matrix called a transition matrix to model them. First, define the state of the mouse being caught in the trap as state 0, and the state of the mouse being in room 1 but not in the trap as state 1. Then define the state of the mouse being in room <span class="math notranslate nohighlight">\(k\)</span> as state <span class="math notranslate nohighlight">\(k\)</span> for <span class="math notranslate nohighlight">\(2\leq k \leq 9\)</span>. Let <span class="math notranslate nohighlight">\(M\)</span> be a matrix where the entry in position <span class="math notranslate nohighlight">\(i, j\)</span> is the probability of the mouse moving from state <span class="math notranslate nohighlight">\(j\)</span> to state <span class="math notranslate nohighlight">\(i\)</span>. <strong>Note:</strong> We are switching to 0-based indexing now! The matrix then looks like this:</p>
+<p>This is a problem where the outcomes are probabilistic, and we can use a type of matrix called a transition matrix to model them (we will define the term ‘transition matrix’ formally below). First, define the state of the mouse being caught in the trap as state 0, and the state of the mouse being in room 1 but not in the trap as state 1. Then define the state of the mouse being in room <span class="math notranslate nohighlight">\(k\)</span> as state <span class="math notranslate nohighlight">\(k\)</span> for <span class="math notranslate nohighlight">\(2\leq k \leq 9\)</span>. Let <span class="math notranslate nohighlight">\(M\)</span> be a matrix where the entry in position <span class="math notranslate nohighlight">\(i, j\)</span> is the probability of the mouse moving from state <span class="math notranslate nohighlight">\(j\)</span> to state <span class="math notranslate nohighlight">\(i\)</span>. <strong>Note:</strong> We are switching to 0-based indexing now! The matrix then looks like this:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">scipy.linalg</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">la</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;bmh&#39;</span><span class="p">)</span>
 
 
 <span class="c1"># I like to enter my probabilities in the rows (which corresponds to state i -&gt; state j), then transpose the matrix</span>
@@ -479,7 +498,7 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">s_0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
-<span class="n">s_0</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">T</span>
+<span class="n">s_0</span> <span class="o">=</span> <span class="n">s_0</span><span class="o">.</span><span class="n">T</span>
 
 <span class="n">s_1</span> <span class="o">=</span> <span class="n">M</span> <span class="o">@</span> <span class="n">s_0</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">s_1</span><span class="p">)</span>
@@ -487,15 +506,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="n">s_0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
-<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">s_0</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">T</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">s_1</span> <span class="o">=</span> <span class="n">M</span> <span class="o">@</span> <span class="n">s_0</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="nb">print</span><span class="p">(</span><span class="n">s_1</span><span class="p">)</span>
-
-<span class="ne">NameError</span>: name &#39;s&#39; is not defined
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0. 0. 0. 0. 0. 0. 0. 1. 0. 0.]
 </pre></div>
 </div>
 </div>
@@ -515,7 +526,7 @@ document.write(`
 </div>
 </div>
 </div>
-<p>Now things are less certain. There is a 1/3 probability that the mouse is in room 8, and corresponding probabilities that the mouse is in room 6 or back in room 9. We don’t know the actual choice the mouse has made, but we have a model for the likelihood of the mouse being</p>
+<p>Now things are less certain. There is a 1/3 probability that the mouse is in room 8, and corresponding probabilities that the mouse is in room 6 or back in room 9. We don’t know the actual choice the mouse has made, but we have a model for the likelihood of the mouse being in a particular location at a particular time step.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">s_3</span> <span class="o">=</span> <span class="n">M</span> <span class="o">@</span> <span class="n">s_2</span>
@@ -564,14 +575,15 @@ document.write(`
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nsteps</span> <span class="o">=</span> <span class="mi">500</span>
 
 <span class="n">states</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">nsteps</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
-<span class="n">states</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">s</span>
+<span class="n">states</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">s_0</span>
 <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nsteps</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
-    <span class="n">states</span><span class="p">[</span><span class="n">t</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">A</span> <span class="o">@</span> <span class="n">states</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>
+    <span class="n">states</span><span class="p">[</span><span class="n">t</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">M</span> <span class="o">@</span> <span class="n">states</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>
     <span class="n">states</span><span class="p">[</span><span class="n">t</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">states</span><span class="p">[</span><span class="n">t</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="n">states</span><span class="p">[</span><span class="n">t</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:])</span>  <span class="c1"># normalization to address floating point arithmetic errors </span>
 </pre></div>
 </div>
 </div>
 </div>
+<p>Let’s plot the state of the system at each time step to see how it evolves.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">IPython.core.pylabtools</span><span class="w"> </span><span class="kn">import</span> <span class="n">figsize</span>
@@ -581,9 +593,10 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/cda69e8fcbd561d5f4adff16f8f30c1a8ee0d7de186d39321b08f7d75529bf28.png" src="_images/cda69e8fcbd561d5f4adff16f8f30c1a8ee0d7de186d39321b08f7d75529bf28.png" />
+<img alt="_images/114045cf7d3a9ce0c00f3ff6ebec30413cf6a181bda967f1412932b6818fafe0.png" src="_images/114045cf7d3a9ce0c00f3ff6ebec30413cf6a181bda967f1412932b6818fafe0.png" />
 </div>
 </div>
+<p>In under 100 time steps, it’s clear that one outcome is much more probable than the others. The final state of the system shows a nearly 100% probability that the mouse is caught in the trap.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">states</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
@@ -591,13 +604,518 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([9.98429352e-01, 0.00000000e+00, 1.64084347e-04, 7.63259841e-04,
-       0.00000000e+00, 0.00000000e+00, 0.00000000e+00, 6.43304224e-04,
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([9.95973817e-01, 0.00000000e+00, 4.12863330e-04, 1.93667772e-03,
+       0.00000000e+00, 0.00000000e+00, 0.00000000e+00, 1.67664155e-03,
        0.00000000e+00, 0.00000000e+00])
 </pre></div>
 </div>
 </div>
 </div>
+<p>What if we had set the mouse loose in a different room; for example, how about room 2? Would changing the initial state of the system change anything about the long-term behavior of the system?</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">T</span>
+
+<span class="n">nsteps</span> <span class="o">=</span> <span class="mi">500</span>
+
+<span class="n">states</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">nsteps</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">states</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">s</span>
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nsteps</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+    <span class="n">states</span><span class="p">[</span><span class="n">t</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">M</span> <span class="o">@</span> <span class="n">states</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>
+    <span class="n">states</span><span class="p">[</span><span class="n">t</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">states</span><span class="p">[</span><span class="n">t</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="n">states</span><span class="p">[</span><span class="n">t</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:])</span>  <span class="c1"># normalization to address floating point arithmetic errors </span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">states</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">states</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[9.97025727e-01 6.62667459e-04 0.00000000e+00 0.00000000e+00
+ 3.57671805e-04 3.57671805e-04 7.70535134e-04 0.00000000e+00
+ 4.12863330e-04 4.12863330e-04]
+</pre></div>
+</div>
+<img alt="_images/45eb1d48ebcf9fb8d587946922b6a739fdfa17ba35b099d37c788b0c7aaa8241.png" src="_images/45eb1d48ebcf9fb8d587946922b6a739fdfa17ba35b099d37c788b0c7aaa8241.png" />
+</div>
+</div>
+<p>It appears not - there is a slight increase in the probability that the mouse is caught in the trap after 500 time steps, but the probability is already nearly 100% and the difference is almost negligible.</p>
+</section>
+<section id="ignore-the-initial-state">
+<h2>Ignore the Initial State<a class="headerlink" href="#ignore-the-initial-state" title="Link to this heading">#</a></h2>
+<p>It is the case that in fact the initial state of a system like this does not have any effect on the long-term, ‘steady-state’ of the system. To see this, let’s take a look at powers of the transition matrix <span class="math notranslate nohighlight">\(M\)</span>: for ‘large’ <span class="math notranslate nohighlight">\(n\)</span>, what does <span class="math notranslate nohighlight">\(M^n\)</span> look like?</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pow_M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">M</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">500</span><span class="p">):</span>
+    <span class="n">pow_M</span> <span class="o">=</span> <span class="n">pow_M</span> <span class="o">@</span> <span class="n">M</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">pow_M</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[[1. 1. 1. 1. 1. 1. 1. 1. 1. 1.]
+ [0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Remember what the entries in <span class="math notranslate nohighlight">\(M\)</span> represent: entry <span class="math notranslate nohighlight">\(m_{i,j}\)</span> is the probability the system transitions in a single time step from state <span class="math notranslate nohighlight">\(j\)</span> to state <span class="math notranslate nohighlight">\(i\)</span>. The entries in the <span class="math notranslate nohighlight">\(n^{th}\)</span> power of <span class="math notranslate nohighlight">\(M\)</span> can be thought of as the probability the system transitions  from state <span class="math notranslate nohighlight">\(j\)</span> to state <span class="math notranslate nohighlight">\(i\)</span> over <span class="math notranslate nohighlight">\(n\)</span> time steps. So what we can observe here is that over 500 time steps, there is a 100% probability (rounding off) that regardless of the initial state of the system, the mouse ends up in the trap.</p>
+<p>In fact, it is possible to determine this without even doing the matrix multiplies in the previous cell, but rather by analyzing <span class="math notranslate nohighlight">\(M\)</span> itself. Let’s step away from this example for now and plan to return shortly.</p>
+</section>
+<section id="eigenvalues-and-eigenvectors">
+<h2>Eigenvalues and Eigenvectors<a class="headerlink" href="#eigenvalues-and-eigenvectors" title="Link to this heading">#</a></h2>
+<div class="admonition-definition-eigenvalues-and-eigenvectors admonition">
+<p class="admonition-title">Definition: Eigenvalues and eigenvectors</p>
+<p>Suppose <span class="math notranslate nohighlight">\(A\)</span> is a square matrix. A vector <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> such that <span class="math notranslate nohighlight">\(A\mathbf{x} = \lambda\mathbf{x}\)</span> for a scalar <span class="math notranslate nohighlight">\(\lambda\)</span> is called an <em>eigenvector</em> of <span class="math notranslate nohighlight">\(A\)</span>, while the scalar <span class="math notranslate nohighlight">\(\lambda\)</span> is called an eigenvalue of <span class="math notranslate nohighlight">\(A\)</span>.</p>
+</div>
+<p>Geometrically, this definition is saying that when <span class="math notranslate nohighlight">\(A\)</span> multiplies one of its eigenvectors, it does not change its direction, though it may scale it (strictly speaking, it could scale by a negative number, which would flip the vector’s direction but the product would remain on the same line). If we think of square <span class="math notranslate nohighlight">\(n\times n\)</span> matrices as representing geometric transformations of <span class="math notranslate nohighlight">\(\mathbb{R}^n\)</span>, the eigenvectors are then analogous to ‘fixed points’ of the transformation. To initially motivate why these vectors might be useful, suppose we have a <span class="math notranslate nohighlight">\(2\times 2\)</span> matrix <span class="math notranslate nohighlight">\(A\)</span> with distinct eigenvalues <span class="math notranslate nohighlight">\(\lambda_1, \lambda_2\)</span> and distinct linearly independent eigenvectors <span class="math notranslate nohighlight">\(\mathbf{x}_1, \mathbf{x}_2\)</span>. Suppose <span class="math notranslate nohighlight">\(\mathbf{u}\)</span> is a vector in <span class="math notranslate nohighlight">\(\mathbb{R}^2\)</span> given as follows:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \mathbf{u} = \begin{bmatrix}
+                    u_1 \\
+                    u_2
+                \end{bmatrix}.
+\end{split}\]</div>
+<p>Imagine we want to understand what <span class="math notranslate nohighlight">\(A\)</span> does to <span class="math notranslate nohighlight">\(\mathbb{R}^2\)</span>. We can try looking at <span class="math notranslate nohighlight">\(A\mathbf{u}\)</span>, and it will be helpful here if we express <span class="math notranslate nohighlight">\(\mathbf{u}\)</span> in terms of a basis for <span class="math notranslate nohighlight">\(\mathbb{R}^2\)</span>; in the absence of any reason to choose another one, let’s use the standard basis:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    A\mathbf{u} = A\begin{bmatrix}
+                        u_1 \\
+                        u_2
+                    \end{bmatrix} 
+                = A(u_1\begin{bmatrix}
+                        1 \\
+                        0
+                        \end{bmatrix} + 
+                     u_2\begin{bmatrix}
+                        0 \\
+                        1
+                        \end{bmatrix}) 
+                = u_1 A \begin{bmatrix}
+                         1 \\
+                         0
+                        \end{bmatrix} + 
+                  u_2 A \begin{bmatrix}
+                         0 \\
+                         1
+                        \end{bmatrix}.
+\end{split}\]</div>
+<p>What the equation above is telling us is that we determine what <span class="math notranslate nohighlight">\(A\)</span> does to <span class="math notranslate nohighlight">\(\mathbf{u}\)</span> by determining what <span class="math notranslate nohighlight">\(A\)</span> does to the basis vectors, and for each of the basis vectors this will often involve both a change in scale and a change in direction.</p>
+<p>But we have assumed that <span class="math notranslate nohighlight">\(A\)</span> has two distinct, linearly independent eigenvectors, therefore we could use the eigenvectors of <span class="math notranslate nohighlight">\(A\)</span> as a basis for <span class="math notranslate nohighlight">\(\mathbb{R}^2\)</span> instead and write <span class="math notranslate nohighlight">\(\mathbf{u} = c_1\mathbf{x}_1 + c_2\mathbf{x}_2\)</span> as a linear combination of the eigenvectors <span class="math notranslate nohighlight">\(\mathbf{x}_1, \mathbf{x}_2\)</span> of <span class="math notranslate nohighlight">\(A\)</span>. Then, our analysis looks as follows:</p>
+<div class="math notranslate nohighlight">
+\[
+    A\mathbf{u} = A(c_1\mathbf{x}_1 + c_2\mathbf{x}_2) = c_1A\mathbf{x}_1 + c_2A\mathbf{x}_2 = c_1\lambda_1\mathbf{x}_1 + c_2\lambda_2\mathbf{x}_2.
+\]</div>
+<p>Here, the multiplication by <span class="math notranslate nohighlight">\(A\)</span> results in simply scaling in the directions of the eigenvectors, the direction changes have been removed, and this simplifies the analysis.</p>
+<p>Note that while I have used <span class="math notranslate nohighlight">\(\mathbb{R}^2\)</span> for the above example, nothing above is specific to <span class="math notranslate nohighlight">\(\mathbb{R}^2\)</span>: we can do the same thing in <span class="math notranslate nohighlight">\(\mathbb{R}^n\)</span> or any other vector space as long as the matrix we are working with has enough linearly independent eigenvectors to span the space (spoiler: unfortunately, that is not always the case).</p>
+</section>
+<section id="calculating-eigenvalues-and-eigenvectors-preliminaries">
+<h2>Calculating Eigenvalues and Eigenvectors - Preliminaries<a class="headerlink" href="#calculating-eigenvalues-and-eigenvectors-preliminaries" title="Link to this heading">#</a></h2>
+<p>For reasons we will get in to shortly,  eigenvalues and eigenvectors for matrices of size greater than <span class="math notranslate nohighlight">\(5\times5\)</span> must almost always be approximated, and for anything greater than <span class="math notranslate nohighlight">\(2\times2\)</span> is often quite tedious to do by hand. However, there are several important theoretical aspects that we can observe by calculating the eigenvalues and eigenvectors of <span class="math notranslate nohighlight">\(2\times 2\)</span> matrices by hand, so we will illustrate a few examples here.</p>
+<div class="important admonition">
+<p class="admonition-title">Important: <span class="math notranslate nohighlight">\(N(A-\lambda I)\)</span></p>
+<p>Suppose that <span class="math notranslate nohighlight">\(A\mathbf{x} = \lambda\mathbf{x}\)</span>. Then <span class="math notranslate nohighlight">\(A\mathbf{x}-\lambda\mathbf{x} = \mathbf{0}\)</span>, and if we include <span class="math notranslate nohighlight">\(I\)</span>, we can factor out <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> on the left-hand side:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{align*}
+        A\mathbf{x}-\lambda\mathbf{x}  &amp;= \mathbf{0} \\
+        A\mathbf{x}-\lambda I\mathbf{x} &amp;= \mathbf{0} \\
+        (A-\lambda I)\mathbf{x}         &amp;= \mathbf{0}
+    \end{align*}
+\end{split}\]</div>
+<p>and this implies that <span class="math notranslate nohighlight">\(\mathbf{x} \in N(A-\lambda I)\)</span>.</p>
+</div>
+<div class="admonition-definition-the-determinant admonition">
+<p class="admonition-title">Definition: The Determinant</p>
+<p>The <em>determinant</em> of a A <span class="math notranslate nohighlight">\(2\times2\)</span> matrix <span class="math notranslate nohighlight">\(A = \begin{bmatrix} a &amp; b \\ c &amp; d \end{bmatrix}\)</span> is the function</p>
+<div class="math notranslate nohighlight">
+\[
+    det(A) = |A| = ad - bc.
+\]</div>
+</div>
+<p>The determinant is defined for square matrices of any size and it contains a great deal of useful information about the matrix from which it is calculated, but as detailed in Appendix A, the <span class="math notranslate nohighlight">\(2\times 2\)</span> case is quite special; the formula for calculating determinants of general <span class="math notranslate nohighlight">\(n\times n\)</span> matrices is fantastically computationally expensive, and as a result determinants are not particularly useful for applications; they are mainly used for toy examples or the occasional low-dimensional problem.</p>
+<p>One important feature of the determinant that we will use here is that if <span class="math notranslate nohighlight">\(det(A) = 0\)</span>, then <span class="math notranslate nohighlight">\(A\)</span> is singular, which is equivalent to <span class="math notranslate nohighlight">\(A\)</span> having a nontrivial nullspace. For a <span class="math notranslate nohighlight">\(2\times2\)</span> matrix <span class="math notranslate nohighlight">\(A = \begin{bmatrix} a &amp; b \\ c &amp; d \end{bmatrix}\)</span>, we can see this is the case because <span class="math notranslate nohighlight">\(ad - bc = 0\)</span> is equivalent to the rows of <span class="math notranslate nohighlight">\(A\)</span> being scalar multiples of each other, which in turn means that rref<span class="math notranslate nohighlight">\((A)\)</span> has a row of zeros and therefore a free variable. However, right now we aren’t interested in <span class="math notranslate nohighlight">\(A\)</span>, we are interested in <span class="math notranslate nohighlight">\(A-\lambda I\)</span>, which looks like</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix}
+        a &amp; b \\
+        c &amp; d
+    \end{bmatrix} - \lambda
+    \begin{bmatrix}
+        1 &amp; 0 \\
+        0 &amp; 1
+    \end{bmatrix} = 
+    \begin{bmatrix}
+        a - \lambda &amp; b \\
+        c &amp; d-\lambda
+    \end{bmatrix},
+\end{split}\]</div>
+<p>and if we do the analogous computation we get <span class="math notranslate nohighlight">\((a-\lambda)(d-\lambda) - bc = 0\)</span>, which simplifies to <span class="math notranslate nohighlight">\(\lambda^2 - (a + d)\lambda + (ad - bc) = 0\)</span>. This equation <span class="math notranslate nohighlight">\(det(A-\lambda I) = 0\)</span> is called the <em>characteristic equation</em> of <span class="math notranslate nohighlight">\(A\)</span>, and its roots are the eigenvalues of <span class="math notranslate nohighlight">\(A\)</span>.</p>
+<div class="admonition-definition-the-characteristic-equation admonition">
+<p class="admonition-title">Definition: The Characteristic Equation</p>
+<p>For a <span class="math notranslate nohighlight">\(n\times n\)</span> matrix <span class="math notranslate nohighlight">\(A\)</span>, the equation <span class="math notranslate nohighlight">\(det(A - \lambda I) = 0\)</span>, where <span class="math notranslate nohighlight">\(\lambda\)</span> is a scalar, is called the <em>characteristic equation</em> of <span class="math notranslate nohighlight">\(A\)</span>. The characteristic equation of <span class="math notranslate nohighlight">\(A\)</span> is a polynomial of degree <span class="math notranslate nohighlight">\(n\)</span>; for <span class="math notranslate nohighlight">\(A = \begin{bmatrix} a &amp; b \\ c &amp; d \end{bmatrix}\)</span>, the characteristic equation is <span class="math notranslate nohighlight">\(\lambda^2 - (a + d)\lambda + (ad - bc) = 0\)</span>, or equivalently, <span class="math notranslate nohighlight">\(\lambda^2 - tr(A)\lambda + det(A) = 0\)</span>, where <span class="math notranslate nohighlight">\(tr(A)\)</span> denotes the <em>trace</em> of <span class="math notranslate nohighlight">\(A\)</span>, defined as the sum of the diagonal entries of <span class="math notranslate nohighlight">\(A\)</span>. The roots of the characteristic equation are the eigenvalues of <span class="math notranslate nohighlight">\(A\)</span>.</p>
+</div>
+<p>Because the characteristic equation is defined in terms of determinants and determinants are not calculable for most real world applications, it follows that the characteristic equation is not calculable for most real-world examples, though it can be proven that for any square <span class="math notranslate nohighlight">\(n\times n\)</span> matrix <span class="math notranslate nohighlight">\(A\)</span>, there exists a polynomial of degree <span class="math notranslate nohighlight">\(n\)</span> whose roots are the eigenvalues of <span class="math notranslate nohighlight">\(A\)</span>. Moreover, there is no general closed-form formula for finding the roots of a polynomial of degree 5 or greater, so even if we go to the trouble of producing the characteristic equation, we aren’t guaranteed to be able to find the eigenvalues from it explicitly; we need instead to rely on an approximation process. All this is to say that the procedure that follows for finding the eigenvalues and eigenvectors of <span class="math notranslate nohighlight">\(2\times2\)</span> matrices doesn’t generalize to larger matrices.</p>
+</section>
+<section id="calculating-eigenvalues-and-eigenvectors-process-by-hand">
+<h2>Calculating Eigenvalues and Eigenvectors - Process (By Hand)<a class="headerlink" href="#calculating-eigenvalues-and-eigenvectors-process-by-hand" title="Link to this heading">#</a></h2>
+<p>For a <span class="math notranslate nohighlight">\(2\times 2\)</span> matrix <span class="math notranslate nohighlight">\(A\)</span>, we can find the eigenvalues and eigenvectors as follows:</p>
+<ul class="simple">
+<li><p>Solve the characteristic equation <span class="math notranslate nohighlight">\(det(A-\lambda I) = 0\)</span>. The roots are the eigenvalues of <span class="math notranslate nohighlight">\(A\)</span>.</p></li>
+<li><p>For each eigenvalue, solve the matrix equation <span class="math notranslate nohighlight">\((A - \lambda I)\mathbf{x} = \mathbf{0}\)</span> for <em>nontrivial</em> vectors <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> (the zero vector is always a solution to this equation; we are interested in nontrivial solutions).</p></li>
+</ul>
+<p><strong>Example:</strong> Find the eigenvalues and eigenvectors of <span class="math notranslate nohighlight">\(A = \begin{bmatrix} 1 &amp; 1 \\ -1 &amp; 3 \end{bmatrix}\)</span>.</p>
+<p>First, set up and solve the characteristic equation:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{align}
+        det(A - \lambda I) &amp;= 0 \\
+        det(\begin{bmatrix} 1 &amp; 1 \\ -1 &amp; 3 \end{bmatrix} - \lambda \begin{bmatrix} 1 &amp; 0 \\ 0 &amp; 1 \end{bmatrix}) &amp;= 0 \\
+        det(\begin{bmatrix} 1 - \lambda &amp; 1 \\ -1 &amp; 3 - \lambda \end{bmatrix}) &amp;= 0 \\
+        (1-\lambda)(3-\lambda) - (-1)\cdot1 &amp;= 0 \\
+        \lambda^2 - 4\lambda + 3 + 1 &amp;= 0 \\
+        \lambda^2 - 4\lambda + 4 &amp;= 0 \\
+        (\lambda - 2)(\lambda - 2) &amp;= 0 \\
+        \lambda &amp;= 2 \text{ (multiplicity 2)}
+    \end{align}
+\end{split}\]</div>
+<p>This matrix has only one distinct eigenvalue, so we only need to set up and solve <span class="math notranslate nohighlight">\((A-\lambda I)\mathbf{x} = \mathbf{0}\)</span> once. First, set up the matrix on the left:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix} 
+        1 &amp; 1 \\
+        -1 &amp; 3
+    \end{bmatrix} - 2
+    \begin{bmatrix}
+        1 &amp; 0 \\
+        0 &amp; 1
+    \end{bmatrix} = 
+    \begin{bmatrix} 
+        1 &amp; 1 \\
+        -1 &amp; 3
+    \end{bmatrix} - 
+    \begin{bmatrix}
+        2 &amp; 0 \\
+        0 &amp; 2
+    \end{bmatrix} =
+    \begin{bmatrix}
+        -1 &amp; 1 \\
+        -1 &amp; 1
+    \end{bmatrix}.
+\end{split}\]</div>
+<p>Next, augment the matrix with the zero vector and row-reduce:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix}
+        -1 &amp; 1 &amp; | 0 \\
+        -1 &amp; 1 &amp; | 0
+    \end{bmatrix} \sim
+    \begin{bmatrix}
+        -1 &amp; 1 &amp; | 0 \\
+         0 &amp; 0 &amp; | 0
+    \end{bmatrix}.
+\end{split}\]</div>
+<p>Setting the free variable corresponding to column 2 to 1, we can see that the pivot variable in column 1 must also equal 1 in order to satisfy the equation corresponding to row 1 (<span class="math notranslate nohighlight">\(-x_1 + x_2 = 0\)</span>). So a solution (i.e. an eigenvector of <span class="math notranslate nohighlight">\(A\)</span> corresponding to the eigenvalue of 2) is</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \mathbf{x} = 
+    \begin{bmatrix}
+        1 \\
+        1
+    \end{bmatrix}.
+\end{split}\]</div>
+<p>This example is somewhat defective in the sense that it is preferable for an <span class="math notranslate nohighlight">\(n\times n\)</span> matrix to have <span class="math notranslate nohighlight">\(n\)</span> linearly independent eigenvectors (this is necessary if we wish to use the eigenvectors as a basis for the column space of <span class="math notranslate nohighlight">\(A\)</span> as illustrated above), but unfortunately that does not always happen.</p>
+<p><strong>Example:</strong> Find the eigenvalues and eigenvectors of <span class="math notranslate nohighlight">\(A = \begin{bmatrix} 1 &amp; 1 \\ 1 &amp; 1 \end{bmatrix}\)</span>.</p>
+<p>First, set up and solve the characteristic equation:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{align}
+        det(A - \lambda I) &amp;= 0 \\
+        det(\begin{bmatrix} 1 &amp; 1 \\ 1 &amp; 1 \end{bmatrix} - \lambda \begin{bmatrix} 1 &amp; 0 \\ 0 &amp; 1 \end{bmatrix}) &amp;= 0 \\
+        det(\begin{bmatrix} 1 - \lambda &amp; 1 \\ 1 &amp; 1 - \lambda \end{bmatrix}) &amp;= 0 \\
+        (1-\lambda)(1-\lambda) - 1\cdot1 &amp;= 0 \\
+        \lambda^2 - 2\lambda + 1 - 1 &amp;= 0 \\
+        \lambda^2 - 2\lambda &amp;= 0 \\
+        \lambda(\lambda - 2) &amp;= 0 \\
+        \lambda &amp;= 0, 2
+    \end{align}
+\end{split}\]</div>
+<p>0 can be an eigenvalue of a matrix; in fact, this happens when <span class="math notranslate nohighlight">\(A\)</span> is singular (why?). Since we have two distinct eigenvalues, we need to set up and solve <span class="math notranslate nohighlight">\((A-\lambda I)\mathbf{x} = \mathbf{0}\)</span> twice this time. First, set up the matrix on the left using <span class="math notranslate nohighlight">\(\lambda_1 = 0\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix} 
+        1 &amp; 1 \\
+        1 &amp; 1
+    \end{bmatrix} - 0
+    \begin{bmatrix}
+        1 &amp; 0 \\
+        0 &amp; 1
+    \end{bmatrix} = 
+    \begin{bmatrix} 
+        1 &amp; 1 \\
+        1 &amp; 1
+    \end{bmatrix}.
+\end{split}\]</div>
+<p>Next, augment the matrix with the zero vector and row-reduce:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix}
+        1 &amp; 1 &amp; | 0 \\
+        1 &amp; 1 &amp; | 0
+    \end{bmatrix} \sim
+    \begin{bmatrix}
+        1 &amp; 1 &amp; | 0 \\
+         0 &amp; 0 &amp; | 0
+    \end{bmatrix}.
+\end{split}\]</div>
+<p>Setting the free variable corresponding to column 2 to 1, we can see that the pivot variable in column 1 must equal -1 in order to satisfy the equation corresponding to row 1 (<span class="math notranslate nohighlight">\(x_1 + x_2 = 0\)</span>). So a solution (i.e. an eigenvector of <span class="math notranslate nohighlight">\(A\)</span> corresponding to the eigenvalue <span class="math notranslate nohighlight">\(\lambda_1=0\)</span>) is</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \mathbf{x}_1 = 
+    \begin{bmatrix}
+        -1 \\
+        1
+    \end{bmatrix}.
+\end{split}\]</div>
+<p>Now set up the matrix on the left using <span class="math notranslate nohighlight">\(\lambda_2 = 2\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix} 
+        1 &amp; 1 \\
+        1 &amp; 1
+    \end{bmatrix} - 2
+    \begin{bmatrix}
+        1 &amp; 0 \\
+        0 &amp; 1
+    \end{bmatrix} = 
+        \begin{bmatrix} 
+        1 &amp; 1 \\
+        1 &amp; 1
+    \end{bmatrix} - 
+    \begin{bmatrix}
+        2 &amp; 0 \\
+        0 &amp; 2
+    \end{bmatrix} = 
+    \begin{bmatrix} 
+        -1 &amp; 1 \\
+        1 &amp; -1
+    \end{bmatrix},
+\end{split}\]</div>
+<p>and we saw this matrix occur in the previous example, so we know that a solution is</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \mathbf{x}_2 = 
+    \begin{bmatrix}
+        1 \\
+        1
+    \end{bmatrix}.
+\end{split}\]</div>
+<p>That gives us two distinct, linearly independent eigenvectors <span class="math notranslate nohighlight">\(\mathbf{x}_1\)</span>, <span class="math notranslate nohighlight">\(\mathbf{x}_2\)</span> corresponding to the two distinct eigenvalues <span class="math notranslate nohighlight">\(0, 2\)</span>.</p>
+<div class="important admonition">
+<p class="admonition-title">Note: Eigenvectors can be scaled</p>
+<p>It is important to note that eigenvectors can be scaled (that is, multiplied by any scalar) and they will remain eigenvectors. It is often desirable to work with unit eigenvectors, which can be obtained in the usual way by dividing the eigenvectors by their lengths. Virtually every software tool for calculating eigenvectors does this automatically and returns unit eigenvectors.</p>
+</div>
+<div class="important admonition">
+<p class="admonition-title">Other Situations</p>
+<p>The characteristic equation of a <span class="math notranslate nohighlight">\(2\times 2\)</span> real matrix <span class="math notranslate nohighlight">\(A\)</span> is a polynomial of degree 2 with real coefficients. This polynomial may not factor, but its roots can be obtained using the quadratic formula, and it can have 1 repeated root, 2 distinct real roots, or two complex conjugate roots. If the roots are complex conjugates, then the eigenvectors are also complex conjugates. Some orthogonal matrices (rotation matrices, for example) have complex conjugate roots.</p>
+</div>
+<p><strong>Example:</strong> Find the eigenvalues and eigenvectors of <span class="math notranslate nohighlight">\(A = \begin{bmatrix} 0 &amp; -1 \\ 1 &amp; 0 \end{bmatrix}\)</span>.</p>
+<p>First, set up and solve the characteristic equation:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{align}
+        det(A - \lambda I) &amp;= 0 \\
+        det(\begin{bmatrix} 0 &amp; -1 \\ 1 &amp; 0 \end{bmatrix} - \lambda \begin{bmatrix} 1 &amp; 0 \\ 0 &amp; 1 \end{bmatrix}) &amp;= 0 \\
+        det(\begin{bmatrix} - \lambda &amp; -1 \\ 1 &amp; - \lambda \end{bmatrix}) &amp;= 0 \\
+        \lambda^2 - (-1)\cdot1 &amp;= 0 \\
+        \lambda^2 + 1 &amp;= 0 \\
+        \lambda &amp;= \pm i,
+    \end{align}
+\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(i=\sqrt{-1}\)</span>. Since we have two distinct eigenvalues, we need to set up and solve <span class="math notranslate nohighlight">\((A-\lambda I)\mathbf{x} = \mathbf{0}\)</span> twice again. First, set up the matrix on the left using <span class="math notranslate nohighlight">\(\lambda_1 = +i\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix} 
+        0 &amp; -1 \\
+        1 &amp; 0
+    \end{bmatrix} - i
+    \begin{bmatrix}
+        1 &amp; 0 \\
+        0 &amp; 1
+    \end{bmatrix} = 
+    \begin{bmatrix} 
+        -i &amp; -1 \\
+        1 &amp; -i
+    \end{bmatrix}.
+\end{split}\]</div>
+<p>If you haven’t worked with complex numbers in the past it may not be immediately obvious, but that matrix has rank 1 (i.e. the rows are scalar multiples of each other). So, we will augment the matrix with the zero vector and row-reduce:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix}
+        -i &amp; -1 &amp; | 0 \\
+        1 &amp; -i &amp; | 0
+    \end{bmatrix} \overset{R_2 - iR_1 \to R_2}{\sim}
+    \begin{bmatrix}
+        -i &amp; -1 &amp; | 0 \\
+         0 &amp; 0 &amp; | 0
+    \end{bmatrix}.
+\end{split}\]</div>
+<p>Setting the free variable corresponding to column 2 to 1, we can see that the pivot variable in column 1 must equal i in order to satisfy the equation corresponding to row 1 (<span class="math notranslate nohighlight">\(-ix_1 - x_2 = 0\)</span>). So a solution (i.e. an eigenvector of <span class="math notranslate nohighlight">\(A\)</span> corresponding to the eigenvalue $\lambda_1=0) is</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \mathbf{x}_1 = 
+    \begin{bmatrix}
+        i \\
+        1
+    \end{bmatrix}.
+\end{split}\]</div>
+<p>Now set up the matrix on the left using <span class="math notranslate nohighlight">\(\lambda_2 = -i\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix} 
+        0 &amp; -1 \\
+        1 &amp; 0
+    \end{bmatrix} + i
+    \begin{bmatrix}
+        1 &amp; 0 \\
+        0 &amp; 1
+    \end{bmatrix} = 
+    \begin{bmatrix} 
+        i &amp; -1 \\
+        1 &amp; i
+    \end{bmatrix}.
+\end{split}\]</div>
+<p>As before it may not be immediately obvious, but that matrix has rank 1 (i.e. the rows are scalar multiples of each other). So, we will augment the matrix with the zero vector and row-reduce:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{bmatrix}
+        i &amp; -1 &amp; | 0 \\
+        1 &amp; i &amp; | 0
+    \end{bmatrix} \overset{R_2 + iR_1\to R_2}{\sim}
+    \begin{bmatrix}
+        i &amp; -1 &amp; | 0 \\
+         0 &amp; 0 &amp; | 0
+    \end{bmatrix}.
+\end{split}\]</div>
+<p>Setting the free variable corresponding to column 2 to 1, we can see that the pivot variable in column 1 must equal -i in order to satisfy the equation corresponding to row 1 (<span class="math notranslate nohighlight">\(ix_1 - x_2 = 0\)</span>). So a solution (i.e. an eigenvector of <span class="math notranslate nohighlight">\(A\)</span> corresponding to the eigenvalue <span class="math notranslate nohighlight">\(\lambda_1=0\)</span>) is</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \mathbf{x}_1 = 
+    \begin{bmatrix}
+        -i \\
+        1
+    \end{bmatrix}.
+\end{split}\]</div>
+<p>That gives us two distinct, linearly independent eigenvectors <span class="math notranslate nohighlight">\(\mathbf{x}_1\)</span>, <span class="math notranslate nohighlight">\(\mathbf{x}_2\)</span> corresponding to the two distinct eigenvalues <span class="math notranslate nohighlight">\(\pm i\)</span>.</p>
+<p>Notice that these eigenvectors can be separated into real and imaginary parts, for example</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \mathbf{x}_1 = \begin{bmatrix}
+                        i \\
+                        1
+                    \end{bmatrix} = 
+                    \begin{bmatrix}
+                        0 \\
+                        1
+                    \end{bmatrix} + i
+                    \begin{bmatrix}
+                        1 \\
+                        0
+                    \end{bmatrix},
+\end{split}\]</div>
+<p>and we can decompose <span class="math notranslate nohighlight">\(\mathbf{x}_2\)</span> similarly. In fact, it is the case that if a matrix has a complex eigenvalue <span class="math notranslate nohighlight">\(\lambda_1=a + bi\)</span>, then it has the complex conjugate <span class="math notranslate nohighlight">\(\lambda_2=a-bi\)</span> as an eigenvalue also, and if we write the eigenvector <span class="math notranslate nohighlight">\(\mathbf{x}_1\)</span> corresponding to <span class="math notranslate nohighlight">\(\lambda_1\)</span> in the form <span class="math notranslate nohighlight">\(\mathbf{x}_1 = \mathbf{a} + i\mathbf{b}\)</span> as demonstrated above, then the eigenvector corresponding to the complex conjugate eigenvalue <span class="math notranslate nohighlight">\(\lambda_2\)</span> is simply <span class="math notranslate nohighlight">\(\mathbf{x}_2 = \mathbf{a} - i\mathbf{b}\)</span>. This can be used to cut the computation time of the eigenvectors in half.</p>
+</section>
+<section id="markov-processes-and-markov-matrices">
+<h2>Markov Processes and Markov Matrices<a class="headerlink" href="#markov-processes-and-markov-matrices" title="Link to this heading">#</a></h2>
+<p>Let’s return now to the problem that we began the section with.</p>
+<div class="admonition-definition-markov-process admonition">
+<p class="admonition-title">Definition: Markov Process</p>
+<p>A <em>Markov process</em> or <em>Markov chain</em> is a stochastic (random) process describing a sequence of events where the probability of each event at time <span class="math notranslate nohighlight">\(t+1\)</span> is determined only by the state attained at time <span class="math notranslate nohighlight">\(t\)</span>. This ‘memoryless’ property is called the <em>Markov property</em>.</p>
+</div>
+<p>The scenario we considered above is a Markov process: at time <span class="math notranslate nohighlight">\(t\)</span>, to determine where the mouse ends up next it doesn’t matter which rooms the mouse travelled to in the past, only where the mouse currently is.</p>
+<div class="admonition-definition-probability-vector admonition">
+<p class="admonition-title">Definition: Probability Vector</p>
+<p>A vector of nonnegative real numbers whose entries sum to 1 is called a <em>probability vector</em>.</p>
+</div>
+<p>In the scenario above, the state vector is a probability vector.</p>
+<div class="admonition-definition-markov-matrix admonition">
+<p class="admonition-title">Definition: Markov Matrix</p>
+<p>A (left or column) <em>Markov</em> matrix, <em>transition</em> matrix, or <em>stochastic</em> matrix is a square matrix of nonnegative real numbers whose columns sum to 1.</p>
+</div>
+<p>In the scenario above, the transition matrix is a left Markov matrix. The ‘left’ designator refers to the fact that this matrix appears on the left when multiplying with a probability vector to determine the next state of the system.</p>
+<div class="admonition-eigenvalues-of-markov-matrices admonition">
+<p class="admonition-title">Eigenvalues of Markov Matrices</p>
+<p>Markov matrices always have 1 as an eigenvalue, and moreover, every other eigenvalue of a Markov matrix is less than 1 in magnitude.</p>
+</div>
+<div class="admonition-definition-principal-eigenvector admonition">
+<p class="admonition-title">Definition: Principal Eigenvector</p>
+<p>The eigenvector associated with the largest magnitude eigenvalue of a matrix (any matrix, not only a Markov matrix) is referred to as the <em>principal eigenvector</em> of the matrix.</p>
+</div>
+<p>Suppose that a Markov matrix <span class="math notranslate nohighlight">\(M\)</span> has <span class="math notranslate nohighlight">\(n\)</span> linearly independent eigenvectors <span class="math notranslate nohighlight">\(\mathbf{x}_1,\dots,\mathbf{x}_n\)</span>. Without loss of generality, suppose that <span class="math notranslate nohighlight">\(\lambda_1=1\)</span>, and thus <span class="math notranslate nohighlight">\(\lambda_2,\dots,\lambda_n\)</span> are all less than 1 in magnitude. Now assume that we have a state vector <span class="math notranslate nohighlight">\(\mathbf{s}\)</span> and we write it using the eigenvectors of <span class="math notranslate nohighlight">\(M\)</span> as previously described:</p>
+<div class="math notranslate nohighlight">
+\[
+    \mathbf{s} = c_1\mathbf{x}_1 + \cdots + c_n\mathbf{x}_n,
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(c_1,\dots, c_n\)</span> are scalars. If we multiply <span class="math notranslate nohighlight">\(\mathbf{s}\)</span> by <span class="math notranslate nohighlight">\(M\)</span> <span class="math notranslate nohighlight">\(k\)</span> times, assuming <span class="math notranslate nohighlight">\(k\)</span> to be a ‘large’ number, the following happens:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{align}
+        M^k\mathbf{s} &amp;= M^k(c_1\mathbf{x}_1 + \cdots + c_n\mathbf{x}_n) \\
+                      &amp;= c_1M^k\mathbf{x}_1 + \cdots + c_nM^k\mathbf{x}_n \\
+                      &amp;= c_1\lambda_1^k\mathbf{x}_1 + \cdots + c_n\lambda_n^k\mathbf{x}_n \\
+                      &amp;\approx c_1\mathbf{x}_1,
+    \end{align}
+\end{split}\]</div>
+<p>where the approximation in the last step comes from the fact that for <span class="math notranslate nohighlight">\(2 \leq i \leq n\)</span>, because <span class="math notranslate nohighlight">\(|\lambda_i| &lt; 1\)</span>, <span class="math notranslate nohighlight">\(\lambda_i^k \approx 0\)</span> for large <span class="math notranslate nohighlight">\(k\)</span>, but <span class="math notranslate nohighlight">\(\lambda_1^k = 1^k = 1\)</span>.</p>
+<p>This tells us that the steady-state of a Markov process is not dependent on the initial state of the system: over the long term, the system tends to the principal eigenvector of the transition matrix.</p>
+<p>Let’s finish this section by looking at the eigenvalues and eigenvectors of the transition matrix <span class="math notranslate nohighlight">\(M\)</span> from the problem that we started with. This matrix is <span class="math notranslate nohighlight">\(10\times 10\)</span>, so we will use SciPy to facilitate the calculation of the eigenvalues and eigenvectors.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">eigenvalues</span><span class="p">,</span> <span class="n">eigenvectors</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">eig</span><span class="p">(</span><span class="n">M</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">eigenvalues</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([ 1.00000000e+00+0.j, -9.88797258e-01+0.j, -8.52195506e-01+0.j,
+       -5.62917520e-01+0.j,  9.88797258e-01+0.j,  8.52195506e-01+0.j,
+        5.62917520e-01+0.j, -9.50554706e-18+0.j,  3.29243140e-17+0.j,
+        0.00000000e+00+0.j])
+</pre></div>
+</div>
+</div>
+</div>
+<p>Note that SciPy uses <code class="docutils literal notranslate"><span class="pre">j</span></code> to denote <span class="math notranslate nohighlight">\(\sqrt{-1}\)</span> and returns eigenvalue information as complex numbers, but in this example the imaginary part of every eigenvalue is 0, and the largest magnitude eigenvalue is indeed 1, which is the first eigenvalue. The principal eigenvector, then, will be the first column returned in <code class="docutils literal notranslate"><span class="pre">eigenvectors</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">eigenvectors</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([1., 0., 0., 0., 0., 0., 0., 0., 0., 0.])
+</pre></div>
+</div>
+</div>
+</div>
+<p>That corresponds to the steady state of the system after it ran for a long time regardless of the state it started in, and it also corresponds to every column of <span class="math notranslate nohighlight">\(M\)</span> when we calculated <span class="math notranslate nohighlight">\(M^k\)</span> for ‘large’ <span class="math notranslate nohighlight">\(k\)</span>. This single vector contains all the information we need to understand the long-term behavior of the system.</p>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -630,12 +1148,50 @@ document.write(`
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="vector-space-problem-set.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Problem Set 6: Vector Spaces and Bases</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="eigenstuff-problem-set-1.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Problem Set 7: Eigenvalues and Eigenvectors of <span class="math notranslate nohighlight">\(2\times2\)</span> Matrices</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div>
                 </footer>
               
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-mousetrap-problem">The Mousetrap Problem</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ignore-the-initial-state">Ignore the Initial State</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eigenvalues-and-eigenvectors">Eigenvalues and Eigenvectors</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calculating-eigenvalues-and-eigenvectors-preliminaries">Calculating Eigenvalues and Eigenvectors - Preliminaries</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calculating-eigenvalues-and-eigenvectors-process-by-hand">Calculating Eigenvalues and Eigenvectors - Process (By Hand)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#markov-processes-and-markov-matrices">Markov Processes and Markov Matrices</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>

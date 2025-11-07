@@ -442,16 +442,22 @@ document.write(`
 <section id="problem-1-convergence-conditions">
 <h3>Problem 1: Convergence Conditions<a class="headerlink" href="#problem-1-convergence-conditions" title="Link to this heading">#</a></h3>
 <p>Let <span class="math notranslate nohighlight">\(A \in \mathbb{R}^{n \times n}\)</span> be a diagonalizable matrix with eigenvalues <span class="math notranslate nohighlight">\(\lambda_1, \lambda_2, \ldots, \lambda_n\)</span> ordered such that <span class="math notranslate nohighlight">\(|\lambda_1| &gt; |\lambda_2| \geq |\lambda_3| \geq \cdots \geq |\lambda_n|\)</span>.</p>
-<p><strong>(a)</strong> Prove that if <span class="math notranslate nohighlight">\(v^{(0)}\)</span> has a nonzero component in the direction of the eigenvector corresponding to <span class="math notranslate nohighlight">\(\lambda_1\)</span>, then the power iteration sequence
-$<span class="math notranslate nohighlight">\(v^{(k+1)} = \frac{Av^{(k)}}{\|Av^{(k)}\|}\)</span><span class="math notranslate nohighlight">\(
-converges to an eigenvector corresponding to \)</span>\lambda_1$.</p>
+<p><strong>(a)</strong> Prove that if <span class="math notranslate nohighlight">\(v^{(0)}\)</span> has a nonzero component in the direction of the eigenvector corresponding to <span class="math notranslate nohighlight">\(\lambda_1\)</span>, then the power iteration sequence</p>
+<div class="math notranslate nohighlight">
+\[
+    v^{(k+1)} = \frac{Av^{(k)}}{\|Av^{(k)}\|}
+\]</div>
+<p>converges to an eigenvector corresponding to <span class="math notranslate nohighlight">\(\lambda_1\)</span>.</p>
 <p><strong>(b)</strong> Show that the rate of convergence is governed by the ratio <span class="math notranslate nohighlight">\(\left|\frac{\lambda_2}{\lambda_1}\right|\)</span>. What happens when <span class="math notranslate nohighlight">\(|\lambda_1| = |\lambda_2|\)</span>?</p>
 <p><strong>(c)</strong> Express the error in the eigenvalue estimate after <span class="math notranslate nohighlight">\(k\)</span> iterations as a function of <span class="math notranslate nohighlight">\(k\)</span> and <span class="math notranslate nohighlight">\(\left|\frac{\lambda_2}{\lambda_1}\right|\)</span>.</p>
 </section>
 <section id="problem-2-rayleigh-quotient-analysis">
 <h3>Problem 2: Rayleigh Quotient Analysis<a class="headerlink" href="#problem-2-rayleigh-quotient-analysis" title="Link to this heading">#</a></h3>
-<p>The Rayleigh quotient for a vector <span class="math notranslate nohighlight">\(v \neq 0\)</span> and matrix <span class="math notranslate nohighlight">\(A\)</span> is defined as:
-$<span class="math notranslate nohighlight">\(R(v) = \frac{v^T A v}{v^T v}\)</span>$</p>
+<p>The Rayleigh quotient for a vector <span class="math notranslate nohighlight">\(v \neq 0\)</span> and matrix <span class="math notranslate nohighlight">\(A\)</span> is defined as:</p>
+<div class="math notranslate nohighlight">
+\[
+    R(v) = \frac{v^T A v}{v^T v}
+\]</div>
 <p><strong>(a)</strong> Prove that if <span class="math notranslate nohighlight">\(v\)</span> is an eigenvector of <span class="math notranslate nohighlight">\(A\)</span> with eigenvalue <span class="math notranslate nohighlight">\(\lambda\)</span>, then <span class="math notranslate nohighlight">\(R(v) = \lambda\)</span>.</p>
 <p><strong>(b)</strong> Show that for a symmetric matrix <span class="math notranslate nohighlight">\(A\)</span>, the Rayleigh quotient satisfies <span class="math notranslate nohighlight">\(\lambda_{\min} \leq R(v) \leq \lambda_{\max}\)</span> for any nonzero vector <span class="math notranslate nohighlight">\(v\)</span>.</p>
 <p><strong>(c)</strong> Derive the gradient <span class="math notranslate nohighlight">\(\nabla R(v)\)</span> and show that critical points occur at eigenvectors of <span class="math notranslate nohighlight">\(A\)</span>.</p>

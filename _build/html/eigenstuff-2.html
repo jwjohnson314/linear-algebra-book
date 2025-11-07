@@ -478,7 +478,7 @@ Then the dominant eigenvector of <span class="math notranslate nohighlight">\(A\
 \]</div>
 </div>
 <p>Why do these formulas work? Let’s assume the approximation formula for the dominant eigenvector and consider the approximation of <span class="math notranslate nohighlight">\(\lambda_{max}\)</span>, the eigenvalue associated to the dominant eigenvector, using the Rayleigh quotient first.</p>
-<p>If we assume that <span class="math notranslate nohighlight">\(\mathbf{b}_{k+1}\)</span> is approximately the dominant eigenvector of <span class="math notranslate nohighlight">\(A\)</span>, then <span class="math notranslate nohighlight">\(A\mathbf{b}_{k+1} \approx \lambda_{max}\mathbf{b}_{k+1}\)</span>. Then <span class="math notranslate nohighlight">\(\mathbf{b}_{k+1}^TA\mathbf{b}_{k+1} \approx \lambda_{max}\mathbf{b}_{k+1}^T\mathbf{b}_{k+1} = \lambda_{max}||\mathbf{b}_{k+1}||^2\)</span>, but <span class="math notranslate nohighlight">\(||\mathbf{b}_{k+1}|| = 1\)</span> because it was already normalized. So <span class="math notranslate nohighlight">\(A\mathbf{b}_{k+1} \approx \lambda_{max}\)</span>.</p>
+<p>If we assume that <span class="math notranslate nohighlight">\(\mathbf{b}_{k+1}\)</span> is approximately the dominant eigenvector of <span class="math notranslate nohighlight">\(A\)</span>, then <span class="math notranslate nohighlight">\(A\mathbf{b}_{k+1} \approx \lambda_{max}\mathbf{b}_{k+1}\)</span>. Then <span class="math notranslate nohighlight">\(\mathbf{b}_{k+1}^TA\mathbf{b}_{k+1} \approx \lambda_{max}\mathbf{b}_{k+1}^T\mathbf{b}_{k+1} = \lambda_{max}||\mathbf{b}_{k+1}||^2\)</span>, but <span class="math notranslate nohighlight">\(||\mathbf{b}_{k+1}|| = 1\)</span> because it was already normalized. So <span class="math notranslate nohighlight">\(\mathbf{b}_{k+1}^TA\mathbf{b}_{k+1} \approx \lambda_{max}\)</span>.</p>
 <p>Now let’s consider the formula for the dominant eigenvector. We will prove this in the case where <span class="math notranslate nohighlight">\(A\)</span> is diagonalizable; that is, where <span class="math notranslate nohighlight">\(A\)</span> has <span class="math notranslate nohighlight">\(n\)</span> linearly independent eigenvectors. A formal proof in the general case is similar in spirit but much more complex.</p>
 <p>Suppose that <span class="math notranslate nohighlight">\(A\)</span> has <span class="math notranslate nohighlight">\(n\)</span> linearly independent eigenvectors <span class="math notranslate nohighlight">\(\mathbf{x}_1,\dots, \mathbf{x}_n\)</span>. Call our initial guess for the dominant eigenvector of <span class="math notranslate nohighlight">\(A\)</span> <span class="math notranslate nohighlight">\(\mathbf{b}_0\)</span>. We can write</p>
 <div class="math notranslate nohighlight">
@@ -590,15 +590,16 @@ Then the dominant eigenvector of <span class="math notranslate nohighlight">\(A\
 </div>
 </div>
 <p><strong>Example:</strong> Let’s take a <span class="math notranslate nohighlight">\(2\times2\)</span> example where we can compute the exact eigenvalues and eigenvectors by hand if we wish (do this as an exercise!). We will set</p>
-<p>$<span class="math notranslate nohighlight">\(
+<div class="math notranslate nohighlight">
+\[\begin{split}
     A = \begin{bmatrix}
             3 &amp; 1 \\
             0 &amp; 2
         \end{bmatrix}, \mathbf{v}_0 = \begin{bmatrix}
         1 \\
         1
-        \end{bmatrix},
-\)</span>$.</p>
+        \end{bmatrix}.
+\end{split}\]</div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]])</span>
@@ -1016,7 +1017,7 @@ Convergence at iteration 30: 50.313415
 </section>
 <section id="a-harder-example">
 <h2>A Harder Example<a class="headerlink" href="#a-harder-example" title="Link to this heading">#</a></h2>
-<p>The previous examples converged very quickly because the matrices where constructed to have an eigenvalue that was much larger than the others. The example below has largest eigenvalues that are very close in magnitude.</p>
+<p>The previous examples converged very quickly because the matrices were constructed to have an eigenvalue that was much larger than the others. The example below has largest eigenvalues that are very close in magnitude.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a &quot;difficult&quot; 100x100 matrix with slow convergence</span>

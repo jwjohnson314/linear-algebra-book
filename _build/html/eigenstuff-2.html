@@ -1,0 +1,1407 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Approximating Eigenvalues and Eigenvectors 1 - Power Iteration &#8212; Applied Linear Algebra</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'eigenstuff-2';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Problem Set 8: Power Iteration" href="eigenstuff-problem-set-2.html" />
+    <link rel="prev" title="Problem Set 7: Eigenvalues and Eigenvectors of \(2\times2\) Matrices" href="eigenstuff-problem-set-1.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="Applied Linear Algebra - Home"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="Applied Linear Algebra - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    <no title>
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="motivation.html">Motivation</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="vectors.html">Vectors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vectors-problem-set.html">Problem Set 1: Vectors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrices.html">Matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrices-problem-set.html">Problem Set 2: Matrix Arithmetic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="linear-systems-gaussian-elimination.html">Linear Systems and Gaussian Elimination</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gaussian-elimination-lu-problem-set.html">Problem Set 3: Gaussian Elimination and <span class="math notranslate nohighlight">\(A=LU\)</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="computation.html">Computation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bonus-faster-matrix-multiplication.html">Optional: Faster Matrix Multiplication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inverse-matrices.html">The Matrix Inverse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lu-and-computation-problem-set.html">Problem Set 4: <span class="math notranslate nohighlight">\(A=LU\)</span> and Computation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ols.html">Ordinary Least Squares and Linear Regression</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aqr.html">Projection and <span class="math notranslate nohighlight">\(A=QR\)</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="projection-qr-problem-set.html">Problem Set 5: Projections and <span class="math notranslate nohighlight">\(A=QR\)</span></a></li>
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="vector-spaces.html">Vector Spaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vector-space-problem-set.html">Problem Set 6: Vector Spaces and Bases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eigenstuff-1.html">Introduction to Eigenvalues and Eigenvectors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eigenstuff-problem-set-1.html">Problem Set 7: Eigenvalues and Eigenvectors of <span class="math notranslate nohighlight">\(2\times2\)</span> Matrices</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Approximating Eigenvalues and Eigenvectors 1 - Power Iteration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eigenstuff-problem-set-2.html">Problem Set 8: Power Iteration</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Feigenstuff-2.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/eigenstuff-2.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Approximating Eigenvalues and Eigenvectors 1 - Power Iteration</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-importance-of-eigenvalues-and-eigenvectors">The Importance of Eigenvalues and Eigenvectors</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-power-iteration-method">The Power Iteration Method</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-power-iteration-python-function">A Power Iteration Python Function</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-brief-tangent-properties-of-symmetric-matrices">A Brief Tangent - Properties of Symmetric Matrices</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#some-less-trivial-examples">Some Less Trivial Examples</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-harder-example">A Harder Example</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="approximating-eigenvalues-and-eigenvectors-1-power-iteration">
+<h1>Approximating Eigenvalues and Eigenvectors 1 - Power Iteration<a class="headerlink" href="#approximating-eigenvalues-and-eigenvectors-1-power-iteration" title="Link to this heading">#</a></h1>
+<section id="the-importance-of-eigenvalues-and-eigenvectors">
+<h2>The Importance of Eigenvalues and Eigenvectors<a class="headerlink" href="#the-importance-of-eigenvalues-and-eigenvectors" title="Link to this heading">#</a></h2>
+<p>There are several reasons that we may want to know the eigenvalues and/or eigenvectors of a matrix <span class="math notranslate nohighlight">\(A\)</span>. Below is a quite incomplete but motivating list:</p>
+<ul class="simple">
+<li><p>The ‘eigenbasis’ gives us an easier basis with which to understand the linear transformation that <span class="math notranslate nohighlight">\(A\)</span> effects.</p></li>
+<li><p>If <span class="math notranslate nohighlight">\(A\)</span> is a Markov matrix, the principal eigenvector tells us the steady state of the system.</p></li>
+<li><p>If <span class="math notranslate nohighlight">\(A\)</span> is the coefficient matrix of a linear system too large to solve by hand, iterative approximation techniques for solving the system will converge if all eigenvalues of <span class="math notranslate nohighlight">\(A\)</span> have magnitude less than 1, but cannot be guaranteed to converge if <span class="math notranslate nohighlight">\(A\)</span> has eigenvalues with magnitude greater than 1.</p></li>
+<li><p>In machine learning and statistical analysis, <em>Principal Component Analysis</em> is a widely-used technique for reducing the size of a dataset while keeping most of the important information in it, and the technique is based on the computation of the eigenvalues and eigenvectors of our old friend <span class="math notranslate nohighlight">\(A^TA\)</span>.</p></li>
+<li><p>Recommendation systems and search engines use eigenvector-based algorithms to make recommendations or find search results.</p></li>
+<li><p>In machine learning and generative artificial intelligence, <em>Spectral Normalization</em> is a technique for stabilizing the learning process for certain neural network architectures that requires scaling matrices by the largest eigenvalue of the matrix during the training process.</p></li>
+</ul>
+<p>In fact, one of the most famous algorithms in the world, Google’s PageRank algorithm, is based on approximating the principal eigenvector of a matrix using the method described in this section.</p>
+<p>In the last section definitions and techniques were introduced to allow by-hand computation of eigenvalues and eigenvectors of <span class="math notranslate nohighlight">\(2\times2\)</span> matrices, but these techniques are not practical for larger problems. In this section we will look at one algorithm for computing the dominant eigenvalue and eigenvector of a matrix.</p>
+</section>
+<section id="the-power-iteration-method">
+<h2>The Power Iteration Method<a class="headerlink" href="#the-power-iteration-method" title="Link to this heading">#</a></h2>
+<p>The Power Iteration Method of eigenvalue approximation, also known as <em>Von Mises</em> iteration, is similar in spirit to obtaining the steady-state of a Markov chain by iterating through it but it works for many different types of matrices, not only Markov matrices. It rests on two assumptions about a matrix <span class="math notranslate nohighlight">\(A\)</span> (assumptions that you may note are satisfied by any Markov matrix):</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(A\)</span> has an eigenvalue that is strictly greater than all of <span class="math notranslate nohighlight">\(A\)</span>’s other eigenvalues.</p></li>
+<li><p>We can find a vector <span class="math notranslate nohighlight">\(\mathbf{b}\)</span> with a nonzero component in the direction of the principal eigenvector of <span class="math notranslate nohighlight">\(A\)</span>.</p></li>
+</ul>
+<p>Assuming these to be true, we can iterate to produce the dominant eigenvector of <span class="math notranslate nohighlight">\(A\)</span> using the following formula:</p>
+<div class="math notranslate nohighlight">
+\[
+    \mathbf{b}_{k+1} = \frac{A\mathbf{b}_k}{||A\mathbf{b}_k||}.
+\]</div>
+<p>Once we estimate <span class="math notranslate nohighlight">\(\mathbf{b}_{k+1}\)</span>, we can estimate the eigenvalue of the dominant eigenvector as well using the <em>Rayleigh quotient</em>:</p>
+<div class="math notranslate nohighlight">
+\[
+    \lambda_{k+1} = \frac{\mathbf{b}_{k+1}^TA\mathbf{b}_{k+1}}{\mathbf{b}_{k+1}^T\mathbf{b}_{k+1}},
+\]</div>
+<p>though you may note that the naming of the Rayleigh quotient is not ideal because <span class="math notranslate nohighlight">\(\mathbf{b}_{k+1}\)</span> has been normalized, so the denominator in the Rayleigh quotient, which is the squared norm of <span class="math notranslate nohighlight">\(\mathbf{b}_{k+1}\)</span>, is in fact just 1 and the formula reduces to:</p>
+<div class="math notranslate nohighlight">
+\[
+    \lambda_{k+1} = \mathbf{b}_{k+1}^TA\mathbf{b}_{k+1}.
+\]</div>
+<div class="admonition-power-iteration-algorithm admonition">
+<p class="admonition-title">Power Iteration Algorithm</p>
+<p>Let <span class="math notranslate nohighlight">\(A\)</span> be a square matrix and suppose that</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(A\)</span> has an eigenvalue that is strictly greater than all of <span class="math notranslate nohighlight">\(A\)</span>’s other eigenvalues.</p></li>
+<li><p>We can find a vector <span class="math notranslate nohighlight">\(\mathbf{b}\)</span> with a nonzero component in the direction of the principal eigenvector of <span class="math notranslate nohighlight">\(A\)</span>.
+Then the dominant eigenvector of <span class="math notranslate nohighlight">\(A\)</span> can be approximated using the recursive formula</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[
+    \mathbf{b}_{k+1} = \frac{A\mathbf{b}_k}{||A\mathbf{b}_k||}
+\]</div>
+<p>while the associated eigenvalue <span class="math notranslate nohighlight">\(\lambda_{max}\)</span> can be approximated with the recursive formula</p>
+<div class="math notranslate nohighlight">
+\[
+    \lambda_{k+1} = \mathbf{b}_{k+1}^TA\mathbf{b}_{k+1}.
+\]</div>
+</div>
+<p>Why do these formulas work? Let’s assume the approximation formula for the dominant eigenvector and consider the approximation of <span class="math notranslate nohighlight">\(\lambda_{max}\)</span>, the eigenvalue associated to the dominant eigenvector, using the Rayleigh quotient first.</p>
+<p>If we assume that <span class="math notranslate nohighlight">\(\mathbf{b}_{k+1}\)</span> is approximately the dominant eigenvector of <span class="math notranslate nohighlight">\(A\)</span>, then <span class="math notranslate nohighlight">\(A\mathbf{b}_{k+1} \approx \lambda_{max}\mathbf{b}_{k+1}\)</span>. Then <span class="math notranslate nohighlight">\(\mathbf{b}_{k+1}^TA\mathbf{b}_{k+1} \approx \lambda_{max}\mathbf{b}_{k+1}^T\mathbf{b}_{k+1} = \lambda_{max}||\mathbf{b}_{k+1}||^2\)</span>, but <span class="math notranslate nohighlight">\(||\mathbf{b}_{k+1}|| = 1\)</span> because it was already normalized. So <span class="math notranslate nohighlight">\(A\mathbf{b}_{k+1} \approx \lambda_{max}\)</span>.</p>
+<p>Now let’s consider the formula for the dominant eigenvector. We will prove this in the case where <span class="math notranslate nohighlight">\(A\)</span> is diagonalizable; that is, where <span class="math notranslate nohighlight">\(A\)</span> has <span class="math notranslate nohighlight">\(n\)</span> linearly independent eigenvectors. A formal proof in the general case is similar in spirit but much more complex.</p>
+<p>Suppose that <span class="math notranslate nohighlight">\(A\)</span> has <span class="math notranslate nohighlight">\(n\)</span> linearly independent eigenvectors <span class="math notranslate nohighlight">\(\mathbf{x}_1,\dots, \mathbf{x}_n\)</span>. Call our initial guess for the dominant eigenvector of <span class="math notranslate nohighlight">\(A\)</span> <span class="math notranslate nohighlight">\(\mathbf{b}_0\)</span>. We can write</p>
+<div class="math notranslate nohighlight">
+\[
+    \mathbf{b}_0 = c_1\mathbf{x}_1 + \cdots + c_n\mathbf{x}_n,
+\]</div>
+<p>and when we multiply by <span class="math notranslate nohighlight">\(A\)</span>, the result is scalar multiplication in the direction of the eigenvectors:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{align}
+        A\mathbf{b}_0 &amp;= c_1A\mathbf{x}_1 + \cdots + c_nA\mathbf{x}_n \\
+                      &amp;= c_1\lambda_1\mathbf{x}_1 + \cdots + c_n\lambda_n\mathbf{x}_n.
+    \end{align}
+\end{split}\]</div>
+<p>If we multiply by <span class="math notranslate nohighlight">\(A\)</span> many times, this becomes</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{align}
+        A^k\mathbf{b}_0 &amp;= c_1A^k\mathbf{x}_1 + \cdots + c_nA^k\mathbf{x}_n \\
+                      &amp;= c_1\lambda_1^k\mathbf{x}_1 + \cdots + c_n\lambda_n^k\mathbf{x}_n.
+    \end{align}
+\end{split}\]</div>
+<p>This is analagous to the analysis we did of Markov matrices previously, but we no longer have the assumptions that the matrix has a dominant eigenvalue of 1 to rely on. Assume without loss of generality that <span class="math notranslate nohighlight">\(\lambda_1\)</span> is the largest eigenvalue of <span class="math notranslate nohighlight">\(A\)</span>. Then continuing the above calculation,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{align}
+        A^k\mathbf{b}_0 &amp;= c_1A^k\mathbf{x}_1 + \cdots + c_nA^k\mathbf{x}_n \\
+                      &amp;= c_1\lambda_1^k\mathbf{x}_1 + \cdots + c_n\lambda_n^k\mathbf{x}_n \\
+                      &amp;= \lambda_1^k(c_1\mathbf{x}_1 + (\frac{\lambda_2}{\lambda_1})^k\mathbf{x}_2 + \cdots + c_n(\frac{\lambda_n}{\lambda_1})^k\mathbf{x}_n),
+    \end{align}
+\end{split}\]</div>
+<p>and now because we have assumed <span class="math notranslate nohighlight">\(\lambda_1 &gt; \lambda_i\)</span> for <span class="math notranslate nohighlight">\(2 \leq i \leq n\)</span>, the quotients <span class="math notranslate nohighlight">\(\lambda_i/\lambda_1 &lt; 1\)</span>, so in fact for large enough <span class="math notranslate nohighlight">\(k\)</span>, we have</p>
+<div class="math notranslate nohighlight">
+\[
+    A^k\mathbf{b}_0 \to \lambda_1^k(c_1\mathbf{x}_1),
+\]</div>
+<p>a scalar multiple of the dominant eigenvector <span class="math notranslate nohighlight">\(\mathbf{x}_1\)</span> that we are seeking.</p>
+<p>Why do we need to scale at each step? That is, why <span class="math notranslate nohighlight">\(\mathbf{b}_{k+1} = A\mathbf{b}_k/||A\mathbf{b}_k||\)</span> instead of just <span class="math notranslate nohighlight">\(\mathbf{b}_{k+1} = A\mathbf{b}_k\)</span> for ‘large enough’ <span class="math notranslate nohighlight">\(k\)</span>, as would seem sufficient based on the above argument? Although <span class="math notranslate nohighlight">\(A^k\mathbf{b}_0 \to \lambda_1^k(c_1\mathbf{x}_1)\)</span> as <span class="math notranslate nohighlight">\(k\to\infty\)</span>, if <span class="math notranslate nohighlight">\(\lambda_1 &gt; 1\)</span>, then <span class="math notranslate nohighlight">\(\lambda_1^k\to\infty\)</span> as <span class="math notranslate nohighlight">\(k\to\infty\)</span>. Normalizing at each step insures that we have a unit vector in the dominant direction and multiplication by <span class="math notranslate nohighlight">\(A\)</span> does not blow it up.</p>
+</section>
+<section id="a-power-iteration-python-function">
+<h2>A Power Iteration Python Function<a class="headerlink" href="#a-power-iteration-python-function" title="Link to this heading">#</a></h2>
+<p>The function below will approximate the pair <span class="math notranslate nohighlight">\((\mathbf{x}, \lambda_{max})\)</span>, where <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> is the dominant eigenvector of some matrix <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(\lambda_{max}\)</span> is the associated eigenvalue. The number of power iterations to perform can be specified or it can be run until a certain accuracy is achieved (this is discussed in more detail further down). The initial vector can be specified or a random vector will be generated to start the iterations. In addition to <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> and <span class="math notranslate nohighlight">\(\lambda_{max}\)</span>, the function returns the history of approximated values of <span class="math notranslate nohighlight">\(\lambda\)</span> as well as the iteration at which convergence occurs (again, more detail further down).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">linalg</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">power_iteration</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">num_iterations</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">initial_vector</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute dominant eigenvalue and eigenvector using power iteration.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    A : ndarray</span>
+<span class="sd">        Square matrix</span>
+<span class="sd">    num_iterations : int</span>
+<span class="sd">        Number of iterations</span>
+<span class="sd">    initial_vector : ndarray, optional</span>
+<span class="sd">        Starting vector. If None, uses random vector.</span>
+<span class="sd">    tolerance : float</span>
+<span class="sd">        Convergence tolerance</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
+<span class="sd">    eigenvalue : float</span>
+<span class="sd">        Dominant eigenvalue</span>
+<span class="sd">    eigenvector : ndarray</span>
+<span class="sd">        Corresponding eigenvector</span>
+<span class="sd">    history : list</span>
+<span class="sd">        Eigenvalue estimates at each iteration</span>
+<span class="sd">    converged_at : int</span>
+<span class="sd">        Iteration where convergence criterion was met (or -1)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># Initialize vector</span>
+    <span class="k">if</span> <span class="n">initial_vector</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">initial_vector</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="n">v</span> <span class="o">=</span> <span class="n">v</span> <span class="o">/</span> <span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+
+    <span class="n">eigenvalue_history</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">converged_at</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="n">prev_eigenvalue</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_iterations</span><span class="p">):</span>
+        <span class="c1"># Multiply by matrix</span>
+        <span class="n">v_new</span> <span class="o">=</span> <span class="n">A</span> <span class="o">@</span> <span class="n">v</span>
+
+        <span class="c1"># Compute eigenvalue estimate (Rayleigh quotient)</span>
+        <span class="n">eigenvalue</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">v_new</span>
+        <span class="n">eigenvalue_history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">eigenvalue</span><span class="p">)</span>
+
+        <span class="c1"># Check convergence</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">abs</span><span class="p">(</span><span class="n">eigenvalue</span> <span class="o">-</span> <span class="n">prev_eigenvalue</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">tolerance</span> <span class="ow">and</span> <span class="n">converged_at</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">converged_at</span> <span class="o">=</span> <span class="n">i</span>
+
+        <span class="n">prev_eigenvalue</span> <span class="o">=</span> <span class="n">eigenvalue</span>
+
+        <span class="c1"># Normalize</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">v_new</span> <span class="o">/</span> <span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">v_new</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">eigenvalue</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">eigenvalue_history</span><span class="p">,</span> <span class="n">converged_at</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Example:</strong> Let’s take a <span class="math notranslate nohighlight">\(2\times2\)</span> example where we can compute the exact eigenvalues and eigenvectors by hand if we wish (do this as an exercise!). We will set</p>
+<p>$<span class="math notranslate nohighlight">\(
+    A = \begin{bmatrix}
+            3 &amp; 1 \\
+            0 &amp; 2
+        \end{bmatrix}, \mathbf{v}_0 = \begin{bmatrix}
+        1 \\
+        1
+        \end{bmatrix},
+\)</span>$.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]])</span>
+<span class="n">initial_vector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+<span class="n">num_iter</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="n">eigenvalue</span><span class="p">,</span> <span class="n">eigenvector</span><span class="p">,</span> <span class="n">eigenvalue_history</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">power_iteration</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">num_iter</span><span class="p">,</span> <span class="n">initial_vector</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- Power Iteration Results ---&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Iterations: </span><span class="si">{</span><span class="n">num_iter</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Estimated dominant eigenvalue: </span><span class="si">{</span><span class="n">eigenvalue</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Estimated eigenvector: </span><span class="si">{</span><span class="n">eigenvector</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>--- Power Iteration Results ---
+Iterations: 10
+Estimated dominant eigenvalue: 3.008669
+Estimated eigenvector: [0.9999831  0.00581402]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Although we can do the eigenvector and eigenvalue computations by hand, let’s use NumPy to check the accuracy of the eigenvalue estimate.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Verify with NumPy</span>
+<span class="n">true_eigenvalues</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">linalg</span><span class="o">.</span><span class="n">eig</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+<span class="n">max_eigenvalue</span> <span class="o">=</span> <span class="n">true_eigenvalues</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- Verification (NumPy) ---&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;True dominant eigenvalue: </span><span class="si">{</span><span class="n">max_eigenvalue</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="nb">abs</span><span class="p">(</span><span class="n">eigenvalue</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">max_eigenvalue</span><span class="p">)</span><span class="si">:</span><span class="s2">.2e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>--- Verification (NumPy) ---
+True dominant eigenvalue: 3.000000+0.000000j
+Error: 8.67e-03
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s look next at the dominant eigenvector. We can gauge the error in the estimate of the dominant eigenvector by measuring the norm of its difference with the true eigenvector in a case like this where we can actually calculate the true eigenvector, but in more realistic settings where we can’t produce the true eigenvector we can measure the error based on the eigenvector relationship to <span class="math notranslate nohighlight">\(A\)</span>: letting <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> represent our eigenvector estimate and <span class="math notranslate nohighlight">\(\lambda\)</span> our eigenvalue estimate, it must be the case that <span class="math notranslate nohighlight">\(A\mathbf{x} \approx \lambda\mathbf{x}\)</span>. If so, then <span class="math notranslate nohighlight">\(||A\mathbf{x} - \lambda\mathbf{x}|| \approx 0\)</span>. The vector <span class="math notranslate nohighlight">\(A\mathbf{x} - \lambda\mathbf{x}\)</span> is called the <em>residual</em> vector, and <span class="math notranslate nohighlight">\(||A\mathbf{x} - \lambda\mathbf{x}||\)</span> is the <em>residual norm</em>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Verify eigenvector</span>
+<span class="n">residual</span> <span class="o">=</span> <span class="n">A</span> <span class="o">@</span> <span class="n">eigenvector</span> <span class="o">-</span> <span class="n">eigenvalue</span> <span class="o">*</span> <span class="n">eigenvector</span>
+<span class="n">residual_norm</span> <span class="o">=</span> <span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">residual</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">eigenvector</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Residual ||Av - λv||: </span><span class="si">{</span><span class="n">residual_norm</span><span class="si">:</span><span class="s2">.2e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0.9999831  0.00581402]
+
+Residual ||Av - λv||: 6.52e-03
+</pre></div>
+</div>
+</div>
+</div>
+<p>Looking back for a moment, note that the residual norm is used in our <code class="docutils literal notranslate"><span class="pre">power_iteration</span></code> function to determine when convergence has happened if we do not specify the number of iterations to perform. In this case the function iterates until the residual norm is less than the tolerance specified (or set as the default).</p>
+<p>It looks like our approximation above is good. Let’s look at the eigenvalue history.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot convergence</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">eigenvalue_history</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">eigenvalue_history</span><span class="p">,</span> <span class="s1">&#39;b-o&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Power Iteration&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">max_eigenvalue</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;True Eigenvalue&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mf">2.8</span><span class="p">,</span> <span class="mf">3.2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Iteration&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Eigenvalue Estimate&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Power Iteration Convergence&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/jwj2/opt/anaconda3/envs/linalg/lib/python3.13/site-packages/matplotlib/cbook.py:1345: ComplexWarning: Casting complex values to real discards the imaginary part
+  return np.asarray(x, float)
+</pre></div>
+</div>
+<img alt="_images/2339abb2c8bfb1f5de5bddc65dbb8ddd6e46c20e0b919e5907cc386a125c79e5.png" src="_images/2339abb2c8bfb1f5de5bddc65dbb8ddd6e46c20e0b919e5907cc386a125c79e5.png" />
+</div>
+</div>
+<p>What if we had started from a random initial guess?</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="n">initial_vector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,))</span>
+<span class="n">num_iter</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="n">eigenvalue</span><span class="p">,</span> <span class="n">eigenvector</span><span class="p">,</span> <span class="n">eigenvalue_history</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">power_iteration</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">num_iter</span><span class="p">,</span> <span class="n">initial_vector</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- Power Iteration Results ---&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Iterations: </span><span class="si">{</span><span class="n">num_iter</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Estimated dominant eigenvalue: </span><span class="si">{</span><span class="n">eigenvalue</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>--- Power Iteration Results ---
+Iterations: 10
+Estimated dominant eigenvalue: 3.018647
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot convergence</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">eigenvalue_history</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">eigenvalue_history</span><span class="p">,</span> <span class="s1">&#39;b-o&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Power Iteration&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">max_eigenvalue</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;True Eigenvalue&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Iteration&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Eigenvalue Estimate&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Power Iteration Convergence&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/6697a253e69be42742d3477ca6629b3319ccd152c9fec0518e2874292fe8c1f3.png" src="_images/6697a253e69be42742d3477ca6629b3319ccd152c9fec0518e2874292fe8c1f3.png" />
+</div>
+</div>
+<p>The result is close but somewhat different starting from random initialization.</p>
+</section>
+<section id="a-brief-tangent-properties-of-symmetric-matrices">
+<h2>A Brief Tangent - Properties of Symmetric Matrices<a class="headerlink" href="#a-brief-tangent-properties-of-symmetric-matrices" title="Link to this heading">#</a></h2>
+<div class="admonition-properties-of-symmetric-matrices admonition">
+<p class="admonition-title">Properties of Symmetric Matrices</p>
+<p>Symmetric matrices have two important properties:</p>
+<ul class="simple">
+<li><p>The eigenvalues of a real symmetric matrix are real.</p></li>
+<li><p>The eigenvectors of a real symmetric matrix corresponding to distinct eigenvectors are orthogonal.</p></li>
+</ul>
+</div>
+<p>Some of the following examples exploit these properties of symmetric matrices, so let’s consider why symmetric matrices have these properties. We saw previously that if a matrix had complex conjugate eigenvalues, then it had corresponding complex conjugate eigenvectors also. Let <span class="math notranslate nohighlight">\(\lambda, \bar{\lambda}\)</span> denote a pair of complex conjugate eigenvalues of a symmetric matrix <span class="math notranslate nohighlight">\(S\)</span>, and let <span class="math notranslate nohighlight">\(\mathbf{x}, \bar{\mathbf{x}}\)</span> denote the corresponding complex conjugate eigenvectors. Consider the following equation:</p>
+<div class="math notranslate nohighlight">
+\[
+    \bar{\mathbf{x}}^TS\mathbf{x} = \bar{\mathbf{x}}\lambda\mathbf{x} = \lambda\bar{\mathbf{x}}^T\mathbf{x}.
+\]</div>
+<p>Now, consider the very similar equation</p>
+<div class="math notranslate nohighlight">
+\[
+    \mathbf{x}^TS\bar{\mathbf{x}} = \mathbf{x}\bar{\lambda}\bar{\mathbf{x}} = \bar{\lambda}\mathbf{x}^T\bar{\mathbf{x}}.
+\]</div>
+<p>Note that at the start of the second equation, we are calculating <span class="math notranslate nohighlight">\(\mathbf{x}^TS\bar{\mathbf{x}} = \mathbf{x}^TS^T\bar{\mathbf{x}}= (S\mathbf{x})^T\bar{\mathbf{x}}\)</span>, which is the dot product of <span class="math notranslate nohighlight">\(S\mathbf{x}\)</span> and <span class="math notranslate nohighlight">\(\bar{\mathbf{x}}\)</span> (we are exploiting the symmetry of <span class="math notranslate nohighlight">\(S\)</span> here). But in the first equation, we are calculating the same dot product, but with the order of the terms reversed. The order of the terms in a dot product does not matter, so these calculations must produce the same result; that is,</p>
+<div class="math notranslate nohighlight">
+\[
+    \lambda\bar{\mathbf{x}}^T\mathbf{x} = \bar{\lambda}\mathbf{x}^T\bar{\mathbf{x}}.
+\]</div>
+<p>But in that equation, <span class="math notranslate nohighlight">\(\bar{\mathbf{x}}^T\mathbf{x} = \mathbf{x}^T\bar{\mathbf{x}}\)</span> is some real number <span class="math notranslate nohighlight">\(c\)</span>, so it can be written</p>
+<div class="math notranslate nohighlight">
+\[
+    \lambda \cdot c = \bar{\lambda}\cdot c,
+\]</div>
+<p>which implies that <span class="math notranslate nohighlight">\(\lambda = \bar{\lambda}\)</span>. That is only possible if the imaginary part of <span class="math notranslate nohighlight">\(\lambda\)</span> is 0; that is, if <span class="math notranslate nohighlight">\(\lambda\)</span> is a real number.</p>
+<p>To see that the eigenvectors corresponding to distinct real eigenvalues of a symmetric matrix must be orthogonal, let <span class="math notranslate nohighlight">\(\lambda_1\neq\lambda_2\)</span> be distinct eigenvalues of a symmetric matrix <span class="math notranslate nohighlight">\(S\)</span> and let <span class="math notranslate nohighlight">\(\mathbf{x}_1, \mathbf{x}_2\)</span> be their corresponding eigenvectors. Consider the following dot products:</p>
+<div class="math notranslate nohighlight">
+\[
+    (S\mathbf{x}_1)^T\mathbf{x}_2 = \lambda_1\mathbf{x}_1^T\mathbf{x_2}.
+\]</div>
+<p>This is the same as</p>
+<div class="math notranslate nohighlight">
+\[
+    (S\mathbf{x}_1)^T\mathbf{x}_2 = \mathbf{x}_1^TS^T\mathbf{x_2} = \mathbf{x}_1^TS\mathbf{x_2} = \lambda_2\mathbf{x}_1^T\mathbf{x_2},
+\]</div>
+<p>which would imply that <span class="math notranslate nohighlight">\(\lambda_1 = \lambda_2\)</span>, in violation of our assumption that the eigenvalues are distinct; the only possible conclusion is that the dot product <span class="math notranslate nohighlight">\(\mathbf{x}_1^T\mathbf{x}_2 = 0\)</span>.</p>
+</section>
+<section id="some-less-trivial-examples">
+<h2>Some Less Trivial Examples<a class="headerlink" href="#some-less-trivial-examples" title="Link to this heading">#</a></h2>
+<p><strong>Example:</strong> Consider the following <span class="math notranslate nohighlight">\(10\times10\)</span> symmetric, tridiagonal example. The matrix is too large for a by-hand calculation, and tridiagonal matrices such as this one often have eigenvalues similar in magnitude, posing a potential challenge for power iteration.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">8675309</span><span class="p">)</span>
+
+<span class="n">A</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+             <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+             <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+             <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+             <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+             <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+             <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+             <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+             <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+             <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]]</span>
+<span class="p">)</span>
+
+<span class="n">num_iter</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">random_init</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="n">eigenvalue</span><span class="p">,</span> <span class="n">eigenvector</span><span class="p">,</span> <span class="n">history</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">power_iteration</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">num_iter</span><span class="p">,</span> <span class="n">random_init</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- Power Iteration Results ---&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Iterations: </span><span class="si">{</span><span class="n">num_iter</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Estimated dominant eigenvalue: </span><span class="si">{</span><span class="n">eigenvalue</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Verify with NumPy</span>
+<span class="n">true_eigenvalues</span> <span class="o">=</span> <span class="n">linalg</span><span class="o">.</span><span class="n">eigvals</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+<span class="n">max_eigenvalue</span> <span class="o">=</span> <span class="n">true_eigenvalues</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- Verification (NumPy) ---&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;True dominant eigenvalue: </span><span class="si">{</span><span class="n">max_eigenvalue</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="nb">abs</span><span class="p">(</span><span class="n">eigenvalue</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">max_eigenvalue</span><span class="p">)</span><span class="si">:</span><span class="s2">.2e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Check convergence</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Convergence (last 5 iterations):&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">history</span><span class="p">[</span><span class="o">-</span><span class="mi">5</span><span class="p">:],</span> <span class="n">start</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">history</span><span class="p">)</span><span class="o">-</span><span class="mi">4</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Iteration </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">: λ = </span><span class="si">{</span><span class="n">val</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Verify eigenvector</span>
+<span class="n">residual</span> <span class="o">=</span> <span class="n">A</span> <span class="o">@</span> <span class="n">eigenvector</span> <span class="o">-</span> <span class="n">eigenvalue</span> <span class="o">*</span> <span class="n">eigenvector</span>
+<span class="n">residual_norm</span> <span class="o">=</span> <span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">residual</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Residual ||Av - λv||: </span><span class="si">{</span><span class="n">residual_norm</span><span class="si">:</span><span class="s2">.2e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Plot convergence</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">history</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">history</span><span class="p">,</span> <span class="s1">&#39;b-o&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Power Iteration&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">max_eigenvalue</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;True Eigenvalue&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Iteration&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Eigenvalue Estimate&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Power Iteration Convergence&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>--- Power Iteration Results ---
+Iterations: 10
+Estimated dominant eigenvalue: 10.198610
+
+--- Verification (NumPy) ---
+True dominant eigenvalue: 10.198666+0.000000j
+Error: 5.62e-05
+
+Convergence (last 5 iterations):
+  Iteration 6: λ = 10.188088
+  Iteration 7: λ = 10.196042
+  Iteration 8: λ = 10.197969
+  Iteration 9: λ = 10.198471
+  Iteration 10: λ = 10.198610
+
+Residual ||Av - λv||: 8.76e-03
+</pre></div>
+</div>
+<img alt="_images/8beb29a3a77d1f9f88190e503fa45db78a0f78b4647e9ea48eb70f374cf19762.png" src="_images/8beb29a3a77d1f9f88190e503fa45db78a0f78b4647e9ea48eb70f374cf19762.png" />
+</div>
+</div>
+<p>Although the tridiagonal example has the potential for slow convergence, in this case we have a great approximation in just a few iterations.</p>
+<p><strong>Example:</strong> Now let’s create a synthetic <span class="math notranslate nohighlight">\(100\times100\)</span> example that we can be sure will have a dominant eigenvalue. To do this, we will create a random matrix <span class="math notranslate nohighlight">\(A\)</span>, then calculate <span class="math notranslate nohighlight">\(A^TA\)</span>, which we know will be symmetric, and then we will add to <span class="math notranslate nohighlight">\(A^TA\)</span> a rank 1 matrix multiplied by 50 (a large, arbitrarily chosen value). This will produce the desired structure in the matrix for power iteration to converge quickly, so that we can see how it works for large matrices, provided they satisfy the assumptions.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a 100x100 matrix with known dominant eigenvalue</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="c1"># Method 1: Create a matrix with a clear dominant eigenvalue</span>
+<span class="c1"># Start with a random symmetric matrix and add a rank-1 update</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">base_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+<span class="n">base_matrix</span> <span class="o">=</span> <span class="p">(</span><span class="n">base_matrix</span> <span class="o">+</span> <span class="n">base_matrix</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>  <span class="c1"># Make symmetric</span>
+
+<span class="c1"># Scale down the base matrix</span>
+<span class="n">base_matrix</span> <span class="o">=</span> <span class="n">base_matrix</span> <span class="o">*</span> <span class="mf">0.5</span>
+
+<span class="c1"># Add a rank-1 update to create a dominant eigenvalue</span>
+<span class="n">dominant_vector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">dominant_vector</span> <span class="o">=</span> <span class="n">dominant_vector</span> <span class="o">/</span> <span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">dominant_vector</span><span class="p">)</span>
+<span class="n">dominant_eigenvalue</span> <span class="o">=</span> <span class="mi">50</span>  <span class="c1"># Much larger than others</span>
+
+<span class="n">A</span> <span class="o">=</span> <span class="n">base_matrix</span> <span class="o">+</span> <span class="n">dominant_eigenvalue</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">dominant_vector</span><span class="p">,</span> <span class="n">dominant_vector</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;100×100 POWER ITERATION EXAMPLE&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span>
+
+<span class="c1"># Use an initial estimate close to the dominant eigenvector for fast convergence</span>
+<span class="n">initial_guess</span> <span class="o">=</span> <span class="n">dominant_vector</span> <span class="o">+</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">initial_guess</span> <span class="o">=</span> <span class="n">initial_guess</span> <span class="o">/</span> <span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">initial_guess</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Matrix size: </span><span class="si">{</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Matrix is symmetric: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="w"> </span><span class="n">A</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Run power iteration</span>
+<span class="n">num_iter</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">eigenvalue</span><span class="p">,</span> <span class="n">eigenvector</span><span class="p">,</span> <span class="n">history</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">power_iteration</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">num_iter</span><span class="p">,</span> <span class="n">initial_guess</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- Power Iteration Results ---&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Iterations: </span><span class="si">{</span><span class="n">num_iter</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Estimated dominant eigenvalue: </span><span class="si">{</span><span class="n">eigenvalue</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Verify with NumPy</span>
+<span class="n">true_eigenvalues</span> <span class="o">=</span> <span class="n">linalg</span><span class="o">.</span><span class="n">eigvals</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+<span class="n">max_eigenvalue</span> <span class="o">=</span> <span class="n">true_eigenvalues</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- Verification (NumPy) ---&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;True dominant eigenvalue: </span><span class="si">{</span><span class="n">max_eigenvalue</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="nb">abs</span><span class="p">(</span><span class="n">eigenvalue</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">max_eigenvalue</span><span class="p">)</span><span class="si">:</span><span class="s2">.2e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Check convergence</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Convergence (last 5 iterations):&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">history</span><span class="p">[</span><span class="o">-</span><span class="mi">5</span><span class="p">:],</span> <span class="n">start</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">history</span><span class="p">)</span><span class="o">-</span><span class="mi">4</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Iteration </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">: λ = </span><span class="si">{</span><span class="n">val</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Verify eigenvector</span>
+<span class="n">residual</span> <span class="o">=</span> <span class="n">A</span> <span class="o">@</span> <span class="n">eigenvector</span> <span class="o">-</span> <span class="n">eigenvalue</span> <span class="o">*</span> <span class="n">eigenvector</span>
+<span class="n">residual_norm</span> <span class="o">=</span> <span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">residual</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Residual ||Av - λv||: </span><span class="si">{</span><span class="n">residual_norm</span><span class="si">:</span><span class="s2">.2e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Plot convergence</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">history</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">history</span><span class="p">,</span> <span class="s1">&#39;b-o&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Power Iteration&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">max_eigenvalue</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;True Eigenvalue&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Iteration&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Eigenvalue Estimate&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Power Iteration Convergence&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># Show first few components of eigenvector</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">First 10 components of dominant eigenvector:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">eigenvector</span><span class="p">[:</span><span class="mi">10</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>============================================================
+100×100 POWER ITERATION EXAMPLE
+============================================================
+
+Matrix size: (100, 100)
+Matrix is symmetric: True
+
+--- Power Iteration Results ---
+Iterations: 10
+Estimated dominant eigenvalue: 50.313415
+
+--- Verification (NumPy) ---
+True dominant eigenvalue: 50.313415+0.000000j
+Error: 4.97e-14
+
+Convergence (last 5 iterations):
+  Iteration 6: λ = 50.313415
+  Iteration 7: λ = 50.313415
+  Iteration 8: λ = 50.313415
+  Iteration 9: λ = 50.313415
+  Iteration 10: λ = 50.313415
+
+Residual ||Av - λv||: 2.16e-08
+</pre></div>
+</div>
+<img alt="_images/291f4151c667f62b8cd28c43b284b79e3158480f1018bf04e07b2ac06e0fd2b7.png" src="_images/291f4151c667f62b8cd28c43b284b79e3158480f1018bf04e07b2ac06e0fd2b7.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>First 10 components of dominant eigenvector:
+[-0.08109219 -0.03728909 -0.05780121  0.0131538   0.13214057 -0.07033478
+  0.10242396 -0.08027026 -0.08669914  0.08063136]
+</pre></div>
+</div>
+</div>
+</div>
+<p>What if we had started from random initialization?</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Compare with random initialization (slower convergence)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;COMPARISON: Random Initialization&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span>
+<span class="n">random_init</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">eigenvalue_rand</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">history_rand</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">power_iteration</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">num_iter</span><span class="p">,</span> <span class="n">random_init</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Estimated eigenvalue: </span><span class="si">{</span><span class="n">eigenvalue_rand</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Convergence at iteration 30: </span><span class="si">{</span><span class="n">history_rand</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Plot comparison</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">history</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">history</span><span class="p">,</span> <span class="s1">&#39;b-o&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Good Initial Guess&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">history_rand</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">history_rand</span><span class="p">,</span> <span class="s1">&#39;g-s&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Random Initialization&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">max_eigenvalue</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;True Eigenvalue&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Iteration&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Eigenvalue Estimate&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Convergence: Good Initial Guess vs Random Start&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>============================================================
+COMPARISON: Random Initialization
+============================================================
+Estimated eigenvalue: 50.313415
+Convergence at iteration 30: 50.313415
+</pre></div>
+</div>
+<img alt="_images/428f63a489e4cc895a91ff0f9513a303b02225e4ef0642ddacb687752b2c115d.png" src="_images/428f63a489e4cc895a91ff0f9513a303b02225e4ef0642ddacb687752b2c115d.png" />
+</div>
+</div>
+<p>We get to the same result, just a little slower.</p>
+</section>
+<section id="a-harder-example">
+<h2>A Harder Example<a class="headerlink" href="#a-harder-example" title="Link to this heading">#</a></h2>
+<p>The previous examples converged very quickly because the matrices where constructed to have an eigenvalue that was much larger than the others. The example below has largest eigenvalues that are very close in magnitude.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a &quot;difficult&quot; 100x100 matrix with slow convergence</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
+
+<span class="n">n</span> <span class="o">=</span> <span class="mi">100</span>
+
+<span class="c1"># Method: Create a matrix where the two largest eigenvalues are very close</span>
+<span class="c1"># This leads to slow convergence because power iteration&#39;s speed depends on</span>
+<span class="c1"># the ratio λ₁/λ₂ where λ₁ &gt; λ₂</span>
+
+<span class="c1"># Start with a tridiagonal matrix (these often have eigenvalues close together)</span>
+<span class="n">main_diag</span> <span class="o">=</span> <span class="mi">5</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">off_diag</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="mf">0.2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">main_diag</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">off_diag</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">off_diag</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Add small random perturbations to make it less structured</span>
+<span class="n">A</span> <span class="o">=</span> <span class="n">A</span> <span class="o">+</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+
+<span class="c1"># Make symmetric</span>
+<span class="n">A</span> <span class="o">=</span> <span class="p">(</span><span class="n">A</span> <span class="o">+</span> <span class="n">A</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+
+<span class="c1"># Scale to create close eigenvalues at the top</span>
+<span class="c1"># Add a small rank-1 update to make one eigenvalue slightly dominant</span>
+<span class="n">v1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">v1</span> <span class="o">=</span> <span class="n">v1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">v1</span><span class="p">)</span>
+<span class="n">A</span> <span class="o">=</span> <span class="n">A</span> <span class="o">+</span> <span class="mf">1.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v1</span><span class="p">)</span>  <span class="c1"># Small eigenvalue boost</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">70</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;100×100 POWER ITERATION - DIFFICULT CASE (SLOW CONVERGENCE)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">70</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Matrix size: </span><span class="si">{</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Matrix is symmetric: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="w"> </span><span class="n">A</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Get true eigenvalues to show the difficulty</span>
+<span class="n">true_eigenvalues</span> <span class="o">=</span> <span class="n">linalg</span><span class="o">.</span><span class="n">eigvalsh</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>  <span class="c1"># specialized eigenvalue function for symmetric matrices - returns eigenvalues in ascending order</span>
+<span class="n">lambda1</span> <span class="o">=</span> <span class="n">true_eigenvalues</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">lambda2</span> <span class="o">=</span> <span class="n">true_eigenvalues</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">lambda3</span> <span class="o">=</span> <span class="n">true_eigenvalues</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- True Eigenvalue Spectrum ---&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;λ₁ (dominant):        </span><span class="si">{</span><span class="n">lambda1</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;λ₂ (second largest):  </span><span class="si">{</span><span class="n">lambda2</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;λ₃ (third largest):   </span><span class="si">{</span><span class="n">lambda3</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Ratio λ₁/λ₂: </span><span class="si">{</span><span class="n">lambda1</span><span class="o">/</span><span class="n">lambda2</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Difference λ₁ - λ₂: </span><span class="si">{</span><span class="n">lambda1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">lambda2</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Note: Small ratio means SLOW convergence!&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ideal ratio for fast convergence: &gt; 1.5&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Difficult ratio (slow convergence): &lt; 1.1&quot;</span><span class="p">)</span>
+
+<span class="c1"># Random initialization</span>
+<span class="n">num_iter</span> <span class="o">=</span> <span class="mi">200</span>
+<span class="n">random_init</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">eigenvalue_rand</span><span class="p">,</span> <span class="n">eigenvector_rand</span><span class="p">,</span> <span class="n">history_rand</span><span class="p">,</span> <span class="n">conv_rand</span> <span class="o">=</span> <span class="n">power_iteration</span><span class="p">(</span>
+    <span class="n">A</span><span class="p">,</span> <span class="n">num_iter</span><span class="p">,</span> <span class="n">random_init</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="mf">1e-6</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- Power Iteration: Random Initialization ---&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Iterations: </span><span class="si">{</span><span class="n">num_iter</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Estimated eigenvalue: </span><span class="si">{</span><span class="n">eigenvalue_rand</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;True eigenvalue:      </span><span class="si">{</span><span class="n">lambda1</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="nb">abs</span><span class="p">(</span><span class="n">eigenvalue_rand</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">lambda1</span><span class="p">)</span><span class="si">:</span><span class="s2">.2e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">conv_rand</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Converged at iteration: </span><span class="si">{</span><span class="n">conv_rand</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Did NOT converge to tolerance 1e-6 in </span><span class="si">{</span><span class="n">num_iter</span><span class="si">}</span><span class="s2"> iterations&quot;</span><span class="p">)</span>
+
+<span class="c1"># Better initialization (closer to true eigenvector)</span>
+<span class="n">true_eigenvector</span> <span class="o">=</span> <span class="n">linalg</span><span class="o">.</span><span class="n">eigh</span><span class="p">(</span><span class="n">A</span><span class="p">)[</span><span class="mi">1</span><span class="p">][:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">good_init</span> <span class="o">=</span> <span class="n">true_eigenvector</span> <span class="o">+</span> <span class="mf">0.3</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">good_init</span> <span class="o">=</span> <span class="n">good_init</span> <span class="o">/</span> <span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">good_init</span><span class="p">)</span>
+
+<span class="n">eigenvalue_good</span><span class="p">,</span> <span class="n">eigenvector_good</span><span class="p">,</span> <span class="n">history_good</span><span class="p">,</span> <span class="n">conv_good</span> <span class="o">=</span> <span class="n">power_iteration</span><span class="p">(</span>
+    <span class="n">A</span><span class="p">,</span> <span class="n">num_iter</span><span class="p">,</span> <span class="n">good_init</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="mf">1e-6</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- Power Iteration: Good Initialization ---&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Estimated eigenvalue: </span><span class="si">{</span><span class="n">eigenvalue_good</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="nb">abs</span><span class="p">(</span><span class="n">eigenvalue_good</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">lambda1</span><span class="p">)</span><span class="si">:</span><span class="s2">.2e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">conv_good</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Converged at iteration: </span><span class="si">{</span><span class="n">conv_good</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Show convergence behavior</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- Convergence Analysis (Random Init) ---&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Iterations 10-20:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="mi">21</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">history_rand</span><span class="p">))):</span>
+    <span class="n">error</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">history_rand</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">lambda1</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Iter </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">: λ = </span><span class="si">{</span><span class="n">history_rand</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">, error = </span><span class="si">{</span><span class="n">error</span><span class="si">:</span><span class="s2">.2e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Iterations 50-60:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="mi">61</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">history_rand</span><span class="p">)),</span> <span class="mi">10</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">history_rand</span><span class="p">):</span>
+        <span class="n">error</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">history_rand</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">lambda1</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Iter </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">: λ = </span><span class="si">{</span><span class="n">history_rand</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">, error = </span><span class="si">{</span><span class="n">error</span><span class="si">:</span><span class="s2">.2e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Last 5 iterations:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">history_rand</span><span class="p">)</span><span class="o">-</span><span class="mi">4</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">history_rand</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+    <span class="n">error</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">history_rand</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">lambda1</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Iter </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">: λ = </span><span class="si">{</span><span class="n">history_rand</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">, error = </span><span class="si">{</span><span class="n">error</span><span class="si">:</span><span class="s2">.2e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Verify eigenvector</span>
+<span class="n">residual_rand</span> <span class="o">=</span> <span class="n">A</span> <span class="o">@</span> <span class="n">eigenvector_rand</span> <span class="o">-</span> <span class="n">eigenvalue_rand</span> <span class="o">*</span> <span class="n">eigenvector_rand</span>
+<span class="n">residual_norm_rand</span> <span class="o">=</span> <span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">residual_rand</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Residual ||Av - λv||: </span><span class="si">{</span><span class="n">residual_norm_rand</span><span class="si">:</span><span class="s2">.2e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Plot convergence - log scale to show slow convergence</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+
+<span class="c1"># Plot 1: Eigenvalue estimates over iterations</span>
+<span class="n">ax1</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">history_rand</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">history_rand</span><span class="p">,</span> <span class="s1">&#39;b-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Random Init&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">history_good</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">history_good</span><span class="p">,</span> <span class="s1">&#39;g-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Good Init&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">lambda1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;True λ₁&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Iteration&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Eigenvalue Estimate&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Eigenvalue Convergence (Linear Scale)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="c1"># Plot 2: Error over iterations (log scale)</span>
+<span class="n">ax2</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">errors_rand</span> <span class="o">=</span> <span class="p">[</span><span class="nb">abs</span><span class="p">(</span><span class="n">val</span> <span class="o">-</span> <span class="n">lambda1</span><span class="p">)</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">history_rand</span><span class="p">]</span>
+<span class="n">errors_good</span> <span class="o">=</span> <span class="p">[</span><span class="nb">abs</span><span class="p">(</span><span class="n">val</span> <span class="o">-</span> <span class="n">lambda1</span><span class="p">)</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">history_good</span><span class="p">]</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">errors_rand</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">errors_rand</span><span class="p">,</span> <span class="s1">&#39;b-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Random Init&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">errors_good</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">errors_good</span><span class="p">,</span> <span class="s1">&#39;g-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Good Init&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Target Tolerance&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Iteration&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Absolute Error (log scale)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Convergence Error (Log Scale)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="c1"># Plot 3: Zoomed view of first 50 iterations</span>
+<span class="n">ax3</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">ax3</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="mi">51</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">history_rand</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">history_rand</span><span class="p">[:</span><span class="mi">50</span><span class="p">],</span> <span class="s1">&#39;b-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Random Init&#39;</span><span class="p">)</span>
+<span class="n">ax3</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="mi">51</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">history_good</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">history_good</span><span class="p">[:</span><span class="mi">50</span><span class="p">],</span> <span class="s1">&#39;g-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Good Init&#39;</span><span class="p">)</span>
+<span class="n">ax3</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">lambda1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;True λ₁&#39;</span><span class="p">)</span>
+<span class="n">ax3</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Iteration&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+<span class="n">ax3</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Eigenvalue Estimate&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+<span class="n">ax3</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;First 50 Iterations (Detail)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+<span class="n">ax3</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">ax3</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="c1"># Plot 4: Convergence rate</span>
+<span class="n">ax4</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">errors_rand</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="c1"># Calculate convergence rate (ratio of consecutive errors)</span>
+    <span class="n">rates_rand</span> <span class="o">=</span> <span class="p">[</span><span class="n">errors_rand</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="n">errors_rand</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">errors_rand</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span>
+                  <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">errors_rand</span><span class="p">)))]</span>
+    <span class="n">theoretical_rate</span> <span class="o">=</span> <span class="n">lambda2</span> <span class="o">/</span> <span class="n">lambda1</span>
+    <span class="n">ax4</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">rates_rand</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">),</span> <span class="n">rates_rand</span><span class="p">,</span> <span class="s1">&#39;b-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Observed Rate&#39;</span><span class="p">)</span>
+    <span class="n">ax4</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">theoretical_rate</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;Theoretical Rate (λ₂/λ₁) = </span><span class="si">{</span><span class="n">theoretical_rate</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">ax4</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Iteration&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+    <span class="n">ax4</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Error Ratio (err_i / err_{i-1})&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+    <span class="n">ax4</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Convergence Rate Analysis&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+    <span class="n">ax4</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+    <span class="n">ax4</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">ax4</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">])</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">70</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;WHY IS THIS SLOW?&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">70</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Power iteration converges at rate (λ₂/λ₁)ⁿ where n is iteration number.&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;For this matrix: (λ₂/λ₁) = </span><span class="si">{</span><span class="n">lambda2</span><span class="o">/</span><span class="n">lambda1</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">After 50 iterations, error reduces by factor: (</span><span class="si">{</span><span class="n">lambda2</span><span class="o">/</span><span class="n">lambda1</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">)^50 = </span><span class="si">{</span><span class="p">(</span><span class="n">lambda2</span><span class="o">/</span><span class="n">lambda1</span><span class="p">)</span><span class="o">**</span><span class="mi">50</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;After 100 iterations: (</span><span class="si">{</span><span class="n">lambda2</span><span class="o">/</span><span class="n">lambda1</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">)^100 = </span><span class="si">{</span><span class="p">(</span><span class="n">lambda2</span><span class="o">/</span><span class="n">lambda1</span><span class="p">)</span><span class="o">**</span><span class="mi">100</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Compare to &#39;nice&#39; matrix with ratio 0.5:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;After 50 iterations: (0.5)^50 = </span><span class="si">{</span><span class="mf">0.5</span><span class="o">**</span><span class="mi">50</span><span class="si">:</span><span class="s2">.2e</span><span class="si">}</span><span class="s2"> (much faster!)&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>======================================================================
+100×100 POWER ITERATION - DIFFICULT CASE (SLOW CONVERGENCE)
+======================================================================
+
+Matrix size: (100, 100)
+Matrix is symmetric: True
+
+--- True Eigenvalue Spectrum ---
+λ₁ (dominant):        8.213034
+λ₂ (second largest):  7.974305
+λ₃ (third largest):   7.854809
+
+Ratio λ₁/λ₂: 1.029937
+Difference λ₁ - λ₂: 0.238728
+
+Note: Small ratio means SLOW convergence!
+Ideal ratio for fast convergence: &gt; 1.5
+Difficult ratio (slow convergence): &lt; 1.1
+
+--- Power Iteration: Random Initialization ---
+Iterations: 200
+Estimated eigenvalue: 8.213033
+True eigenvalue:      8.213034
+Error: 7.75e-07
+Converged at iteration: 148
+
+--- Power Iteration: Good Initialization ---
+Estimated eigenvalue: 8.213034
+Error: 6.23e-08
+Converged at iteration: 111
+
+--- Convergence Analysis (Random Init) ---
+Iterations 10-20:
+  Iter 10: λ = 7.840471, error = 3.73e-01
+  Iter 11: λ = 7.886276, error = 3.27e-01
+  Iter 12: λ = 7.923611, error = 2.89e-01
+  Iter 13: λ = 7.954588, error = 2.58e-01
+  Iter 14: λ = 7.980722, error = 2.32e-01
+  Iter 15: λ = 8.003112, error = 2.10e-01
+  Iter 16: λ = 8.022557, error = 1.90e-01
+  Iter 17: λ = 8.039645, error = 1.73e-01
+  Iter 18: λ = 8.054811, error = 1.58e-01
+  Iter 19: λ = 8.068382, error = 1.45e-01
+  Iter 20: λ = 8.080605, error = 1.32e-01
+
+Iterations 50-60:
+  Iter 50: λ = 8.202332, error = 1.07e-02
+  Iter 60: λ = 8.208108, error = 4.93e-03
+
+Last 5 iterations:
+  Iter 196: λ = 8.213033, error = 9.82e-07
+  Iter 197: λ = 8.213033, error = 9.25e-07
+  Iter 198: λ = 8.213033, error = 8.72e-07
+  Iter 199: λ = 8.213033, error = 8.22e-07
+  Iter 200: λ = 8.213033, error = 7.75e-07
+
+Residual ||Av - λv||: 4.18e-04
+</pre></div>
+</div>
+<img alt="_images/ff308b7981fb1e1989c36c9e7e1341dfe50b1820961e5d28b959247d08aee82e.png" src="_images/ff308b7981fb1e1989c36c9e7e1341dfe50b1820961e5d28b959247d08aee82e.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>======================================================================
+WHY IS THIS SLOW?
+======================================================================
+Power iteration converges at rate (λ₂/λ₁)ⁿ where n is iteration number.
+For this matrix: (λ₂/λ₁) = 0.970933
+
+After 50 iterations, error reduces by factor: (0.9709)^50 = 0.228804
+After 100 iterations: (0.9709)^100 = 0.052351
+
+Compare to &#39;nice&#39; matrix with ratio 0.5:
+After 50 iterations: (0.5)^50 = 8.88e-16 (much faster!)
+</pre></div>
+</div>
+</div>
+</div>
+<p>As you can see, convergence is much slower this time, and having a good initialization has a larger impact than in previous examples.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="eigenstuff-problem-set-1.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Problem Set 7: Eigenvalues and Eigenvectors of <span class="math notranslate nohighlight">\(2\times2\)</span> Matrices</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="eigenstuff-problem-set-2.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Problem Set 8: Power Iteration</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-importance-of-eigenvalues-and-eigenvectors">The Importance of Eigenvalues and Eigenvectors</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-power-iteration-method">The Power Iteration Method</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-power-iteration-python-function">A Power Iteration Python Function</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-brief-tangent-properties-of-symmetric-matrices">A Brief Tangent - Properties of Symmetric Matrices</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#some-less-trivial-examples">Some Less Trivial Examples</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-harder-example">A Harder Example</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Jeremiah W. Johnson
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <div>
+  <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="jwjohnson314" data-description="Support me on Buy me a coffee!" data-message="Thanks for reading! If you found this useful and want to support this book project, you can Buy Me a Coffee here. Your support helps keep this book free for my students." data-color="#5F7FFF" data-position="Right" data-x_margin="18" data-y_margin="18"></script> 
+</div>
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

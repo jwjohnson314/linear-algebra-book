@@ -1,0 +1,723 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Problem Set 8: Power Iteration &#8212; Applied Linear Algebra</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'eigenstuff-problem-set-2';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Approximating Eigenvalues and Eigenvectors 1 - Power Iteration" href="eigenstuff-2.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="Applied Linear Algebra - Home"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="Applied Linear Algebra - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    <no title>
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="motivation.html">Motivation</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="vectors.html">Vectors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vectors-problem-set.html">Problem Set 1: Vectors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrices.html">Matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrices-problem-set.html">Problem Set 2: Matrix Arithmetic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="linear-systems-gaussian-elimination.html">Linear Systems and Gaussian Elimination</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gaussian-elimination-lu-problem-set.html">Problem Set 3: Gaussian Elimination and <span class="math notranslate nohighlight">\(A=LU\)</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="computation.html">Computation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bonus-faster-matrix-multiplication.html">Optional: Faster Matrix Multiplication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inverse-matrices.html">The Matrix Inverse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lu-and-computation-problem-set.html">Problem Set 4: <span class="math notranslate nohighlight">\(A=LU\)</span> and Computation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ols.html">Ordinary Least Squares and Linear Regression</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aqr.html">Projection and <span class="math notranslate nohighlight">\(A=QR\)</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="projection-qr-problem-set.html">Problem Set 5: Projections and <span class="math notranslate nohighlight">\(A=QR\)</span></a></li>
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="vector-spaces.html">Vector Spaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vector-space-problem-set.html">Problem Set 6: Vector Spaces and Bases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eigenstuff-1.html">Introduction to Eigenvalues and Eigenvectors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eigenstuff-problem-set-1.html">Problem Set 7: Eigenvalues and Eigenvectors of <span class="math notranslate nohighlight">\(2\times2\)</span> Matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eigenstuff-2.html">Approximating Eigenvalues and Eigenvectors 1 - Power Iteration</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Problem Set 8: Power Iteration</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Feigenstuff-problem-set-2.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/eigenstuff-problem-set-2.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Problem Set 8: Power Iteration</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#theoretical-questions">Theoretical Questions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-1-convergence-conditions">Problem 1: Convergence Conditions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-2-rayleigh-quotient-analysis">Problem 2: Rayleigh Quotient Analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-3-shifted-power-iteration">Problem 3: Shifted Power Iteration</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-4-deflation-technique">Problem 4: Deflation Technique</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#computational-problems">Computational Problems</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-5-basic-implementation">Problem 5: Basic Implementation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-6-convergence-rate-analysis">Problem 6: Convergence Rate Analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-7-failure-modes">Problem 7: Failure Modes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-8-pagerank-application">Problem 8: PageRank Application</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-9-inverse-iteration">Problem 9: Inverse Iteration</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-10-symmetric-vs-non-symmetric-matrices">Problem 10: Symmetric vs. Non-Symmetric Matrices</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#challenge-problems">Challenge Problems</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-11-qr-algorithm-connection">Problem 11: QR Algorithm Connection</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-12-arnoldi-lanczos-preview">Problem 12: Arnoldi/Lanczos Preview</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="problem-set-8-power-iteration">
+<h1>Problem Set 8: Power Iteration<a class="headerlink" href="#problem-set-8-power-iteration" title="Link to this heading">#</a></h1>
+<section id="theoretical-questions">
+<h2>Theoretical Questions<a class="headerlink" href="#theoretical-questions" title="Link to this heading">#</a></h2>
+<section id="problem-1-convergence-conditions">
+<h3>Problem 1: Convergence Conditions<a class="headerlink" href="#problem-1-convergence-conditions" title="Link to this heading">#</a></h3>
+<p>Let <span class="math notranslate nohighlight">\(A \in \mathbb{R}^{n \times n}\)</span> be a diagonalizable matrix with eigenvalues <span class="math notranslate nohighlight">\(\lambda_1, \lambda_2, \ldots, \lambda_n\)</span> ordered such that <span class="math notranslate nohighlight">\(|\lambda_1| &gt; |\lambda_2| \geq |\lambda_3| \geq \cdots \geq |\lambda_n|\)</span>.</p>
+<p><strong>(a)</strong> Prove that if <span class="math notranslate nohighlight">\(v^{(0)}\)</span> has a nonzero component in the direction of the eigenvector corresponding to <span class="math notranslate nohighlight">\(\lambda_1\)</span>, then the power iteration sequence
+$<span class="math notranslate nohighlight">\(v^{(k+1)} = \frac{Av^{(k)}}{\|Av^{(k)}\|}\)</span><span class="math notranslate nohighlight">\(
+converges to an eigenvector corresponding to \)</span>\lambda_1$.</p>
+<p><strong>(b)</strong> Show that the rate of convergence is governed by the ratio <span class="math notranslate nohighlight">\(\left|\frac{\lambda_2}{\lambda_1}\right|\)</span>. What happens when <span class="math notranslate nohighlight">\(|\lambda_1| = |\lambda_2|\)</span>?</p>
+<p><strong>(c)</strong> Express the error in the eigenvalue estimate after <span class="math notranslate nohighlight">\(k\)</span> iterations as a function of <span class="math notranslate nohighlight">\(k\)</span> and <span class="math notranslate nohighlight">\(\left|\frac{\lambda_2}{\lambda_1}\right|\)</span>.</p>
+</section>
+<section id="problem-2-rayleigh-quotient-analysis">
+<h3>Problem 2: Rayleigh Quotient Analysis<a class="headerlink" href="#problem-2-rayleigh-quotient-analysis" title="Link to this heading">#</a></h3>
+<p>The Rayleigh quotient for a vector <span class="math notranslate nohighlight">\(v \neq 0\)</span> and matrix <span class="math notranslate nohighlight">\(A\)</span> is defined as:
+$<span class="math notranslate nohighlight">\(R(v) = \frac{v^T A v}{v^T v}\)</span>$</p>
+<p><strong>(a)</strong> Prove that if <span class="math notranslate nohighlight">\(v\)</span> is an eigenvector of <span class="math notranslate nohighlight">\(A\)</span> with eigenvalue <span class="math notranslate nohighlight">\(\lambda\)</span>, then <span class="math notranslate nohighlight">\(R(v) = \lambda\)</span>.</p>
+<p><strong>(b)</strong> Show that for a symmetric matrix <span class="math notranslate nohighlight">\(A\)</span>, the Rayleigh quotient satisfies <span class="math notranslate nohighlight">\(\lambda_{\min} \leq R(v) \leq \lambda_{\max}\)</span> for any nonzero vector <span class="math notranslate nohighlight">\(v\)</span>.</p>
+<p><strong>(c)</strong> Derive the gradient <span class="math notranslate nohighlight">\(\nabla R(v)\)</span> and show that critical points occur at eigenvectors of <span class="math notranslate nohighlight">\(A\)</span>.</p>
+</section>
+<section id="problem-3-shifted-power-iteration">
+<h3>Problem 3: Shifted Power Iteration<a class="headerlink" href="#problem-3-shifted-power-iteration" title="Link to this heading">#</a></h3>
+<p>Consider the shifted power iteration method applied to <span class="math notranslate nohighlight">\((A - \mu I)^{-1}\)</span> where <span class="math notranslate nohighlight">\(\mu\)</span> is a scalar.</p>
+<p><strong>(a)</strong> If <span class="math notranslate nohighlight">\(A\)</span> has eigenvalues <span class="math notranslate nohighlight">\(\lambda_1, \ldots, \lambda_n\)</span>, what are the eigenvalues of <span class="math notranslate nohighlight">\((A - \mu I)^{-1}\)</span>?</p>
+<p><strong>(b)</strong> Explain how choosing <span class="math notranslate nohighlight">\(\mu\)</span> close to an eigenvalue <span class="math notranslate nohighlight">\(\lambda_i\)</span> can accelerate convergence to the corresponding eigenvector.</p>
+<p><strong>(c)</strong> What is the relationship between inverse iteration (power iteration on <span class="math notranslate nohighlight">\(A^{-1}\)</span>) and shifted power iteration with <span class="math notranslate nohighlight">\(\mu = 0\)</span>?</p>
+</section>
+<section id="problem-4-deflation-technique">
+<h3>Problem 4: Deflation Technique<a class="headerlink" href="#problem-4-deflation-technique" title="Link to this heading">#</a></h3>
+<p>After finding the dominant eigenpair <span class="math notranslate nohighlight">\((\lambda_1, v_1)\)</span>, we can construct a deflated matrix to find the second eigenvalue.</p>
+<p><strong>(a)</strong> For a symmetric matrix <span class="math notranslate nohighlight">\(A\)</span>, show that the matrix <span class="math notranslate nohighlight">\(A_2 = A - \lambda_1 v_1 v_1^T\)</span> has eigenvalues <span class="math notranslate nohighlight">\(0, \lambda_2, \lambda_3, \ldots, \lambda_n\)</span> (assuming <span class="math notranslate nohighlight">\(\|v_1\| = 1\)</span>).</p>
+<p><strong>(b)</strong> Why is deflation numerically unstable for non-symmetric matrices?</p>
+<p><strong>(c)</strong> Propose an alternative approach to find multiple eigenpairs without deflation.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="computational-problems">
+<h2>Computational Problems<a class="headerlink" href="#computational-problems" title="Link to this heading">#</a></h2>
+<section id="problem-5-basic-implementation">
+<h3>Problem 5: Basic Implementation<a class="headerlink" href="#problem-5-basic-implementation" title="Link to this heading">#</a></h3>
+<p>Implement the power iteration algorithm in Python with the following specifications:</p>
+<p><strong>(a)</strong> Write a function <code class="docutils literal notranslate"><span class="pre">power_iteration(A,</span> <span class="pre">num_iterations,</span> <span class="pre">v0=None)</span></code> that:</p>
+<ul class="simple">
+<li><p>Takes a matrix <code class="docutils literal notranslate"><span class="pre">A</span></code> (NumPy array)</p></li>
+<li><p>Performs <code class="docutils literal notranslate"><span class="pre">num_iterations</span></code> iterations</p></li>
+<li><p>Returns the dominant eigenvalue estimate and corresponding eigenvector</p></li>
+<li><p>Uses random initialization if <code class="docutils literal notranslate"><span class="pre">v0</span></code> is not provided</p></li>
+<li><p>Normalizes the vector at each iteration</p></li>
+</ul>
+<p><strong>(b)</strong> Test your implementation on the matrix:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    A = \begin{bmatrix} 4 &amp; 1 &amp; 0 \\ 1 &amp; 3 &amp; 1 \\ 0 &amp; 1 &amp; 2 \end{bmatrix}
+\end{split}\]</div>
+<p>Compare your results with <code class="docutils literal notranslate"><span class="pre">numpy.linalg.eig()</span></code>.</p>
+<p><strong>(c)</strong> Plot the convergence of the eigenvalue estimate as a function of iteration number. Use <code class="docutils literal notranslate"><span class="pre">matplotlib.pyplot</span></code> to create a semi-log plot showing the absolute error <span class="math notranslate nohighlight">\(|\lambda^{(k)} - \lambda_1|\)</span>.</p>
+</section>
+<section id="problem-6-convergence-rate-analysis">
+<h3>Problem 6: Convergence Rate Analysis<a class="headerlink" href="#problem-6-convergence-rate-analysis" title="Link to this heading">#</a></h3>
+<p>Consider the matrices:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    A_1 = \begin{bmatrix} 5 &amp; 0 \\ 0 &amp; 4.5 \end{bmatrix}, \quad A_2 = \begin{bmatrix} 5 &amp; 0 \\ 0 &amp; 1 \end{bmatrix}, \quad A_3 = \begin{bmatrix} 5 &amp; 0 \\ 0 &amp; 0.1 \end{bmatrix}
+\end{split}\]</div>
+<p><strong>(a)</strong> For each matrix, compute the ratio <span class="math notranslate nohighlight">\(\left|\frac{\lambda_2}{\lambda_1}\right|\)</span> and predict the convergence rate.</p>
+<p><strong>(b)</strong> Run power iteration for 50 iterations on each matrix starting from <span class="math notranslate nohighlight">\(v^{(0)} = [1, 1]^T\)</span>. Plot all three convergence curves on the same semi-log plot.</p>
+<p><strong>(c)</strong> Verify empirically that the number of iterations required to achieve error <span class="math notranslate nohighlight">\(&lt; 10^{-6}\)</span> is approximately proportional to <span class="math notranslate nohighlight">\(-\log_{10}|\lambda_2/\lambda_1|\)</span>.</p>
+</section>
+<section id="problem-7-failure-modes">
+<h3>Problem 7: Failure Modes<a class="headerlink" href="#problem-7-failure-modes" title="Link to this heading">#</a></h3>
+<p>Explore cases where power iteration fails or behaves unexpectedly.</p>
+<p><strong>(a)</strong> Apply power iteration to the matrix:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    B = \begin{bmatrix} 0 &amp; 1 \\ -1 &amp; 0 \end{bmatrix}
+\end{split}\]</div>
+<p>What happens? Explain why in terms of the eigenvalues of <span class="math notranslate nohighlight">\(B\)</span>.</p>
+<p><strong>(b)</strong> Create a <span class="math notranslate nohighlight">\(3 \times 3\)</span> matrix with two dominant eigenvalues <span class="math notranslate nohighlight">\(\lambda_1 = 5\)</span>, <span class="math notranslate nohighlight">\(\lambda_2 = -5\)</span>, and <span class="math notranslate nohighlight">\(\lambda_3 = 1\)</span>. Run power iteration from several random starting vectors and observe the behavior.</p>
+<p><strong>(c)</strong> Implement a check in your power iteration function to detect oscillating behavior and issue a warning.</p>
+</section>
+<section id="problem-8-pagerank-application">
+<h3>Problem 8: PageRank Application<a class="headerlink" href="#problem-8-pagerank-application" title="Link to this heading">#</a></h3>
+<p>The Google PageRank algorithm is essentially power iteration on a modified adjacency matrix.</p>
+<p>Consider a simple web graph with 4 pages and link structure represented by:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    L = \begin{bmatrix} 0 &amp; 1 &amp; 1 &amp; 0 \\ 0 &amp; 0 &amp; 1 &amp; 0 \\ 1 &amp; 0 &amp; 0 &amp; 1 \\ 0 &amp; 0 &amp; 1 &amp; 0 \end{bmatrix}
+\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(L_{ij} = 1\)</span> if page <span class="math notranslate nohighlight">\(i\)</span> links to page <span class="math notranslate nohighlight">\(j\)</span>.</p>
+<p><strong>(a)</strong> Construct the Markov matrix <span class="math notranslate nohighlight">\(M\)</span> where <span class="math notranslate nohighlight">\(M_{ij} = L_{ij}/d_i\)</span> and <span class="math notranslate nohighlight">\(d_i\)</span> is the out-degree of page <span class="math notranslate nohighlight">\(i\)</span> (number of outgoing links). Handle dangling nodes (pages with no outgoing links).</p>
+<p><strong>(b)</strong> Construct the Google matrix <span class="math notranslate nohighlight">\(G = \alpha M + (1-\alpha)\frac{1}{n}E\)</span> where <span class="math notranslate nohighlight">\(\alpha = 0.85\)</span> and <span class="math notranslate nohighlight">\(E\)</span> is the matrix of all ones.</p>
+<p><strong>(c)</strong> Use power iteration to find the PageRank vector (the dominant eigenvector of <span class="math notranslate nohighlight">\(G\)</span>). What are the relative rankings of the four pages?</p>
+</section>
+<section id="problem-9-inverse-iteration">
+<h3>Problem 9: Inverse Iteration<a class="headerlink" href="#problem-9-inverse-iteration" title="Link to this heading">#</a></h3>
+<p>Research and implement inverse iteration to find the eigenvalue closest to a given shift <span class="math notranslate nohighlight">\(\mu\)</span>.</p>
+<p><strong>(a)</strong> Write a function <code class="docutils literal notranslate"><span class="pre">inverse_iteration(A,</span> <span class="pre">mu,</span> <span class="pre">num_iterations,</span> <span class="pre">v0=None)</span></code> that performs power iteration on <span class="math notranslate nohighlight">\((A - \mu I)^{-1}\)</span> using <code class="docutils literal notranslate"><span class="pre">scipy.linalg.solve()</span></code> instead of explicitly computing the inverse.</p>
+<p><strong>(b)</strong> Apply your function to find all eigenvalues of:
+$<span class="math notranslate nohighlight">\(C = \begin{bmatrix} 1 &amp; 2 &amp; 0 \\ 2 &amp; 2 &amp; 2 \\ 0 &amp; 2 &amp; 3 \end{bmatrix}\)</span>$
+by choosing appropriate shifts near 0, 2, and 4.</p>
+<p><strong>(c)</strong> Compare the convergence speed of inverse iteration versus standard power iteration for finding the smallest eigenvalue (in absolute value).</p>
+</section>
+<section id="problem-10-symmetric-vs-non-symmetric-matrices">
+<h3>Problem 10: Symmetric vs. Non-Symmetric Matrices<a class="headerlink" href="#problem-10-symmetric-vs-non-symmetric-matrices" title="Link to this heading">#</a></h3>
+<p>Compare power iteration performance on symmetric and non-symmetric matrices.</p>
+<p><strong>(a)</strong> Generate a random <span class="math notranslate nohighlight">\(10 \times 10\)</span> symmetric positive definite matrix using:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">A_sym</span> <span class="o">=</span> <span class="n">Q</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">eigenvalues</span><span class="p">)</span> <span class="o">@</span> <span class="n">Q</span><span class="o">.</span><span class="n">T</span>
+</pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">Q</span></code> is a random orthogonal matrix and eigenvalues are chosen with a clear dominant eigenvalue.</p>
+<p><strong>(b)</strong> Generate a non-symmetric matrix with the same eigenvalues using:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">A_nonsym</span> <span class="o">=</span> <span class="n">Q1</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">eigenvalues</span><span class="p">)</span> <span class="o">@</span> <span class="n">Q2</span><span class="o">.</span><span class="n">T</span>
+</pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">Q1</span></code> and <code class="docutils literal notranslate"><span class="pre">Q2</span></code> are different random orthogonal matrices.</p>
+<p><strong>(c)</strong> Run power iteration on both matrices and compare:</p>
+<ul class="simple">
+<li><p>Convergence speed</p></li>
+<li><p>Stability (variation in results from different random initializations)</p></li>
+<li><p>Behavior of the Rayleigh quotient over iterations</p></li>
+</ul>
+<p>Create visualizations showing these comparisons.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="challenge-problems">
+<h2>Challenge Problems<a class="headerlink" href="#challenge-problems" title="Link to this heading">#</a></h2>
+<section id="problem-11-qr-algorithm-connection">
+<h3>Problem 11: QR Algorithm Connection<a class="headerlink" href="#problem-11-qr-algorithm-connection" title="Link to this heading">#</a></h3>
+<p>The QR algorithm for computing all eigenvalues can be viewed as simultaneous power iteration on multiple vectors.</p>
+<p><strong>(a)</strong> Research and explain the relationship between the QR iteration and power iteration.</p>
+<p><strong>(b)</strong> Implement one step of the QR algorithm using <code class="docutils literal notranslate"><span class="pre">numpy.linalg.qr()</span></code> and show that the diagonal entries of the resulting matrix converge to eigenvalues.</p>
+<p><strong>(c)</strong> For a <span class="math notranslate nohighlight">\(4 \times 4\)</span> symmetric tridiagonal matrix of your choice, compare the convergence of:</p>
+<ul class="simple">
+<li><p>Power iteration (for the dominant eigenvalue only)</p></li>
+<li><p>QR algorithm (for all eigenvalues)</p></li>
+</ul>
+</section>
+<section id="problem-12-arnoldi-lanczos-preview">
+<h3>Problem 12: Arnoldi/Lanczos Preview<a class="headerlink" href="#problem-12-arnoldi-lanczos-preview" title="Link to this heading">#</a></h3>
+<p>For large sparse matrices, the Arnoldi iteration (or Lanczos for symmetric matrices) is more efficient than power iteration.</p>
+<p><strong>(a)</strong> Research Arnoldi iteration and explain conceptually how Arnoldi iteration builds a Krylov subspace <span class="math notranslate nohighlight">\(\mathcal{K}_m(A, v) = \text{span}\{v, Av, A^2v, \ldots, A^{m-1}v\}\)</span>.</p>
+<p><strong>(b)</strong> Research Lanczos iteration and implement a basic Lanczos iteration for a symmetric matrix that builds an orthonormal basis of the Krylov subspace using Gram-Schmidt orthogonalization.</p>
+<p><strong>(c)</strong> Apply your implementation to a <span class="math notranslate nohighlight">\(100 \times 100\)</span> symmetric tridiagonal matrix and compare the efficiency (iterations needed) with standard power iteration.</p>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="eigenstuff-2.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Approximating Eigenvalues and Eigenvectors 1 - Power Iteration</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#theoretical-questions">Theoretical Questions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-1-convergence-conditions">Problem 1: Convergence Conditions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-2-rayleigh-quotient-analysis">Problem 2: Rayleigh Quotient Analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-3-shifted-power-iteration">Problem 3: Shifted Power Iteration</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-4-deflation-technique">Problem 4: Deflation Technique</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#computational-problems">Computational Problems</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-5-basic-implementation">Problem 5: Basic Implementation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-6-convergence-rate-analysis">Problem 6: Convergence Rate Analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-7-failure-modes">Problem 7: Failure Modes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-8-pagerank-application">Problem 8: PageRank Application</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-9-inverse-iteration">Problem 9: Inverse Iteration</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-10-symmetric-vs-non-symmetric-matrices">Problem 10: Symmetric vs. Non-Symmetric Matrices</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#challenge-problems">Challenge Problems</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-11-qr-algorithm-connection">Problem 11: QR Algorithm Connection</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-12-arnoldi-lanczos-preview">Problem 12: Arnoldi/Lanczos Preview</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Jeremiah W. Johnson
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <div>
+  <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="jwjohnson314" data-description="Support me on Buy me a coffee!" data-message="Thanks for reading! If you found this useful and want to support this book project, you can Buy Me a Coffee here. Your support helps keep this book free for my students." data-color="#5F7FFF" data-position="Right" data-x_margin="18" data-y_margin="18"></script> 
+</div>
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -4,7 +4,7 @@
 format: jb-book
 root: intro
 chapters:
-- file: motivation
+# - file: motivation
 - file: vectors
 - file: vectors-problem-set
 - file: matrices

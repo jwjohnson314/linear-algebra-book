@@ -1,0 +1,1678 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Approximating Eigenvectors and Eigenvalues 2: The \(QR\) Algorithm &#8212; Applied Linear Algebra</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'eigenstuff-3';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Problem Set 9: PCA and the QR Algorithm" href="eigenstuff-problem-set-3.html" />
+    <link rel="prev" title="Problem Set 8: Power Iteration" href="eigenstuff-problem-set-2.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="Applied Linear Algebra - Home"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="Applied Linear Algebra - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Applied Linear Algebra
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="vectors.html">Vectors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vectors-problem-set.html">Problem Set 1: Vectors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrices.html">Matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrices-problem-set.html">Problem Set 2: Matrix Arithmetic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="linear-systems-gaussian-elimination.html">Linear Systems and Gaussian Elimination</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gaussian-elimination-lu-problem-set.html">Problem Set 3: Gaussian Elimination and <span class="math notranslate nohighlight">\(A=LU\)</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="computation.html">Computation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bonus-faster-matrix-multiplication.html">Optional: Faster Matrix Multiplication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inverse-matrices.html">The Matrix Inverse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lu-and-computation-problem-set.html">Problem Set 4: <span class="math notranslate nohighlight">\(A=LU\)</span> and Computation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ols.html">Ordinary Least Squares and Linear Regression</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aqr.html">Projection and <span class="math notranslate nohighlight">\(A=QR\)</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="projection-qr-problem-set.html">Problem Set 5: Projections and <span class="math notranslate nohighlight">\(A=QR\)</span></a></li>
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="vector-spaces.html">Vector Spaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vector-space-problem-set.html">Problem Set 6: Vector Spaces and Bases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eigenstuff-1.html">Introduction to Eigenvalues and Eigenvectors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eigenstuff-problem-set-1.html">Problem Set 7: Eigenvalues and Eigenvectors of <span class="math notranslate nohighlight">\(2\times2\)</span> Matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eigenstuff-2.html">Approximating Eigenvalues and Eigenvectors 1 - Power Iteration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eigenstuff-problem-set-2.html">Problem Set 8: Power Iteration</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Approximating Eigenvectors and Eigenvalues 2: The <span class="math notranslate nohighlight">\(QR\)</span> Algorithm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eigenstuff-problem-set-3.html">Problem Set 9: PCA and the QR Algorithm</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Feigenstuff-3.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/eigenstuff-3.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Approximating Eigenvectors and Eigenvalues 2: The QR Algorithm</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#principal-component-analysis">Principal Component Analysis</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-2d-example">A 2D Example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-larger-example">A Larger Example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-real-world-example">A Real-World Example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-qr-algorithm">The QR Algorithm</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#computational-complexity-of-the-qr-algorithm">Computational Complexity of the QR Algorithm</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="approximating-eigenvectors-and-eigenvalues-2-the-qr-algorithm">
+<h1>Approximating Eigenvectors and Eigenvalues 2: The <span class="math notranslate nohighlight">\(QR\)</span> Algorithm<a class="headerlink" href="#approximating-eigenvectors-and-eigenvalues-2-the-qr-algorithm" title="Link to this heading">#</a></h1>
+<p>When the assumptions are met, power iteration combined with Rayleigh quotient approximation works beautifully to produce the principal eigenvector of a matrix and its associated eigenvalue, but for many applications we want not just the principal eigenvector and eigenvalue but all of the eigenvalues and eigenvectors of a matrix. To motivate why, we will first consider a new application: Principal Component Analysis (PCA). We will introduce an algorithm based on the <span class="math notranslate nohighlight">\(A=QR\)</span> factorization for obtaining all of the eigenvalues of a matrix. Once we have the eigenvalues, we can then solve <span class="math notranslate nohighlight">\((A-\lambda I)\mathbf{x} = \mathbf{0}\)</span> for the eigenvectors.</p>
+<section id="principal-component-analysis">
+<h2>Principal Component Analysis<a class="headerlink" href="#principal-component-analysis" title="Link to this heading">#</a></h2>
+<p>Principal component analysis is a dimensionality reduction technique used in statistics and machine learning. The idea behind it is to first transform one’s dataset into a new coordinate system based on the directions of greatest variation in the dataset, and then to discard ‘low variance’ features, thus reducing the dimensionality of the dataset while preserving most of the variance. The directions of variation in a dataset can be identified as the eigenvectors of the datasets <em>covariance</em> matrix (defined below), and the relative magnitude of the associated eigenvalues can be used to guide us to the high variance directions.</p>
+<div class="admonition-the-covariance-matrix admonition">
+<p class="admonition-title">The Covariance Matrix</p>
+<p>Let <span class="math notranslate nohighlight">\(X\)</span> represent a dataset consisting of <span class="math notranslate nohighlight">\(n\)</span> observations with <span class="math notranslate nohighlight">\(p\)</span> features, and let <span class="math notranslate nohighlight">\(\bar{X}\)</span> be the <span class="math notranslate nohighlight">\(n\times p\)</span> matrix with the column means of <span class="math notranslate nohighlight">\(X\)</span> as columnwise components; that is, for all <span class="math notranslate nohighlight">\(i\)</span>, the entry in position <span class="math notranslate nohighlight">\(i, j\)</span> of <span class="math notranslate nohighlight">\(\bar{X}\)</span> is the mean of column <span class="math notranslate nohighlight">\(j\)</span>. Then the <span class="math notranslate nohighlight">\(p\times p\)</span> matrix</p>
+<div class="math notranslate nohighlight">
+\[
+    Cov(X) = \frac{1}{n-1}(X - \bar{X})^T(X - \bar{X})
+\]</div>
+<p>is called the <em>covariance matrix</em> of <span class="math notranslate nohighlight">\(X\)</span>. The entry in position <span class="math notranslate nohighlight">\(i, j\)</span> of <span class="math notranslate nohighlight">\(Cov(X)\)</span> is the covariance of features <span class="math notranslate nohighlight">\(i\)</span> and <span class="math notranslate nohighlight">\(j\)</span> from <span class="math notranslate nohighlight">\(X\)</span>.</p>
+</div>
+<p>Note in the above definition of <span class="math notranslate nohighlight">\(Cov(X)\)</span> the product <span class="math notranslate nohighlight">\((X - \bar{X})^T(X - \bar{X})\)</span>. Products of this form have come up repeatedly, in contexts such as projections and linear regression (ordinary least squares). A product like this of the form <span class="math notranslate nohighlight">\(A^TA\)</span> produces a symmetric matrix, and every real symmetric matrix will have real eigenvalues and orthogonal eigenvectors. Suppose we find the eigenvalues and eigenvectors of Cov(X) and we order the eigenvalues - and their associated eigenvectors - from greatest to least magnitude. We can select a subset of the eigenvectors to serve as a new basis for the dataset, and then we can project the data onto this subset. More precisely, given an <span class="math notranslate nohighlight">\(n\times p\)</span> matrix <span class="math notranslate nohighlight">\(X\)</span>, PCA is done as follows.</p>
+<div class="admonition-principal-component-analysis-algorithm admonition">
+<p class="admonition-title">Principal Component Analysis Algorithm</p>
+<ol class="arabic simple">
+<li><p>Find the eigenvalues and eigenvectors of the <span class="math notranslate nohighlight">\(p\times p\)</span> symmetric <span class="math notranslate nohighlight">\(Cov(X)\)</span> and sort them in order of decreasing magnitude of the eigenvalues.</p></li>
+<li><p>For <span class="math notranslate nohighlight">\(1\leq i\leq p\)</span>, calculate <span class="math notranslate nohighlight">\(g_j\sum_{j=1}^i \lambda_j\)</span>. Also calculate <span class="math notranslate nohighlight">\(g_{tot}=\sum_{j=1}^p \lambda_j\)</span>.</p></li>
+<li><p>Determine <span class="math notranslate nohighlight">\(j\)</span> such that <span class="math notranslate nohighlight">\(g_j / g_{tot} \geq \alpha\)</span>, where <span class="math notranslate nohighlight">\(\alpha\)</span> is a predetermined threshold, often <span class="math notranslate nohighlight">\(0.9\)</span>.</p></li>
+<li><p>Put the first <span class="math notranslate nohighlight">\(j\)</span> eigenvectors of <span class="math notranslate nohighlight">\(Cov(X)\)</span> into a <span class="math notranslate nohighlight">\( p\times j\)</span> matrix <span class="math notranslate nohighlight">\(W\)</span>.</p></li>
+<li><p>Calculate the product <span class="math notranslate nohighlight">\(XW\)</span>. Use this lower-dimensional <span class="math notranslate nohighlight">\(n \times j\)</span> matrix instead of the original dataset.</p></li>
+</ol>
+</div>
+<p>The idea behind the above algorithm is to find as small as possible a <span class="math notranslate nohighlight">\(j\)</span> (i.e. reduce the dimension of the dataset as much as possible) while capturing as much of the variance in the dataset as possible (<span class="math notranslate nohighlight">\(g_j / g_{tot}\)</span>). Requiring <span class="math notranslate nohighlight">\(g_j / g_{tot} \geq 0.9\)</span> is common, but depending on context other thresholds may be used.</p>
+</section>
+<section id="a-2d-example">
+<h2>A 2D Example<a class="headerlink" href="#a-2d-example" title="Link to this heading">#</a></h2>
+<p>We will illustrate how the eigenvectors of the covariance matrix point in the directions of greatest variance with an example in the plane using synthetic data. The data is normally distributed in x and y, then rotated  <span class="math notranslate nohighlight">\(45^{\circ}\)</span> using a rotation matrix.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.decomposition</span><span class="w"> </span><span class="kn">import</span> <span class="n">PCA</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">fetch_openml</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_classification</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomForestClassifier</span> <span class="k">as</span> <span class="n">RF</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">accuracy_score</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy.linalg</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">la</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;bmh&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">ys</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.50</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">])</span>
+
+<span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)],</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)]])</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="p">(</span><span class="n">A</span> <span class="o">@</span> <span class="n">data</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/531eb54d9786df42175d0bacef5ae013948f6c3993f3c5342f208e8a0ea6cd9f.png" src="_images/531eb54d9786df42175d0bacef5ae013948f6c3993f3c5342f208e8a0ea6cd9f.png" />
+</div>
+</div>
+<p>Now let’s calculate the covariance matrix of the dataset.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">num_obs</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># center X</span>
+<span class="n">X</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span> 
+
+<span class="c1"># make Cov(X)</span>
+<span class="n">covX</span> <span class="o">=</span> <span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span> <span class="o">@</span> <span class="n">X</span> <span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">num_obs</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>And get the eigenvalues and eigenvectors.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">L</span><span class="p">,</span> <span class="n">V</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">eig</span><span class="p">(</span><span class="n">covX</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now, let’s plot the eigenvectors of <span class="math notranslate nohighlight">\(Cov(X)\)</span> along with the data:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">quiver</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">V</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="n">V</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">angles</span><span class="o">=</span><span class="s1">&#39;xy&#39;</span><span class="p">,</span> <span class="n">scale_units</span><span class="o">=</span><span class="s1">&#39;xy&#39;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">quiver</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">V</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="o">-</span><span class="n">V</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">angles</span><span class="o">=</span><span class="s1">&#39;xy&#39;</span><span class="p">,</span> <span class="n">scale_units</span><span class="o">=</span><span class="s1">&#39;xy&#39;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/d49c358c1e6cc0d40076fb1d3d53ceb9508306968849ef118d453acbe4f499e8.png" src="_images/d49c358c1e6cc0d40076fb1d3d53ceb9508306968849ef118d453acbe4f499e8.png" />
+</div>
+</div>
+<p>Scikit-Learn implements PCA very efficiently, so we can take advantage of it rather than go through the construction of <span class="math notranslate nohighlight">\(Cov(X)\)</span> and the derivation of its eigenvectors and eigenvalues.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pca</span> <span class="o">=</span> <span class="n">PCA</span><span class="p">()</span>
+<span class="n">pca</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><style>#sk-container-id-1 {
+  /* Definition of color scheme common for light and dark mode */
+  --sklearn-color-text: #000;
+  --sklearn-color-text-muted: #666;
+  --sklearn-color-line: gray;
+  /* Definition of color scheme for unfitted estimators */
+  --sklearn-color-unfitted-level-0: #fff5e6;
+  --sklearn-color-unfitted-level-1: #f6e4d2;
+  --sklearn-color-unfitted-level-2: #ffe0b3;
+  --sklearn-color-unfitted-level-3: chocolate;
+  /* Definition of color scheme for fitted estimators */
+  --sklearn-color-fitted-level-0: #f0f8ff;
+  --sklearn-color-fitted-level-1: #d4ebff;
+  --sklearn-color-fitted-level-2: #b3dbfd;
+  --sklearn-color-fitted-level-3: cornflowerblue;
+
+  /* Specific color for light theme */
+  --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+  --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, white)));
+  --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+  --sklearn-color-icon: #696969;
+
+  @media (prefers-color-scheme: dark) {
+    /* Redefinition of color scheme for dark theme */
+    --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+    --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, #111)));
+    --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+    --sklearn-color-icon: #878787;
+  }
+}
+
+#sk-container-id-1 {
+  color: var(--sklearn-color-text);
+}
+
+#sk-container-id-1 pre {
+  padding: 0;
+}
+
+#sk-container-id-1 input.sk-hidden--visually {
+  border: 0;
+  clip: rect(1px 1px 1px 1px);
+  clip: rect(1px, 1px, 1px, 1px);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+#sk-container-id-1 div.sk-dashed-wrapped {
+  border: 1px dashed var(--sklearn-color-line);
+  margin: 0 0.4em 0.5em 0.4em;
+  box-sizing: border-box;
+  padding-bottom: 0.4em;
+  background-color: var(--sklearn-color-background);
+}
+
+#sk-container-id-1 div.sk-container {
+  /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
+     but bootstrap.min.css set `[hidden] { display: none !important; }`
+     so we also need the `!important` here to be able to override the
+     default hidden behavior on the sphinx rendered scikit-learn.org.
+     See: https://github.com/scikit-learn/scikit-learn/issues/21755 */
+  display: inline-block !important;
+  position: relative;
+}
+
+#sk-container-id-1 div.sk-text-repr-fallback {
+  display: none;
+}
+
+div.sk-parallel-item,
+div.sk-serial,
+div.sk-item {
+  /* draw centered vertical line to link estimators */
+  background-image: linear-gradient(var(--sklearn-color-text-on-default-background), var(--sklearn-color-text-on-default-background));
+  background-size: 2px 100%;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+/* Parallel-specific style estimator block */
+
+#sk-container-id-1 div.sk-parallel-item::after {
+  content: "";
+  width: 100%;
+  border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
+  flex-grow: 1;
+}
+
+#sk-container-id-1 div.sk-parallel {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  background-color: var(--sklearn-color-background);
+  position: relative;
+}
+
+#sk-container-id-1 div.sk-parallel-item {
+  display: flex;
+  flex-direction: column;
+}
+
+#sk-container-id-1 div.sk-parallel-item:first-child::after {
+  align-self: flex-end;
+  width: 50%;
+}
+
+#sk-container-id-1 div.sk-parallel-item:last-child::after {
+  align-self: flex-start;
+  width: 50%;
+}
+
+#sk-container-id-1 div.sk-parallel-item:only-child::after {
+  width: 0;
+}
+
+/* Serial-specific style estimator block */
+
+#sk-container-id-1 div.sk-serial {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--sklearn-color-background);
+  padding-right: 1em;
+  padding-left: 1em;
+}
+
+
+/* Toggleable style: style used for estimator/Pipeline/ColumnTransformer box that is
+clickable and can be expanded/collapsed.
+- Pipeline and ColumnTransformer use this feature and define the default style
+- Estimators will overwrite some part of the style using the `sk-estimator` class
+*/
+
+/* Pipeline and ColumnTransformer style (default) */
+
+#sk-container-id-1 div.sk-toggleable {
+  /* Default theme specific background. It is overwritten whether we have a
+  specific estimator or a Pipeline/ColumnTransformer */
+  background-color: var(--sklearn-color-background);
+}
+
+/* Toggleable label */
+#sk-container-id-1 label.sk-toggleable__label {
+  cursor: pointer;
+  display: flex;
+  width: 100%;
+  margin-bottom: 0;
+  padding: 0.5em;
+  box-sizing: border-box;
+  text-align: center;
+  align-items: start;
+  justify-content: space-between;
+  gap: 0.5em;
+}
+
+#sk-container-id-1 label.sk-toggleable__label .caption {
+  font-size: 0.6rem;
+  font-weight: lighter;
+  color: var(--sklearn-color-text-muted);
+}
+
+#sk-container-id-1 label.sk-toggleable__label-arrow:before {
+  /* Arrow on the left of the label */
+  content: "▸";
+  float: left;
+  margin-right: 0.25em;
+  color: var(--sklearn-color-icon);
+}
+
+#sk-container-id-1 label.sk-toggleable__label-arrow:hover:before {
+  color: var(--sklearn-color-text);
+}
+
+/* Toggleable content - dropdown */
+
+#sk-container-id-1 div.sk-toggleable__content {
+  max-height: 0;
+  max-width: 0;
+  overflow: hidden;
+  text-align: left;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-1 div.sk-toggleable__content.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+#sk-container-id-1 div.sk-toggleable__content pre {
+  margin: 0.2em;
+  border-radius: 0.25em;
+  color: var(--sklearn-color-text);
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-1 div.sk-toggleable__content.fitted pre {
+  /* unfitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+#sk-container-id-1 input.sk-toggleable__control:checked~div.sk-toggleable__content {
+  /* Expand drop-down */
+  max-height: 200px;
+  max-width: 100%;
+  overflow: auto;
+}
+
+#sk-container-id-1 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+  content: "▾";
+}
+
+/* Pipeline/ColumnTransformer-specific style */
+
+#sk-container-id-1 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-1 div.sk-label.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator-specific style */
+
+/* Colorize estimator box */
+#sk-container-id-1 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-1 div.sk-estimator.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+#sk-container-id-1 div.sk-label label.sk-toggleable__label,
+#sk-container-id-1 div.sk-label label {
+  /* The background is the default theme color */
+  color: var(--sklearn-color-text-on-default-background);
+}
+
+/* On hover, darken the color of the background */
+#sk-container-id-1 div.sk-label:hover label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+/* Label box, darken color on hover, fitted */
+#sk-container-id-1 div.sk-label.fitted:hover label.sk-toggleable__label.fitted {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator label */
+
+#sk-container-id-1 div.sk-label label {
+  font-family: monospace;
+  font-weight: bold;
+  display: inline-block;
+  line-height: 1.2em;
+}
+
+#sk-container-id-1 div.sk-label-container {
+  text-align: center;
+}
+
+/* Estimator-specific */
+#sk-container-id-1 div.sk-estimator {
+  font-family: monospace;
+  border: 1px dotted var(--sklearn-color-border-box);
+  border-radius: 0.25em;
+  box-sizing: border-box;
+  margin-bottom: 0.5em;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-1 div.sk-estimator.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+/* on hover */
+#sk-container-id-1 div.sk-estimator:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-1 div.sk-estimator.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Specification for estimator info (e.g. "i" and "?") */
+
+/* Common style for "i" and "?" */
+
+.sk-estimator-doc-link,
+a:link.sk-estimator-doc-link,
+a:visited.sk-estimator-doc-link {
+  float: right;
+  font-size: smaller;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-background);
+  border-radius: 1em;
+  height: 1em;
+  width: 1em;
+  text-decoration: none !important;
+  margin-left: 0.5em;
+  text-align: center;
+  /* unfitted */
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+  color: var(--sklearn-color-unfitted-level-1);
+}
+
+.sk-estimator-doc-link.fitted,
+a:link.sk-estimator-doc-link.fitted,
+a:visited.sk-estimator-doc-link.fitted {
+  /* fitted */
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+div.sk-estimator:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover,
+div.sk-label-container:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+div.sk-estimator.fitted:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover,
+div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+/* Span, style for the box shown on hovering the info icon */
+.sk-estimator-doc-link span {
+  display: none;
+  z-index: 9999;
+  position: relative;
+  font-weight: normal;
+  right: .2ex;
+  padding: .5ex;
+  margin: .5ex;
+  width: min-content;
+  min-width: 20ex;
+  max-width: 50ex;
+  color: var(--sklearn-color-text);
+  box-shadow: 2pt 2pt 4pt #999;
+  /* unfitted */
+  background: var(--sklearn-color-unfitted-level-0);
+  border: .5pt solid var(--sklearn-color-unfitted-level-3);
+}
+
+.sk-estimator-doc-link.fitted span {
+  /* fitted */
+  background: var(--sklearn-color-fitted-level-0);
+  border: var(--sklearn-color-fitted-level-3);
+}
+
+.sk-estimator-doc-link:hover span {
+  display: block;
+}
+
+/* "?"-specific style due to the `<a>` HTML tag */
+
+#sk-container-id-1 a.estimator_doc_link {
+  float: right;
+  font-size: 1rem;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-background);
+  border-radius: 1rem;
+  height: 1rem;
+  width: 1rem;
+  text-decoration: none;
+  /* unfitted */
+  color: var(--sklearn-color-unfitted-level-1);
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+}
+
+#sk-container-id-1 a.estimator_doc_link.fitted {
+  /* fitted */
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+#sk-container-id-1 a.estimator_doc_link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+#sk-container-id-1 a.estimator_doc_link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+}
+</style><div id="sk-container-id-1" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>PCA()</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-1" type="checkbox" checked><label for="sk-estimator-id-1" class="sk-toggleable__label fitted sk-toggleable__label-arrow"><div><div>PCA</div></div><div><a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.6/modules/generated/sklearn.decomposition.PCA.html">?<span>Documentation for PCA</span></a><span class="sk-estimator-doc-link fitted">i<span>Fitted</span></span></div></label><div class="sk-toggleable__content fitted"><pre>PCA()</pre></div> </div></div></div></div></div></div>
+</div>
+<p>The ‘explained variances’ attribute in PCA are the eigenvalues of the covariance matrix. Note that PCA will always return these ordered from greatest to least magnitude. As you can see below, they are the same as the eigenvalues calculated directly up above, but our eigenvalue calculation from before did not return sorted eigenvalues.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># explained variances in PCA vs. eigenvalues of Cov(X)</span>
+<span class="n">pca</span><span class="o">.</span><span class="n">explained_variance_</span><span class="p">,</span> <span class="n">L</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(array([0.24952294, 0.06037186]), array([0.24952294+0.j, 0.06037186+0.j]))
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="a-larger-example">
+<h2>A Larger Example<a class="headerlink" href="#a-larger-example" title="Link to this heading">#</a></h2>
+<p>As described above, PCA is typically used to reduce the number of features in a dataset. When we have only two features to work with that isn’t really possible without ending up with a trivial dataset; in the previous example the calculations of <span class="math notranslate nohighlight">\(g_j\)</span> and <span class="math notranslate nohighlight">\(g_{tot}\)</span> were skipped over entirely since there is nothing we can do with them. Let’s now consider a larger, but still synthetic, example where we will select the minimal number of principal components necessary to capture 90% of the variance in the dataset. As noted above, the 90% is a choice we get to make.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># sklearn utility for generating a synthetic dataset</span>
+
+<span class="n">data</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">make_classification</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">n_features</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">n_informative</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Calculate Cov(X)</span>
+
+<span class="n">num_obs</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># center X</span>
+<span class="n">X</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span> 
+
+<span class="c1"># make Cov(X)</span>
+<span class="n">covX</span> <span class="o">=</span> <span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span> <span class="o">@</span> <span class="n">X</span> <span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">num_obs</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># get the eigenvalues and eigenvectors</span>
+
+<span class="n">L</span><span class="p">,</span> <span class="n">V</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">eig</span><span class="p">(</span><span class="n">covX</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can use NumPy’s argsort function to sort L without losing track of the indices that we will need to identify the eigenvectors associated with the largest eigenvalues. NumPy sorts in ascending order, so we need to reverse the sorted order, then we can use the cumulative sum function to fill the array <span class="math notranslate nohighlight">\(g\)</span> with values <span class="math notranslate nohighlight">\(g_j\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Calculate the gs</span>
+
+<span class="n">g_tot</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="n">idx</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">argsort</span><span class="p">()[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">g</span> <span class="o">=</span> <span class="n">L</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()</span>
+
+<span class="c1"># array with proportion of explained variance</span>
+<span class="n">exp_var</span> <span class="o">=</span> <span class="n">g</span> <span class="o">/</span> <span class="n">g_tot</span>
+
+<span class="c1"># find at which index the explained variance is finally at least 90%</span>
+<span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">exp_var</span> <span class="o">&gt;=</span> <span class="mf">0.9</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>np.int64(73)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Based on the above calculation, we need the first 72 principal components to capture 90% of the variance in the dataset.</p>
+<p>How do we actually use this information? We need to transform our dataset. This can be done by multiplying the original dataset with a matrix containing the first 72 principal components:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">transformed_data</span> <span class="o">=</span> <span class="n">data</span> <span class="o">@</span> <span class="n">V</span><span class="p">[:,</span> <span class="p">:</span><span class="mi">72</span><span class="p">]</span>
+
+<span class="n">transformed_data</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(1000, 72)
+</pre></div>
+</div>
+</div>
+</div>
+<p>The transformed dataset can now be used as a lower-dimensional replacement for the original dataset that still captures 90% of the variance present in the original dataset.</p>
+</section>
+<section id="a-real-world-example">
+<h2>A Real-World Example<a class="headerlink" href="#a-real-world-example" title="Link to this heading">#</a></h2>
+<p>The example below uses a famous dataset of digitized handwritten digits called the MNIST dataset. It has been widely used for training and benchmarking machine learning algorithms. A description of the dataset is output from the next cell.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mnist</span> <span class="o">=</span> <span class="n">fetch_openml</span><span class="p">(</span><span class="s1">&#39;mnist_784&#39;</span><span class="p">,</span> <span class="n">data_home</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mnist</span><span class="o">.</span><span class="n">DESCR</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>**Author**: Yann LeCun, Corinna Cortes, Christopher J.C. Burges  
+**Source**: [MNIST Website](http://yann.lecun.com/exdb/mnist/) - Date unknown  
+**Please cite**:  
+
+The MNIST database of handwritten digits with 784 features, raw data available at: http://yann.lecun.com/exdb/mnist/. It can be split in a training set of the first 60,000 examples, and a test set of 10,000 examples  
+
+It is a subset of a larger set available from NIST. The digits have been size-normalized and centered in a fixed-size image. It is a good database for people who want to try learning techniques and pattern recognition methods on real-world data while spending minimal efforts on preprocessing and formatting. The original black and white (bilevel) images from NIST were size normalized to fit in a 20x20 pixel box while preserving their aspect ratio. The resulting images contain grey levels as a result of the anti-aliasing technique used by the normalization algorithm. the images were centered in a 28x28 image by computing the center of mass of the pixels, and translating the image so as to position this point at the center of the 28x28 field.  
+
+With some classification methods (particularly template-based methods, such as SVM and K-nearest neighbors), the error rate improves when the digits are centered by bounding box rather than center of mass. If you do this kind of pre-processing, you should report it in your publications. The MNIST database was constructed from NIST&#39;s NIST originally designated SD-3 as their training set and SD-1 as their test set. However, SD-3 is much cleaner and easier to recognize than SD-1. The reason for this can be found on the fact that SD-3 was collected among Census Bureau employees, while SD-1 was collected among high-school students. Drawing sensible conclusions from learning experiments requires that the result be independent of the choice of training set and test among the complete set of samples. Therefore it was necessary to build a new database by mixing NIST&#39;s datasets.  
+
+The MNIST training set is composed of 30,000 patterns from SD-3 and 30,000 patterns from SD-1. Our test set was composed of 5,000 patterns from SD-3 and 5,000 patterns from SD-1. The 60,000 pattern training set contained examples from approximately 250 writers. We made sure that the sets of writers of the training set and test set were disjoint. SD-1 contains 58,527 digit images written by 500 different writers. In contrast to SD-3, where blocks of data from each writer appeared in sequence, the data in SD-1 is scrambled. Writer identities for SD-1 is available and we used this information to unscramble the writers. We then split SD-1 in two: characters written by the first 250 writers went into our new training set. The remaining 250 writers were placed in our test set. Thus we had two sets with nearly 30,000 examples each. The new training set was completed with enough examples from SD-3, starting at pattern # 0, to make a full set of 60,000 training patterns. Similarly, the new test set was completed with SD-3 examples starting at pattern # 35,000 to make a full set with 60,000 test patterns. Only a subset of 10,000 test images (5,000 from SD-1 and 5,000 from SD-3) is available on this site. The full 60,000 sample training set is available.
+
+Downloaded from openml.org.
+</pre></div>
+</div>
+</div>
+</div>
+<p>The images in the dataset are vectorized already; the components of the vectors are 64-bit unsigned integer pixel values. A sample of the images are visualized below.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">70000</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">wspace</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+    <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">mnist</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="p">:]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Ground Truth: </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">mnist</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/ec50706cf3b76cc7f48b6427e3858d5dd01c6f36edcd356307e283ce16f10183.png" src="_images/ec50706cf3b76cc7f48b6427e3858d5dd01c6f36edcd356307e283ce16f10183.png" />
+</div>
+</div>
+<p>The individual pixel values are not particularly informative, but the first two principal components of the dataset are. Below, they are plotted with each point colored by label. As you can see in the plot, although there is some overlap points with the same label generally cluster together.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+
+<span class="n">pc</span> <span class="o">=</span> <span class="n">PCA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">mnist</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+
+<span class="n">pc_w_labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">pc</span><span class="p">,</span> <span class="n">mnist</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">70000</span><span class="p">,</span> <span class="mi">1</span><span class="p">)])</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">pc_w_labels</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;pc1&#39;</span><span class="p">,</span> <span class="s1">&#39;pc2&#39;</span><span class="p">,</span> <span class="s1">&#39;label&#39;</span><span class="p">])</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">lmplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;pc1&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;pc2&#39;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;label&#39;</span><span class="p">,</span> <span class="n">fit_reg</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">10</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/718a7e79ec8f22e6e674047b37edc485991dd9f67cb2c135b8cc75c69d8dd2ed.png" src="_images/718a7e79ec8f22e6e674047b37edc485991dd9f67cb2c135b8cc75c69d8dd2ed.png" />
+</div>
+</div>
+<p>The above plot only used the first two principal components. Let’s look at the explained variances for all of the principal components.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mnist_full_pca</span> <span class="o">=</span> <span class="n">PCA</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">mnist</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+<span class="n">explained_variance</span> <span class="o">=</span> <span class="n">mnist_full_pca</span><span class="o">.</span><span class="n">explained_variance_</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">explained_variance</span><span class="p">)),</span> <span class="n">explained_variance</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Variance Explained by Principal Components (MNIST data)&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/1ae16fcfeeee824c2c62e1ca6807632abf0cc8cabe59e1a55a3828675d5044c8.png" src="_images/1ae16fcfeeee824c2c62e1ca6807632abf0cc8cabe59e1a55a3828675d5044c8.png" />
+</div>
+</div>
+<p>As the plot above illustrates, most of the variance in the dataset is captured by the first approximately 100 principal components; the others provide very little information. It would be reasonable, then, to expect that a machine learning model could be efficiently trained to almost the same level of accuracy using only the first 100 principal components as it could be trained to achieve using all of the dataset. Let’s illustrate this. We will train a machine learning model to predict the handwritten digits in the MNIST images, first using all 784 pixel values, and then using only the first 100 principal components, and we will compare the accuracy of the two approaches.</p>
+<p>To do this correctly, we need to randomly split the data into two sets: a ‘training’ set and a ‘test’ set. The models will be fit on the training data, and they will be assessed at their ability to predict the handwritten digits in the images in the test set only. This way, the models cannot have any advance knowledge of the images on which their predictions are being assessed. This approach to model assessment is called <em>cross-validation</em>.</p>
+<p>The architecture of the machine learning model that we use here is not important. If you are interested in the details, you can read about the random forest model <a class="reference external" href="https://en.wikipedia.org/wiki/Random_forest#Algorithm">here</a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># randomly split the data into training and test sets</span>
+
+<span class="n">Xtr</span><span class="p">,</span> <span class="n">Xte</span><span class="p">,</span> <span class="n">ytr</span><span class="p">,</span> <span class="n">yte</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">mnist</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">mnist</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># fit and assess a random forest model on the 784 component MNIST image vectors</span>
+
+<span class="n">full_rf</span> <span class="o">=</span> <span class="n">RF</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">Xtr</span><span class="p">,</span> <span class="n">ytr</span><span class="p">)</span>
+<span class="n">full_pred</span> <span class="o">=</span> <span class="n">full_rf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">Xte</span><span class="p">)</span>
+<span class="n">full_acc</span> <span class="o">=</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">yte</span><span class="p">,</span> <span class="n">full_pred</span><span class="p">)</span>
+
+<span class="c1"># fit and assess a random forest model on the first 100 principal components of the MNIST data</span>
+
+<span class="c1"># first determine the 100 principal components using only the training data</span>
+<span class="n">pca</span> <span class="o">=</span> <span class="n">PCA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">Xtr</span><span class="p">)</span>
+
+<span class="c1"># transform the training and test sets using those principal components</span>
+<span class="n">pca_Xtr</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">Xtr</span><span class="p">)</span>
+<span class="n">pca_Xte</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">Xte</span><span class="p">)</span>
+
+<span class="c1"># fit and assess the random forest model to the transformed data</span>
+<span class="n">pca_rf</span> <span class="o">=</span> <span class="n">RF</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">pca_Xtr</span><span class="p">,</span> <span class="n">ytr</span><span class="p">)</span>
+<span class="n">pca_pred</span> <span class="o">=</span> <span class="n">pca_rf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">pca_Xte</span><span class="p">)</span>
+<span class="n">pca_acc</span> <span class="o">=</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">yte</span><span class="p">,</span> <span class="n">pca_pred</span><span class="p">)</span>
+
+<span class="c1"># compare the performance of the full model to the pca model</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">full_acc</span><span class="p">,</span> <span class="n">pca_acc</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">KeyboardInterrupt</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">18</span><span class="p">],</span> <span class="n">line</span> <span class="mi">3</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># fit and assess a random forest model on the 784 component MNIST image vectors</span>
+<span class="ne">----&gt; </span><span class="mi">3</span> <span class="n">full_rf</span> <span class="o">=</span> <span class="n">RF</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">Xtr</span><span class="p">,</span> <span class="n">ytr</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">full_pred</span> <span class="o">=</span> <span class="n">full_rf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">Xte</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="n">full_acc</span> <span class="o">=</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">yte</span><span class="p">,</span> <span class="n">full_pred</span><span class="p">)</span>
+
+<span class="nn">File ~/opt/anaconda3/envs/linalg/lib/python3.13/site-packages/sklearn/base.py:1389,</span> in <span class="ni">_fit_context.&lt;locals&gt;.decorator.&lt;locals&gt;.wrapper</span><span class="nt">(estimator, *args, **kwargs)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1382</span>     <span class="n">estimator</span><span class="o">.</span><span class="n">_validate_params</span><span class="p">()</span>
+<span class="g g-Whitespace">   </span><span class="mi">1384</span> <span class="k">with</span> <span class="n">config_context</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1385</span>     <span class="n">skip_parameter_validation</span><span class="o">=</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1386</span>         <span class="n">prefer_skip_nested_validation</span> <span class="ow">or</span> <span class="n">global_skip_validation</span>
+<span class="g g-Whitespace">   </span><span class="mi">1387</span>     <span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1388</span> <span class="p">):</span>
+<span class="ne">-&gt; </span><span class="mi">1389</span>     <span class="k">return</span> <span class="n">fit_method</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="nn">File ~/opt/anaconda3/envs/linalg/lib/python3.13/site-packages/sklearn/ensemble/_forest.py:487,</span> in <span class="ni">BaseForest.fit</span><span class="nt">(self, X, y, sample_weight)</span>
+<span class="g g-Whitespace">    </span><span class="mi">476</span> <span class="n">trees</span> <span class="o">=</span> <span class="p">[</span>
+<span class="g g-Whitespace">    </span><span class="mi">477</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_make_estimator</span><span class="p">(</span><span class="n">append</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">)</span>
+<span class="nn">    478     for i</span> in <span class="ni">range</span><span class="nt">(n_more_estimators)</span>
+<span class="g g-Whitespace">    </span><span class="mi">479</span> <span class="p">]</span>
+<span class="g g-Whitespace">    </span><span class="mi">481</span> <span class="c1"># Parallel loop: we prefer the threading backend as the Cython code</span>
+<span class="g g-Whitespace">    </span><span class="mi">482</span> <span class="c1"># for fitting the trees is internally releasing the Python GIL</span>
+<span class="g g-Whitespace">    </span><span class="mi">483</span> <span class="c1"># making threading more efficient than multiprocessing in</span>
+<span class="g g-Whitespace">    </span><span class="mi">484</span> <span class="c1"># that case. However, for joblib 0.12+ we respect any</span>
+<span class="g g-Whitespace">    </span><span class="mi">485</span> <span class="c1"># parallel_backend contexts set at a higher level,</span>
+<span class="g g-Whitespace">    </span><span class="mi">486</span> <span class="c1"># since correctness does not rely on using threads.</span>
+<span class="ne">--&gt; </span><span class="mi">487</span> <span class="n">trees</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">488</span>     <span class="n">n_jobs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">489</span>     <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">490</span>     <span class="n">prefer</span><span class="o">=</span><span class="s2">&quot;threads&quot;</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">491</span> <span class="p">)(</span>
+<span class="g g-Whitespace">    </span><span class="mi">492</span>     <span class="n">delayed</span><span class="p">(</span><span class="n">_parallel_build_trees</span><span class="p">)(</span>
+<span class="g g-Whitespace">    </span><span class="mi">493</span>         <span class="n">t</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">494</span>         <span class="bp">self</span><span class="o">.</span><span class="n">bootstrap</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">495</span>         <span class="n">X</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">496</span>         <span class="n">y</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">497</span>         <span class="n">sample_weight</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">498</span>         <span class="n">i</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">499</span>         <span class="nb">len</span><span class="p">(</span><span class="n">trees</span><span class="p">),</span>
+<span class="g g-Whitespace">    </span><span class="mi">500</span>         <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">501</span>         <span class="n">class_weight</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">class_weight</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">502</span>         <span class="n">n_samples_bootstrap</span><span class="o">=</span><span class="n">n_samples_bootstrap</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">503</span>         <span class="n">missing_values_in_feature_mask</span><span class="o">=</span><span class="n">missing_values_in_feature_mask</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">504</span>     <span class="p">)</span>
+<span class="nn">    505     for i, t</span> in <span class="ni">enumerate</span><span class="nt">(trees)</span>
+<span class="g g-Whitespace">    </span><span class="mi">506</span> <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">508</span> <span class="c1"># Collect newly grown trees</span>
+<span class="g g-Whitespace">    </span><span class="mi">509</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimators_</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">trees</span><span class="p">)</span>
+
+<span class="nn">File ~/opt/anaconda3/envs/linalg/lib/python3.13/site-packages/sklearn/utils/parallel.py:77,</span> in <span class="ni">Parallel.__call__</span><span class="nt">(self, iterable)</span>
+<span class="g g-Whitespace">     </span><span class="mi">72</span> <span class="n">config</span> <span class="o">=</span> <span class="n">get_config</span><span class="p">()</span>
+<span class="g g-Whitespace">     </span><span class="mi">73</span> <span class="n">iterable_with_config</span> <span class="o">=</span> <span class="p">(</span>
+<span class="g g-Whitespace">     </span><span class="mi">74</span>     <span class="p">(</span><span class="n">_with_config</span><span class="p">(</span><span class="n">delayed_func</span><span class="p">,</span> <span class="n">config</span><span class="p">),</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">75</span>     <span class="k">for</span> <span class="n">delayed_func</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span> <span class="ow">in</span> <span class="n">iterable</span>
+<span class="g g-Whitespace">     </span><span class="mi">76</span> <span class="p">)</span>
+<span class="ne">---&gt; </span><span class="mi">77</span> <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="n">iterable_with_config</span><span class="p">)</span>
+
+<span class="nn">File ~/opt/anaconda3/envs/linalg/lib/python3.13/site-packages/joblib/parallel.py:1918,</span> in <span class="ni">Parallel.__call__</span><span class="nt">(self, iterable)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1916</span>     <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_sequential_output</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1917</span>     <span class="nb">next</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+<span class="ne">-&gt; </span><span class="mi">1918</span>     <span class="k">return</span> <span class="n">output</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">return_generator</span> <span class="k">else</span> <span class="nb">list</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1920</span> <span class="c1"># Let&#39;s create an ID that uniquely identifies the current call. If the</span>
+<span class="g g-Whitespace">   </span><span class="mi">1921</span> <span class="c1"># call is interrupted early and that the same instance is immediately</span>
+<span class="g g-Whitespace">   </span><span class="mi">1922</span> <span class="c1"># re-used, this id will be used to prevent workers that were</span>
+<span class="g g-Whitespace">   </span><span class="mi">1923</span> <span class="c1"># concurrently finalizing a task from the previous call to run the</span>
+<span class="g g-Whitespace">   </span><span class="mi">1924</span> <span class="c1"># callback.</span>
+<span class="g g-Whitespace">   </span><span class="mi">1925</span> <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span><span class="p">:</span>
+
+<span class="nn">File ~/opt/anaconda3/envs/linalg/lib/python3.13/site-packages/joblib/parallel.py:1847,</span> in <span class="ni">Parallel._get_sequential_output</span><span class="nt">(self, iterable)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1845</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_dispatched_batches</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="g g-Whitespace">   </span><span class="mi">1846</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_dispatched_tasks</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="ne">-&gt; </span><span class="mi">1847</span> <span class="n">res</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1848</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_completed_tasks</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="g g-Whitespace">   </span><span class="mi">1849</span> <span class="bp">self</span><span class="o">.</span><span class="n">print_progress</span><span class="p">()</span>
+
+<span class="nn">File ~/opt/anaconda3/envs/linalg/lib/python3.13/site-packages/sklearn/utils/parallel.py:139,</span> in <span class="ni">_FuncWrapper.__call__</span><span class="nt">(self, *args, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">137</span>     <span class="n">config</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="g g-Whitespace">    </span><span class="mi">138</span> <span class="k">with</span> <span class="n">config_context</span><span class="p">(</span><span class="o">**</span><span class="n">config</span><span class="p">):</span>
+<span class="ne">--&gt; </span><span class="mi">139</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">function</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="nn">File ~/opt/anaconda3/envs/linalg/lib/python3.13/site-packages/sklearn/ensemble/_forest.py:189,</span> in <span class="ni">_parallel_build_trees</span><span class="nt">(tree, bootstrap, X, y, sample_weight, tree_idx, n_trees, verbose, class_weight, n_samples_bootstrap, missing_values_in_feature_mask)</span>
+<span class="g g-Whitespace">    </span><span class="mi">186</span>     <span class="k">elif</span> <span class="n">class_weight</span> <span class="o">==</span> <span class="s2">&quot;balanced_subsample&quot;</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">187</span>         <span class="n">curr_sample_weight</span> <span class="o">*=</span> <span class="n">compute_sample_weight</span><span class="p">(</span><span class="s2">&quot;balanced&quot;</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">indices</span><span class="o">=</span><span class="n">indices</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">189</span>     <span class="n">tree</span><span class="o">.</span><span class="n">_fit</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">190</span>         <span class="n">X</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">191</span>         <span class="n">y</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">192</span>         <span class="n">sample_weight</span><span class="o">=</span><span class="n">curr_sample_weight</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">193</span>         <span class="n">check_input</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">194</span>         <span class="n">missing_values_in_feature_mask</span><span class="o">=</span><span class="n">missing_values_in_feature_mask</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">195</span>     <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">196</span> <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">197</span>     <span class="n">tree</span><span class="o">.</span><span class="n">_fit</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">198</span>         <span class="n">X</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">199</span>         <span class="n">y</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">202</span>         <span class="n">missing_values_in_feature_mask</span><span class="o">=</span><span class="n">missing_values_in_feature_mask</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">203</span>     <span class="p">)</span>
+
+<span class="nn">File ~/opt/anaconda3/envs/linalg/lib/python3.13/site-packages/sklearn/tree/_classes.py:472,</span> in <span class="ni">BaseDecisionTree._fit</span><span class="nt">(self, X, y, sample_weight, check_input, missing_values_in_feature_mask)</span>
+<span class="g g-Whitespace">    </span><span class="mi">461</span> <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">462</span>     <span class="n">builder</span> <span class="o">=</span> <span class="n">BestFirstTreeBuilder</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">463</span>         <span class="n">splitter</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">464</span>         <span class="n">min_samples_split</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">469</span>         <span class="bp">self</span><span class="o">.</span><span class="n">min_impurity_decrease</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">470</span>     <span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">472</span> <span class="n">builder</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tree_</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">sample_weight</span><span class="p">,</span> <span class="n">missing_values_in_feature_mask</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">474</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_outputs_</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">is_classifier</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">475</span>     <span class="bp">self</span><span class="o">.</span><span class="n">n_classes_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_classes_</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="ne">KeyboardInterrupt</span>: 
+</pre></div>
+</div>
+</div>
+</div>
+<p>As expected, the model fit by first transforming the data using PCA performs nearly as well as the model fit using the full dataset, despite the fact that the transformed dataset is about 87% smaller than the full dataset.</p>
+</section>
+<section id="the-qr-algorithm">
+<h2>The QR Algorithm<a class="headerlink" href="#the-qr-algorithm" title="Link to this heading">#</a></h2>
+<p>PCA provides an example of an algorithm where we need to determine all of the eigenvectors and eigenvalues of a matrix. One of the most widely used algorithms for finding the eigenvalues of an arbitrary matrix without any special characteristics (such as symmetry) is based on the <span class="math notranslate nohighlight">\(A=QR\)</span> decomposition of a matrix into an orthogonal matrix and an upper right triangular matrix and is called the <span class="math notranslate nohighlight">\(QR\)</span> algorithm. The basic implementation of the algorithm is straightforward:</p>
+<div class="admonition-the-qr-algorithm admonition">
+<p class="admonition-title">The <span class="math notranslate nohighlight">\(QR\)</span> Algorithm</p>
+<ol class="arabic simple">
+<li><p>Let <span class="math notranslate nohighlight">\(A_1 = A\)</span></p></li>
+<li><p>For <span class="math notranslate nohighlight">\(t = 1,\dots\)</span></p>
+<ul class="simple">
+<li><p>Compute the <span class="math notranslate nohighlight">\(QR\)</span> factorization <span class="math notranslate nohighlight">\(A_t = Q_tR_t\)</span></p></li>
+<li><p>Let <span class="math notranslate nohighlight">\(A_{t+1} = R_tQ_t\)</span>.</p></li>
+</ul>
+</li>
+</ol>
+</div>
+<p>That is, at each iteration of the <span class="math notranslate nohighlight">\(QR\)</span> algorithm, we calculate the <span class="math notranslate nohighlight">\(QR\)</span> decomposition of <span class="math notranslate nohighlight">\(A\)</span>, then reverse the order of the terms and multiply to produce a ‘new’ <span class="math notranslate nohighlight">\(A\)</span>. We continue this for as many iterations as desired.</p>
+<p>This algorithm is surprisingly robust: the only condition is that the eigenvalues of our matrix have distinct magnitudes. Under that assumption, the output of this algorithm is a <em>quasi-triangular</em> matrix (defined precisely below) referred to as the <em>Schur</em> form of <span class="math notranslate nohighlight">\(A\)</span>, which in the best case will be diagonal, and because the eigenvalues of a diagonal matrix are precisely the diagonal entries we can simply read them off. If the output of the algorithm is not diagonal, it will still be in a form from which we can obtain the eigenvalues of <span class="math notranslate nohighlight">\(A\)</span> without too much trouble as described below.</p>
+<p>Before we go further let’s illustrate with an example.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Matrix A below&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="o">*</span><span class="mi">20</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="n">A_new</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty_like</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
+    <span class="n">Q</span><span class="p">,</span> <span class="n">R</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">qr</span><span class="p">(</span><span class="n">A_new</span><span class="p">)</span>
+    <span class="n">A_new</span> <span class="o">=</span> <span class="n">R</span> <span class="o">@</span> <span class="n">Q</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Matrix A_</span><span class="si">{new}</span><span class="s1"> below&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="o">*</span><span class="mi">20</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">A_new</span><span class="p">,</span> <span class="n">decimals</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="n">L</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">eig</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;eigenvalues of A obtained via SciPy below&#39;</span><span class="p">)</span> 
+<span class="nb">print</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Matrix A below
+====================
+[[6 1 0 0 1]
+ [2 5 1 0 0]
+ [0 1 4 1 0]
+ [0 0 2 3 1]
+ [1 0 0 1 2]]
+
+
+Matrix A_{new} below
+====================
+[[ 7.28 -0.38  0.64 -0.62  0.18]
+ [ 0.    5.2  -0.58 -0.42  0.58]
+ [ 0.    0.    4.2  -0.2   0.23]
+ [ 0.   -0.    0.    2.28 -0.29]
+ [ 0.   -0.    0.    0.    1.04]]
+
+
+eigenvalues of A obtained via SciPy below
+[7.28225117+0.j 5.20285268+0.j 4.19870499+0.j 2.27916578+0.j
+ 1.03702538+0.j]
+</pre></div>
+</div>
+</div>
+</div>
+<p>As you can see, the (rounded off) eigenvalues of <span class="math notranslate nohighlight">\(A\)</span> have spontaneously appeared on the diagonal of <span class="math notranslate nohighlight">\(A_{new}\)</span>.</p>
+<p>Why this seemingly simple algorithm works is beyond the scope of this course to explain in full, but we will provide as much intuitive explanation as possible. In order to do so we need some definitions.</p>
+<div class="admonition-definition-quasi-triangular-matrix admonition">
+<p class="admonition-title">Definition: Quasi-Triangular Matrix</p>
+<p>A matrix <span class="math notranslate nohighlight">\(A\)</span> is <em>quasi-triangular</em> if when expressed as a block matrix of <span class="math notranslate nohighlight">\(2\times 2\)</span> and <span class="math notranslate nohighlight">\(1\times 1\)</span> blocks is triangular.</p>
+</div>
+<p>Quasi-triangular matrices can be upper or lower quasi-triangular, or even quasi-diagonal. Below is an example of  a quasi upper triangular matrix.</p>
+<p><em>Example:</em> Let</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    A = \begin{bmatrix}
+            1 &amp; 2 &amp; 2 &amp; 4 \\
+            2 &amp; 1 &amp; 0 &amp; 3 \\
+            0 &amp; 0 &amp; 1 &amp; 3 \\
+            0 &amp; 0 &amp; 4 &amp; 4 \\
+        \end{bmatrix}.
+\end{split}\]</div>
+<p><span class="math notranslate nohighlight">\(A\)</span> is not triangular: the entries in positions <span class="math notranslate nohighlight">\(2, 1\)</span> and <span class="math notranslate nohighlight">\(4, 3\)</span> are below the diagonal. But if we write <span class="math notranslate nohighlight">\(A\)</span> in terms of the <span class="math notranslate nohighlight">\(2\times 2\)</span> blocks</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    B = \begin{bmatrix}
+            1 &amp; 2 \\
+            2 &amp; 1
+        \end{bmatrix},
+    C = \begin{bmatrix}
+            2 &amp; 4 \\
+            0 &amp; 3
+        \end{bmatrix},
+    D = \begin{bmatrix}
+            1 &amp; 3 \\
+            4 &amp; 4
+        \end{bmatrix}
+\end{split}\]</div>
+<p>and the <span class="math notranslate nohighlight">\(2\times 2\)</span> zero matrix that we will simply denote with <span class="math notranslate nohighlight">\(0\)</span>, we have</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    A = \begin{bmatrix}
+            B &amp; C \\
+            0 &amp; D
+        \end{bmatrix}
+\end{split}\]</div>
+<p>which is triangular, so <span class="math notranslate nohighlight">\(A\)</span> is quasi-triangular; indeed <span class="math notranslate nohighlight">\(A\)</span> is quasi upper triangular.</p>
+<p>It is straightforward to find the eigenvalues of a quasi-triangular matrix: they are the eigenvalues of the diagonal blocks. If a block is <span class="math notranslate nohighlight">\(2\times 2\)</span>, we can solve the characteristic equation for that block, and if the block is <span class="math notranslate nohighlight">\(1\times 1\)</span> (just a single diagonal entry), the eigenvalue for that block is the entry.</p>
+<p><strong>Example, continued:</strong> The diagonal blocks of <span class="math notranslate nohighlight">\(A\)</span> above are the matrices <span class="math notranslate nohighlight">\(B\)</span> and <span class="math notranslate nohighlight">\(D\)</span>. The characteristic equation of <span class="math notranslate nohighlight">\(B\)</span> is</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{align*}
+        (1 - \lambda)(1-\lambda) - 4 &amp;= 0 \\
+        \lambda^2 - 2\lambda - 3 &amp;= 0 \\
+        (\lambda - 3)(\lambda + 1) &amp;= 0,
+    \end{align*}
+\end{split}\]</div>
+<p>which is zero for <span class="math notranslate nohighlight">\(\lambda=-1, 3\)</span>. The characteristic equation for <span class="math notranslate nohighlight">\(D\)</span> is</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \begin{align*}
+        (1 - \lambda)(4-\lambda) - 12 &amp;= 0 \\
+        \lambda^2 - 5\lambda - 8 &amp;= 0.
+    \end{align*}
+\end{split}\]</div>
+<p>That equation doesn’t factor but we can obtain its roots with the quadratic formula:</p>
+<div class="math notranslate nohighlight">
+\[
+    \lambda = \frac{5 \pm\sqrt{25 - 4\cdot1\cdot(-8)}}{2} = \frac{5}{2} \pm \frac{\sqrt{57}}{2} \approx 6.2749, -1.2749.
+\]</div>
+<p>Let’s confirm that SciPy returns the same result.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">]])</span>
+<span class="n">L</span><span class="p">,</span> <span class="n">V</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">eig</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[ 3.        +0.j -1.        +0.j -1.27491722+0.j  6.27491722+0.j]
+</pre></div>
+</div>
+</div>
+</div>
+<p>It is the case that every real square matrix can be decomposed into the product of orthogonal matrices and a quasi-triangular matrix. This is known as a Schur decomposition.</p>
+<div class="admonition-theorem-the-schur-decomposition admonition">
+<p class="admonition-title">Theorem: The Schur Decomposition</p>
+<p>Every real square matrix <span class="math notranslate nohighlight">\(A\)</span> can be written in the form</p>
+<div class="math notranslate nohighlight">
+\[
+    A = QUQ^T
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(Q\)</span> is an orthogonal matrix and <span class="math notranslate nohighlight">\(U\)</span> is a quasi upper-triangular matrix.</p>
+</div>
+<p>The above theorem implies that there exists an orthogonal matrix <span class="math notranslate nohighlight">\(Q\)</span> such that <span class="math notranslate nohighlight">\(Q^TAQ\)</span> is quasi-upper triangular.</p>
+<p>With the above definitions and theorems in hand, we can explain in a bit more detail what the <span class="math notranslate nohighlight">\(QR\)</span> algorithm does: it obtains an approximate Schur decomposition of <span class="math notranslate nohighlight">\(A\)</span>. Note that when we reverse <span class="math notranslate nohighlight">\(Q\)</span> and <span class="math notranslate nohighlight">\(R\)</span> and calculate <span class="math notranslate nohighlight">\(RQ\)</span>, we get</p>
+<div class="math notranslate nohighlight">
+\[
+    RQ = Q^TAQ,
+\]</div>
+<p>because if <span class="math notranslate nohighlight">\(A=QR\)</span>, then <span class="math notranslate nohighlight">\(R = Q^{-1}A\)</span>, but because <span class="math notranslate nohighlight">\(Q\)</span> is orthogonal, <span class="math notranslate nohighlight">\(Q^{-1} = Q^T\)</span>. So <span class="math notranslate nohighlight">\(RQ\)</span> and <span class="math notranslate nohighlight">\(A\)</span> are similar matrices and thus have the same eigenvalues. At each iteration <span class="math notranslate nohighlight">\(Q\)</span>’s accumulate and the product of the <span class="math notranslate nohighlight">\(Q\)</span>’s converges to a matrix containing the eigenvectors of <span class="math notranslate nohighlight">\(A\)</span>, while at the same time the off-diagonal entries of <span class="math notranslate nohighlight">\(RQ\)</span> are driven toward <span class="math notranslate nohighlight">\(0\)</span>.</p>
+<p>Let’s revisit our first example using the algorithm and track <span class="math notranslate nohighlight">\(Q\)</span> this time to see this in action.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Matrix A below&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="o">*</span><span class="mi">20</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="n">A_new</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty_like</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+<span class="n">Q_new</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">200</span><span class="p">):</span>
+    <span class="n">Q</span><span class="p">,</span> <span class="n">R</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">qr</span><span class="p">(</span><span class="n">A_new</span><span class="p">)</span>
+    <span class="n">Q_new</span> <span class="o">=</span> <span class="n">Q_new</span> <span class="o">@</span> <span class="n">Q</span>
+    <span class="n">A_new</span> <span class="o">=</span> <span class="n">R</span> <span class="o">@</span> <span class="n">Q</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Matrix A_</span><span class="si">{new}</span><span class="s1"> below&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="o">*</span><span class="mi">20</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">A_new</span><span class="p">,</span> <span class="n">decimals</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="n">L</span><span class="p">,</span> <span class="n">V</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">eig</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;eigenvalues of A obtained via SciPy below&#39;</span><span class="p">)</span> 
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="o">*</span><span class="mi">20</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;estimated eigenvectors of A stored in Q_new below&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="o">*</span><span class="mi">20</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">Q_new</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;eigenvectors of A obtained via SciPy below&#39;</span><span class="p">)</span> 
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="o">*</span><span class="mi">20</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">V</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Matrix A below
+====================
+[[6 1 0 0 1]
+ [2 5 1 0 0]
+ [0 1 4 1 0]
+ [0 0 2 3 1]
+ [1 0 0 1 2]]
+
+
+Matrix A_{new} below
+====================
+[[-1.14378921e+19 -1.03740095e+18 -2.33802054e+18  1.23412572e+18
+   6.45240023e+18]
+ [-7.74743000e+03 -3.58618007e+18 -9.31097372e+18  3.57954124e+18
+   5.91616213e+18]
+ [ 2.10107900e+04  9.71156172e+18 -6.42985853e+17 -5.02553981e+18
+   3.80979658e+18]
+ [-0.00000000e+00 -0.00000000e+00  0.00000000e+00  5.66589102e+18
+  -2.93870251e+18]
+ [-0.00000000e+00 -0.00000000e+00  0.00000000e+00  3.92781991e+17
+   5.33313249e+18]]
+
+
+eigenvalues of A obtained via SciPy below
+====================
+[7.28225117+0.j 5.20285268+0.j 4.19870499+0.j 2.27916578+0.j
+ 1.03702538+0.j]
+
+
+estimated eigenvectors of A stored in Q_new below
+====================
+[[-0.28662304  0.08217023 -0.42522625  0.85451674 -0.00889157]
+ [ 0.52124041  0.26290677  0.65148795  0.47263945 -0.10660138]
+ [-0.17351152  0.9280881  -0.12026876 -0.20962262 -0.22391967]
+ [ 0.68661937 -0.06479659 -0.56250606 -0.04809626 -0.45346327]
+ [ 0.38026736  0.24203713 -0.25272207 -0.01257725  0.85603045]]
+
+
+eigenvectors of A obtained via SciPy below
+====================
+[[ 0.65053349  0.31742773 -0.13964281  0.26518015 -0.1631798 ]
+ [ 0.68172539 -0.14885613  0.61300144 -0.36687543  0.03582117]
+ [ 0.2548016  -0.66505132 -0.21190937  0.46784691  0.1844012 ]
+ [ 0.15459745 -0.65110264 -0.65510889 -0.43821155 -0.58219725]
+ [ 0.15242193 -0.10418054 -0.36146354 -0.61981595  0.77403602]]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="computational-complexity-of-the-qr-algorithm">
+<h2>Computational Complexity of the QR Algorithm<a class="headerlink" href="#computational-complexity-of-the-qr-algorithm" title="Link to this heading">#</a></h2>
+<p>The <span class="math notranslate nohighlight">\(QR\)</span> algorithm is computationally expensive because the <span class="math notranslate nohighlight">\(QR\)</span> decomposition is computationally expensive: calculating <span class="math notranslate nohighlight">\(A=QR\)</span> is in general <span class="math notranslate nohighlight">\(\mathcal{O}(n^3)\)</span>, so doing this many times is prohibitive. In practice, there are a number of optimizations used; the most important of which is to begin by bringing our matrix to a form called <em>Hessenberg</em> form.  A matrix is in Hessenberg form if it has no nonzero entries below the first <em>subdiagonal</em>, the diagonal just below the main diagonal. Bringing a matrix to Hessenberg form is itself <span class="math notranslate nohighlight">\(\mathcal{O}(n^3)\)</span> in general, but it can be shown that calculating the <span class="math notranslate nohighlight">\(QR\)</span> decomposition of a matrix in Hessenberg form is <span class="math notranslate nohighlight">\(\mathcal{O}(n^2)\)</span>, so if we the matrix is reduced to Hessenberg form first running the algorithm is computationally far more tractable.</p>
+<p>Even with the best optimizations currently available, obtaining approximations to an arbitrary degree of accuracy of the eigenvalues and eigenvectors of very large matrices is often computationally intractable. In such situations iterative methods may be used to calculate some of the eigenvalues and eigenvectors based on some stopping condition: for example, an iterative method for PCA could halt when enough eigenvectors and eigenvalues have been calculated to explain the desired proportion of variance observed in the data. Such methods are less precise than exact full eigenvector and eigenvalue calculations, but may be the only choice.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="eigenstuff-problem-set-2.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Problem Set 8: Power Iteration</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="eigenstuff-problem-set-3.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Problem Set 9: PCA and the QR Algorithm</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#principal-component-analysis">Principal Component Analysis</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-2d-example">A 2D Example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-larger-example">A Larger Example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-real-world-example">A Real-World Example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-qr-algorithm">The QR Algorithm</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#computational-complexity-of-the-qr-algorithm">Computational Complexity of the QR Algorithm</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Jeremiah W. Johnson
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <div>
+  <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="jwjohnson314" data-description="Support me on Buy me a coffee!" data-message="Thanks for reading! If you found this useful and want to support this book project, you can Buy Me a Coffee here. Your support helps keep this book free for my students." data-color="#5F7FFF" data-position="Right" data-x_margin="18" data-y_margin="18"></script> 
+</div>
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

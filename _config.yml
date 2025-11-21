@@ -10,7 +10,7 @@ copyright: "2025"
 # See https://jupyterbook.org/content/execute.html
 execute:
   execute_notebooks: force
-
+  execution_timeout: 3000 
 # Define the name of the latex output file for PDF builds
 latex:
   latex_documents:

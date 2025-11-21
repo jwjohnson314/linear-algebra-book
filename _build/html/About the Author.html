@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Applied Linear Algebra &#8212; Applied Linear Algebra</title>
+    <title>&lt;no title&gt; &#8212; Applied Linear Algebra</title>
   
   
   
@@ -57,12 +57,9 @@
     <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'intro';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'About the Author';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Vectors" href="vectors.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -145,7 +142,7 @@
     
   
 
-<a class="navbar-brand logo" href="#">
+<a class="navbar-brand logo" href="intro.html">
   
   
   
@@ -176,8 +173,8 @@
     <div class="bd-toc-item navbar-nav active">
         
         <ul class="nav bd-sidenav bd-sidenav__home-link">
-            <li class="toctree-l1 current active">
-                <a class="reference internal" href="#">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
                     Applied Linear Algebra
                 </a>
             </li>
@@ -281,7 +278,7 @@
       
       
       
-      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fintro.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2FAbout the Author.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -311,7 +308,7 @@
       
       
       
-      <li><a href="_sources/intro.md" target="_blank"
+      <li><a href="_sources/About the Author.md" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -395,7 +392,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Applied Linear Algebra</h1>
+    <h1><no title></h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -404,12 +401,9 @@ document.write(`
                 <h2> Contents </h2>
             </div>
             <nav aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#about-this-book">About This Book</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#outline">Outline</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#software">Software</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-author">The Author</a></li>
+                <ul class="simple visible nav section-nav flex-column">
 </ul>
+
             </nav>
         </div>
     </div>
@@ -420,36 +414,7 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <p><img alt="Cover image showing vectors under transformation and illustrating vector addition" src="_images/cover-image.png" /></p>
-<section class="tex2jax_ignore mathjax_ignore" id="applied-linear-algebra">
-<h1>Applied Linear Algebra<a class="headerlink" href="#applied-linear-algebra" title="Link to this heading">#</a></h1>
-<section id="about-this-book">
-<h2>About This Book<a class="headerlink" href="#about-this-book" title="Link to this heading">#</a></h2>
-<p>Linear algebra is one of the most well studied and widely applied branches of mathematics. In recent years, linear algebra has played a prominent role in the rise of machine learning and artificial intelligence through its key role in the development of deep neural networks such as those that power large language models such as ChatGPT, whose architectures can be loosely described simply as sequences of linear transformations interspersed with nonlinearities.</p>
-<p>The ubiquitious role of linear algebra in applications old and new means that there are plenty of resources - i.e. other books and/or online content - already available with which one can learn linear algebra; however, after spending more than a decade introducing students to linear algebra for the first time, I haven’t found a resource that addresses the subject the way that I would like to address it. So here we are.</p>
-<p>There are two primary challenges one faces when learning linear algebra at the level where it is usually introduced, around the second or third year of college and usually after a calculus course. The first is that even in an applied linear algebra course the subject is inherently more abstract than any of the math one would have learned previously. For example, where in calculus one considers functions ‘one at a time’, studying, say, properties of a function like <span class="math notranslate nohighlight">\(f(x) = xe^{-x}\)</span> such as its extrema or end behavior, in linear algebra one considers infinite ‘spaces’ of vectors like <span class="math notranslate nohighlight">\(\mathbb{R}^2\)</span> and how such spaces are transformed under a given linear operator. This requires - or forces one to develop - some additional mathematical maturity. The second challenge is that even in an applied linear algebra course, interesting real-world applications are hard to come by until quite a bit of abstract theory has been developed. In my introductory applied linear algebra course it is often not until after mid-semester that we finally can begin to explore meaningful applications.</p>
-<p>Closely tied to both of these challenges is the computational complexity of linear algebra, a topic that is largely ignored in introductory courses but is central to every practical application of linear algebra. Every linear algebra operation is computationally expensive, and it is a disservice to a student of linear algebra to pretend otherwise. Linear systems are never solved via matrix inversion; it’s simply to expensive and error-prone. Eigenvalues are not computed via determinants, determinants are too computationally expensive for anything other than toy examples and thought exercises. And yet, countless hours are spent teaching students techniques such as these that are never used in the real world.</p>
-<p>The purpose of this book is to address the computational aspects of linear algebra head-non while maintaining an introductory presentation of linear algebra. That is why it is written using Jupyter notebooks: so that examples can be coded up and computational costs considered throughout. I hope you will leave with a realistic perspective on how linear algebra is done in the real world.</p>
-<p>As is probably clear, this is an opinionated book that is not for everyone. One central opinion is that someone learning linear algebra needs to do just enough toy problems by hand to understand the operation or topic and then needs to consider the computational aspects of what they are doing: the computational costs, the stability of the operations, and so on. The presentation adheres to this approach throughout.</p>
-</section>
-<section id="outline">
-<h2>Outline<a class="headerlink" href="#outline" title="Link to this heading">#</a></h2>
-<p>This book is a work in progress. Upon completion it will cover many of the usual topics covered in an introductory linear algebra course, including the complete solution of <span class="math notranslate nohighlight">\(A\mathbf{x} = \mathbf{b}\)</span>, eigenvalue and eigenvector calculations, and various matrix decompositions including <span class="math notranslate nohighlight">\(A=LU\)</span>, <span class="math notranslate nohighlight">\(A=QR\)</span>, and the singular value decomposition.</p>
-<p>One area where the book differs significantly from most introductory linear algebra texts is in its treatment of eigenvalue and eigenvector computations. The characteristic equation via the <span class="math notranslate nohighlight">\(2\times 2\)</span> determinant is introduced and used for some calculations by hand, after which the focus is on power iteration and the <span class="math notranslate nohighlight">\(QR\)</span> algorithm. Obviously to be included in an introductory linear algebra course these topics need to be introduced in fairly basic form, but the accompanying exercises to provide the opportunity to go further if desired.</p>
-<p>Applications to be covered include the normal equations of linear regression, Markov chains, recommender systems (PageRank), PCA, neural networks, and perhaps some additional topics from probability theory. A few standard topics that are not practical are omitted; for instance, determinants will be mostly relegated to an appendix.</p>
-</section>
-<section id="software">
-<h2>Software<a class="headerlink" href="#software" title="Link to this heading">#</a></h2>
-<p>All code samples in this book use Python 3.XX and the standard scientific Python stack: NumPy, SciPy, Matplotlib. Indeed, the book itself is written using the Jupyter-books package, and the source can be downloaded via GitHub.</p>
-</section>
-<section id="the-author">
-<h2>The Author<a class="headerlink" href="#the-author" title="Link to this heading">#</a></h2>
-<p>This book was written by Jeremiah W. Johnson, Ph.D. I am a mathematician and machine learning/artificial intelligence research scientist. My Ph.D is in computational abstract algebra, while my current research focuses on self–supervised learning and applications to magnetospheric physics. I am also interested in quantitative finance and applications of machine learning and AI to financial markets. My research has been funded through over $1m in grants from NVIDIA, NASA, and the National Science Foundation. I currently hold the position of Associate Professor in the department of Applied Engineering and Sciences at the University of New Hampshire, where I direct the analytics and data science programs and teach a variety of courses in mathematics and data science. You can find me at <a class="reference internal" href="#jeremiahwjohnson.me"><span class="xref myst">jeremiahwjohnson.me</span></a>.</p>
-</section>
-<div class="toctree-wrapper compound">
-</div>
-</section>
-
+  
     <script type="text/x-thebe-config">
     {
         requestKernel: true,
@@ -480,15 +445,6 @@ document.write(`
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
-    <a class="right-next"
-       href="vectors.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Vectors</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
-    </a>
 </div>
                 </footer>
               
@@ -504,12 +460,9 @@ document.write(`
     <i class="fa-solid fa-list"></i> Contents
   </div>
   <nav class="bd-toc-nav page-toc">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#about-this-book">About This Book</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#outline">Outline</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#software">Software</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-author">The Author</a></li>
+    <ul class="simple visible nav section-nav flex-column">
 </ul>
+
   </nav></div>
 
 </div></div>

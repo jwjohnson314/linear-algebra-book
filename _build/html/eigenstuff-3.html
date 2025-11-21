@@ -410,6 +410,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-real-world-example">A Real-World Example</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-qr-algorithm">The QR Algorithm</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#computational-complexity-of-the-qr-algorithm">Computational Complexity of the QR Algorithm</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bonus-how-is-a-qr-really-calculated">Bonus: How is <span class="math notranslate nohighlight">\(A=QR\)</span> Really Calculated?</a></li>
 </ul>
             </nav>
         </div>
@@ -485,7 +486,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/0a23f28af19ac3ca7ccf8e337cc7529da5a71be96d584fb217432574d8fbbdf8.png" src="_images/0a23f28af19ac3ca7ccf8e337cc7529da5a71be96d584fb217432574d8fbbdf8.png" />
+<img alt="_images/d5fb8e1ae3741f39e81be8359e0e60bcbf43be987a6a5169ed07b22358a01acf.png" src="_images/d5fb8e1ae3741f39e81be8359e0e60bcbf43be987a6a5169ed07b22358a01acf.png" />
 </div>
 </div>
 <p>Now let’s calculate the covariance matrix of the dataset.</p>
@@ -520,7 +521,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/8a9dd44a2a5c6e66164b5a8862b4d69e42df0118ab69463835d9705f789e83d1.png" src="_images/8a9dd44a2a5c6e66164b5a8862b4d69e42df0118ab69463835d9705f789e83d1.png" />
+<img alt="_images/9c901a4aa730aeb30997787871755f6ab42654d6cd3d5190ab687eab525c80c9.png" src="_images/9c901a4aa730aeb30997787871755f6ab42654d6cd3d5190ab687eab525c80c9.png" />
 </div>
 </div>
 <p>Scikit-Learn implements PCA very efficiently, so we can take advantage of it rather than go through the construction of <span class="math notranslate nohighlight">\(Cov(X)\)</span> and the derivation of its eigenvectors and eigenvalues.</p>
@@ -958,7 +959,7 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(array([0.25046224, 0.06502171]), array([0.25046224+0.j, 0.06502171+0.j]))
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(array([0.24140283, 0.06203058]), array([0.24140283+0.j, 0.06203058+0.j]))
 </pre></div>
 </div>
 </div>
@@ -1018,7 +1019,7 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>np.int64(73)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>np.int64(72)
 </pre></div>
 </div>
 </div>
@@ -1083,7 +1084,7 @@ Downloaded from openml.org.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/2f42c624c8a728eb48430eb97b898e6a61e9110431a58744fcb800ff4b15e83e.png" src="_images/2f42c624c8a728eb48430eb97b898e6a61e9110431a58744fcb800ff4b15e83e.png" />
+<img alt="_images/4eb0ba69affa7e45d0e1e59653d657d44d05f244e7dcd33db7e2200881619c15.png" src="_images/4eb0ba69affa7e45d0e1e59653d657d44d05f244e7dcd33db7e2200881619c15.png" />
 </div>
 </div>
 <p>The individual pixel values are not particularly informative, but the first two principal components of the dataset are. Below, they are plotted with each point colored by label. As you can see in the plot, although there is some overlap points with the same label generally cluster together.</p>
@@ -1175,7 +1176,7 @@ Downloaded from openml.org.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.9578571428571429 0.9336428571428571
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.9608571428571429 0.9334285714285714
 </pre></div>
 </div>
 </div>
@@ -1448,8 +1449,417 @@ eigenvectors of A obtained via SciPy below
 </section>
 <section id="computational-complexity-of-the-qr-algorithm">
 <h2>Computational Complexity of the QR Algorithm<a class="headerlink" href="#computational-complexity-of-the-qr-algorithm" title="Link to this heading">#</a></h2>
-<p>The <span class="math notranslate nohighlight">\(QR\)</span> algorithm is computationally expensive because the <span class="math notranslate nohighlight">\(QR\)</span> decomposition is computationally expensive: calculating <span class="math notranslate nohighlight">\(A=QR\)</span> is in general <span class="math notranslate nohighlight">\(\mathcal{O}(n^3)\)</span>, so doing this many times is prohibitive. In practice, there are a number of optimizations used; the most important of which is to begin by bringing our matrix to a form called <em>Hessenberg</em> form.  A matrix is in Hessenberg form if it has no nonzero entries below the first <em>subdiagonal</em>, the diagonal just below the main diagonal. Bringing a matrix to Hessenberg form is itself <span class="math notranslate nohighlight">\(\mathcal{O}(n^3)\)</span> in general, but it can be shown that calculating the <span class="math notranslate nohighlight">\(QR\)</span> decomposition of a matrix in Hessenberg form is <span class="math notranslate nohighlight">\(\mathcal{O}(n^2)\)</span>, so if we the matrix is reduced to Hessenberg form first running the algorithm is computationally far more tractable.</p>
+<p>The <span class="math notranslate nohighlight">\(QR\)</span> algorithm is computationally expensive because the <span class="math notranslate nohighlight">\(QR\)</span> decomposition is computationally expensive: calculating <span class="math notranslate nohighlight">\(A=QR\)</span> is in general <span class="math notranslate nohighlight">\(\mathcal{O}(n^3)\)</span>, so doing this many times is prohibitive. In practice, there are a number of optimizations used; the most important of which is to begin by bringing our matrix to a form called <em>Hessenberg</em> form.  A matrix is in Hessenberg form if it has no nonzero entries below the first subdiagonal, which is the diagonal just below the main diagonal. Bringing a matrix to Hessenberg form is itself <span class="math notranslate nohighlight">\(\mathcal{O}(n^3)\)</span> in general, but it can be shown that calculating the <span class="math notranslate nohighlight">\(QR\)</span> decomposition of a matrix in Hessenberg form is <span class="math notranslate nohighlight">\(\mathcal{O}(n^2)\)</span>, so if we the matrix is reduced to Hessenberg form first running the algorithm is computationally far more tractable.</p>
 <p>Even with the best optimizations currently available, obtaining approximations to an arbitrary degree of accuracy of the eigenvalues and eigenvectors of very large matrices is often computationally intractable. In such situations iterative methods may be used to calculate some of the eigenvalues and eigenvectors based on some stopping condition: for example, an iterative method for PCA could halt when enough eigenvectors and eigenvalues have been calculated to explain the desired proportion of variance observed in the data. Such methods are less precise than exact full eigenvector and eigenvalue calculations, but may be the only choice.</p>
+</section>
+<section id="bonus-how-is-a-qr-really-calculated">
+<h2>Bonus: How is <span class="math notranslate nohighlight">\(A=QR\)</span> Really Calculated?<a class="headerlink" href="#bonus-how-is-a-qr-really-calculated" title="Link to this heading">#</a></h2>
+<p>When we first introduced the <span class="math notranslate nohighlight">\(QR\)</span> decomposition, we described the Gram-Schmidt orthogonalization and used that to calculate it. This is not numerically stable and is generally not used in practice; instead, <span class="math notranslate nohighlight">\(A=QR\)</span> is calculated using Householder transformations. Householder transformations are also used in obtaining Hessenberg form, so they do double-duty in an efficient <span class="math notranslate nohighlight">\(QR\)</span> algorithm implementation. How Householder transformations are used to obtain <span class="math notranslate nohighlight">\(A=QR\)</span> is described below.</p>
+<div class="admonition-definition-householder-matrix admonition">
+<p class="admonition-title">Definition: Householder Matrix</p>
+<p>Given a unit vector <span class="math notranslate nohighlight">\(\mathbf{v}\)</span>, the matrix</p>
+<div class="math notranslate nohighlight">
+\[
+    H = I - 2\mathbf{v}\mathbf{v}^T
+\]</div>
+<p>is called a Householder matrix.</p>
+</div>
+<p>Householder matrices are orthogonal matrices and are sometimes referred to as reflection matrices because they reflect vectors about the hyperplane orthogonal to the vector <span class="math notranslate nohighlight">\(\mathbf{v}\)</span> used in their construction. This is illustrated in the visualization below.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define a vector to reflect across (the normal to the reflection line)</span>
+<span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+<span class="n">v</span> <span class="o">=</span> <span class="n">v</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>  <span class="c1"># Normalize</span>
+
+<span class="c1"># Create the Householder transformation matrix: H = I - 2vv^T</span>
+<span class="n">H</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+
+<span class="c1"># Create some test vectors to transform</span>
+<span class="n">angles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">vectors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">a</span><span class="p">)]</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">angles</span><span class="p">])</span>
+
+<span class="c1"># Apply the Householder transformation</span>
+<span class="n">transformed</span> <span class="o">=</span> <span class="n">vectors</span> <span class="o">@</span> <span class="n">H</span><span class="o">.</span><span class="n">T</span>
+
+<span class="c1"># Set up the plot</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+<span class="c1"># Plot the reflection line (perpendicular to v)</span>
+<span class="c1"># The reflection line is spanned by the vector perpendicular to v</span>
+<span class="n">perp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+<span class="n">line_ext</span> <span class="o">=</span> <span class="mf">1.5</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="o">-</span><span class="n">line_ext</span><span class="o">*</span><span class="n">perp</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">line_ext</span><span class="o">*</span><span class="n">perp</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> 
+        <span class="p">[</span><span class="o">-</span><span class="n">line_ext</span><span class="o">*</span><span class="n">perp</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line_ext</span><span class="o">*</span><span class="n">perp</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> 
+        <span class="s1">&#39;g--&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Reflection Line&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+
+<span class="c1"># Plot the normal vector v</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">arrow</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">head_width</span><span class="o">=</span><span class="mf">0.08</span><span class="p">,</span> <span class="n">head_length</span><span class="o">=</span><span class="mf">0.08</span><span class="p">,</span> 
+         <span class="n">fc</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="n">ec</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Normal Vector v&#39;</span><span class="p">)</span>
+
+<span class="c1"># Plot original and transformed vectors</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">orig</span><span class="p">,</span> <span class="n">trans</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">vectors</span><span class="p">,</span> <span class="n">transformed</span><span class="p">)):</span>
+    <span class="c1"># Original vectors in blue</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">arrow</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">orig</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">orig</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">head_width</span><span class="o">=</span><span class="mf">0.06</span><span class="p">,</span> <span class="n">head_length</span><span class="o">=</span><span class="mf">0.06</span><span class="p">,</span>
+             <span class="n">fc</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">ec</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
+    
+    <span class="c1"># Transformed vectors in red</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">arrow</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">trans</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">trans</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">head_width</span><span class="o">=</span><span class="mf">0.06</span><span class="p">,</span> <span class="n">head_length</span><span class="o">=</span><span class="mf">0.06</span><span class="p">,</span>
+             <span class="n">fc</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">ec</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
+    
+    <span class="c1"># Draw connecting lines to show the reflection</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">orig</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">trans</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="p">[</span><span class="n">orig</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">trans</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> 
+            <span class="s1">&#39;k--&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
+
+<span class="c1"># Create legend manually</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.patches</span><span class="w"> </span><span class="kn">import</span> <span class="n">FancyArrow</span>
+<span class="n">blue_arrow</span> <span class="o">=</span> <span class="n">FancyArrow</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> 
+                        <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span>
+<span class="n">red_arrow</span> <span class="o">=</span> <span class="n">FancyArrow</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> 
+                       <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="n">blue_arrow</span><span class="p">,</span> <span class="n">red_arrow</span><span class="p">,</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_lines</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ax</span><span class="o">.</span><span class="n">patches</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> 
+          <span class="p">[</span><span class="s1">&#39;Original Vectors&#39;</span><span class="p">,</span> <span class="s1">&#39;Reflected Vectors&#39;</span><span class="p">,</span> <span class="s1">&#39;Reflection Line&#39;</span><span class="p">,</span> <span class="s1">&#39;Normal Vector v&#39;</span><span class="p">],</span>
+          <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper right&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="o">-</span><span class="mf">1.6</span><span class="p">,</span> <span class="mf">1.6</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">1.6</span><span class="p">,</span> <span class="mf">1.6</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Householder Transformation in 2D</span><span class="se">\n</span><span class="s1">H = I - 2vvᵀ&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># Print the transformation matrix</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Householder Matrix H:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">H</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Normal vector v: </span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Reflection line direction: </span><span class="si">{</span><span class="n">perp</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/5a2522187472e5be7c6bd374bca38889a9cb9cfe7aee6348732b2abef1f07033.png" src="_images/5a2522187472e5be7c6bd374bca38889a9cb9cfe7aee6348732b2abef1f07033.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Householder Matrix H:
+[[ 0.6 -0.8]
+ [-0.8 -0.6]]
+
+Normal vector v: [0.4472136  0.89442719]
+Reflection line direction: [-0.89442719  0.4472136 ]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now suppose we wish to find the <span class="math notranslate nohighlight">\(QR\)</span> factorization of <span class="math notranslate nohighlight">\(A\)</span>. We will start with a very specific Householder matrix <span class="math notranslate nohighlight">\(Q_1\)</span>. Take <span class="math notranslate nohighlight">\(A_i\)</span> to be an arbitrary column vector of <span class="math notranslate nohighlight">\(A\)</span> with magnitude <span class="math notranslate nohighlight">\(||A_i|| = \alpha\)</span>. Set <span class="math notranslate nohighlight">\(\mathbf{u} = A_i - \alpha\mathbf{e}_1\)</span>, where <span class="math notranslate nohighlight">\(\mathbf{e}_1\)</span> is the first standard basis vector, let <span class="math notranslate nohighlight">\(\mathbf{v} = \mathbf{u}/||\mathbf{u}||\)</span>, and define <span class="math notranslate nohighlight">\(Q_1=I-2\mathbf{v}\mathbf{v}^T\)</span>. Then</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    Q_1A_i = \begin{bmatrix}
+                \alpha \\
+                0 \\
+                \vdots \\
+                0
+            \end{bmatrix}.
+\end{split}\]</div>
+<p>Verifying this is a good exercise. Now we can use this process to produce the <span class="math notranslate nohighlight">\(QR\)</span> factorization of <span class="math notranslate nohighlight">\(A\)</span> as follows. First, instead of multiplying <span class="math notranslate nohighlight">\(Q_1\)</span> and the column <span class="math notranslate nohighlight">\(A_1\)</span>, multiply <span class="math notranslate nohighlight">\(Q_1\)</span> and the whole matrix <span class="math notranslate nohighlight">\(A\)</span> to produce</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    Q_1A = \left[\begin{array}{cccc}
+                \alpha &amp; * &amp; \dots &amp; * \\
+                0 &amp; &amp; &amp; \\
+                \vdots &amp; &amp; A' &amp; \\
+                0 &amp; &amp; &amp;
+            \end{array}\right].
+\end{split}\]</div>
+<p>Now extract <span class="math notranslate nohighlight">\(A'\)</span> from the product above and repeat the procedure, picking an arbitrary column of <span class="math notranslate nohighlight">\(A'\)</span> and determining a new <span class="math notranslate nohighlight">\(\alpha\)</span>, <span class="math notranslate nohighlight">\(\mathbf{u}\)</span>, and <span class="math notranslate nohighlight">\(\mathbf{v}\)</span> based on it, from which a new Householder matrix <span class="math notranslate nohighlight">\(Q_2'\)</span> can be constructed. Note, however, that <span class="math notranslate nohighlight">\(Q_2'\)</span> will be smaller than <span class="math notranslate nohighlight">\(Q_1\)</span>, and we need them to be the same size for what follows. So define</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    Q_2 = \left[\begin{array}{cccc}
+            1 &amp; 0 &amp; \dots &amp; 0 \\
+            \vdots &amp; &amp; Q_2' &amp; \\
+            0 &amp; &amp; &amp; 
+          \end{array}\right],
+\end{split}\]</div>
+<p>and in general for <span class="math notranslate nohighlight">\(1 \leq k \leq n\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    Q_k = \left[\begin{array}{cc}
+            I_{k-1} &amp; 0 \\
+            0 &amp; Q_k'
+          \end{array}\right].
+\end{split}\]</div>
+<p>Iterating this process produces an upper triangular matrix <span class="math notranslate nohighlight">\(R = Q_tQ_{t-1}\cdots Q_1A\)</span>. Invert (transpose) the <span class="math notranslate nohighlight">\(Q_i\)</span>’s and we have <span class="math notranslate nohighlight">\(Q_1^TQ_2^T\cdots Q_t^TR = A\)</span>. The product of orthogonal matrices is an orthogonal matrix, so without loss of generality let <span class="math notranslate nohighlight">\(Q = Q_1^TQ_2^T\cdots Q_t^T\)</span>, and we have <span class="math notranslate nohighlight">\(A=QR\)</span>, the product of an orthogonal matrix and an upper triangular matrix, as desired.</p>
+<p><strong>Example:</strong> Let’s walk through a small example in detail to illustrate the algorithm.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[[2. 1. 2. 3.]
+ [1. 1. 2. 4.]
+ [2. 3. 4. 1.]
+ [1. 2. 3. 4.]]
+</pre></div>
+</div>
+</div>
+</div>
+<p><span class="math notranslate nohighlight">\(A\)</span> has four columns, so we will need to iterate the procedure outlined above three times to compute <span class="math notranslate nohighlight">\(QR\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Step 1: first column</span>
+
+<span class="c1"># get the first column data</span>
+<span class="n">A1</span> <span class="o">=</span> <span class="n">A</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># make sure numpy recognizes this is a column vector </span>
+<span class="n">alpha</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">A1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Norm of A1: alpha = </span><span class="si">{</span><span class="n">alpha</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="c1"># calculate u</span>
+<span class="n">u</span> <span class="o">=</span> <span class="n">A1</span> <span class="o">-</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+
+<span class="c1"># calculate v</span>
+<span class="n">v</span> <span class="o">=</span> <span class="n">u</span> <span class="o">/</span> <span class="n">la</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+
+<span class="c1"># calculate Q1</span>
+<span class="n">Q1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">v</span> <span class="o">@</span> <span class="n">v</span><span class="o">.</span><span class="n">T</span>
+
+<span class="c1"># display intermediate result</span>
+<span class="n">tmp</span> <span class="o">=</span> <span class="n">Q1</span> <span class="o">@</span> <span class="n">A</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Intermediate step: Q1 and first column and row of R obtained</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="n">decimals</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Norm of A1: alpha = 3.1622776601683795
+
+Intermediate step: Q1 and first column and row of R obtained
+
+[[ 3.16  3.48  5.38  5.06]
+ [-0.   -1.13 -0.9   2.23]
+ [ 0.   -1.26 -1.81 -2.54]
+ [ 0.   -0.13  0.1   2.23]]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># step 2: second column</span>
+
+<span class="c1"># get A&#39; and associated data</span>
+<span class="n">A_prime</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span> <span class="mi">1</span><span class="p">:]</span>
+<span class="n">A2</span> <span class="o">=</span> <span class="n">A_prime</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="c1"># make sure numpy recognizes this is a column vector</span>
+<span class="n">alpha2</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">A2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Norm of A2: </span><span class="si">{</span><span class="n">alpha2</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="c1">#calculate u2</span>
+<span class="n">u2</span> <span class="o">=</span> <span class="n">A2</span> <span class="o">-</span> <span class="n">alpha2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+
+<span class="n">v2</span> <span class="o">=</span> <span class="n">u2</span> <span class="o">/</span> <span class="n">la</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">u2</span><span class="p">)</span>
+
+<span class="c1"># calculate Q1</span>
+<span class="n">Q_prime</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">v2</span> <span class="o">@</span> <span class="n">v2</span><span class="o">.</span><span class="n">T</span>
+
+<span class="c1"># display intermediate result</span>
+<span class="n">tmp2</span> <span class="o">=</span> <span class="n">Q_prime</span> <span class="o">@</span> <span class="n">A_prime</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;second column and row of R obtained, Q</span><span class="se">\&#39;</span><span class="s1"> obtained but still needs to be embedded in 4x4 matrix</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span> 
+<span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">tmp2</span><span class="p">,</span> <span class="n">decimals</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Norm of A2: 1.70293863659264
+
+second column and row of R obtained, Q&#39; obtained but still needs to be embedded in 4x4 matrix
+
+[[ 1.7   1.94  0.23]
+ [-0.   -0.54 -3.43]
+ [-0.    0.23  2.13]]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># display Q_prime, this needs to be embedded in a 4x4 matrix next</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">Q_prime</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[[-0.66500079 -0.74278135 -0.07778057]
+ [-0.74278135  0.66863431 -0.03469906]
+ [-0.07778057 -0.03469906  0.99636648]]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># embed Q&#39; in 4x4 matrix Q2</span>
+<span class="n">Q2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="n">Q2</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">Q2</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span> <span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="n">Q_prime</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Q2 obtained</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">Q2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Q2 obtained
+
+[[ 1.          0.          0.          0.        ]
+ [ 0.         -0.66500079 -0.74278135 -0.07778057]
+ [ 0.         -0.74278135  0.66863431 -0.03469906]
+ [ 0.         -0.07778057 -0.03469906  0.99636648]]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># step 3: third column</span>
+
+<span class="c1"># get A&#39; and associated data</span>
+<span class="n">A_prime_prime</span> <span class="o">=</span> <span class="n">tmp2</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span> <span class="mi">1</span><span class="p">:]</span>
+<span class="n">A3</span> <span class="o">=</span> <span class="n">A_prime_prime</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">alpha3</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">A3</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Norm of A3: </span><span class="si">{</span><span class="n">alpha3</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="c1">#calculate u3</span>
+<span class="n">u3</span> <span class="o">=</span> <span class="n">A3</span> <span class="o">-</span> <span class="n">alpha3</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+
+<span class="n">v3</span> <span class="o">=</span> <span class="n">u3</span> <span class="o">/</span> <span class="n">la</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">u3</span><span class="p">)</span>
+
+<span class="c1"># calculate Q&#39;</span>
+<span class="n">Q_prime_prime</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">v3</span> <span class="o">@</span> <span class="n">v3</span><span class="o">.</span><span class="n">T</span>
+
+<span class="c1"># display intermediate result</span>
+<span class="n">tmp3</span> <span class="o">=</span> <span class="n">Q_prime_prime</span> <span class="o">@</span> <span class="n">A_prime_prime</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Remaining rows and columns of R obtained, Q</span><span class="se">\&#39;\&#39;</span><span class="s1"> obtained but still needs to be embedded in a 4x4 matrix&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">tmp3</span><span class="p">,</span> <span class="n">decimals</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Norm of A3: 0.5872202195147039
+
+Remaining rows and columns of R obtained, Q&#39;&#39; obtained but still needs to be embedded in a 4x4 matrix
+[[0.59 3.99]
+ [0.   0.63]]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># embed Q_prime_prime in a 4x4 matrix</span>
+
+<span class="n">Q3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="n">Q3</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">Q3</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">Q3</span><span class="p">[</span><span class="mi">2</span><span class="p">:,</span> <span class="mi">2</span><span class="p">:]</span> <span class="o">=</span> <span class="n">Q_prime_prime</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Q3 obtained</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="n">Q3</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Q3 obtained
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[ 1.        ,  0.        ,  0.        ,  0.        ],
+       [ 0.        ,  1.        ,  0.        ,  0.        ],
+       [ 0.        ,  0.        , -0.9213666 ,  0.38869473],
+       [ 0.        ,  0.        ,  0.38869473,  0.9213666 ]])
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can now assemble <span class="math notranslate nohighlight">\(R\)</span>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># compute R, verify upper triangular</span>
+<span class="n">R</span> <span class="o">=</span> <span class="n">Q3</span> <span class="o">@</span> <span class="n">Q2</span> <span class="o">@</span> <span class="n">Q1</span> <span class="o">@</span> <span class="n">A</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">decimals</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[[ 3.16  3.48  5.38  5.06]
+ [-0.    1.7   1.94  0.23]
+ [-0.   -0.    0.59  3.99]
+ [ 0.    0.    0.    0.63]]
+</pre></div>
+</div>
+</div>
+</div>
+<p><span class="math notranslate nohighlight">\(R\)</span> is clearly an upper triangular matrix; let’s compute <span class="math notranslate nohighlight">\(Q\)</span> next.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Final step: calculate Q as the product of the inverses of the Qs above</span>
+<span class="n">Q</span> <span class="o">=</span> <span class="n">Q1</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">Q2</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">Q3</span><span class="o">.</span><span class="n">T</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">Q</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[[ 0.63245553 -0.70466426 -0.05872202  0.31622777]
+ [ 0.31622777 -0.05872202  0.70466426 -0.63245553]
+ [ 0.63245553  0.46977618 -0.5284982  -0.31622777]
+ [ 0.31622777  0.5284982   0.46977618  0.63245553]]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Lets confirm that <span class="math notranslate nohighlight">\(Q\)</span> is an orthogonal matrix:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">Q</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">Q</span><span class="p">,</span> <span class="n">decimals</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[ 1.,  0., -0., -0.],
+       [ 0.,  1.,  0., -0.],
+       [-0.,  0.,  1.,  0.],
+       [-0., -0.,  0.,  1.]])
+</pre></div>
+</div>
+</div>
+</div>
+<p>Finally, let’s verify that <span class="math notranslate nohighlight">\(A=QR\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Verify: A=QR</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">Q</span> <span class="o">@</span> <span class="n">R</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[[2. 1. 2. 3.]
+ [1. 1. 2. 4.]
+ [2. 3. 4. 1.]
+ [1. 2. 3. 4.]]
+</pre></div>
+</div>
+</div>
+</div>
+<p>The algorithm indeed produces A.</p>
 </section>
 </section>
 
@@ -1523,6 +1933,7 @@ eigenvectors of A obtained via SciPy below
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-real-world-example">A Real-World Example</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-qr-algorithm">The QR Algorithm</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#computational-complexity-of-the-qr-algorithm">Computational Complexity of the QR Algorithm</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bonus-how-is-a-qr-really-calculated">Bonus: How is <span class="math notranslate nohighlight">\(A=QR\)</span> Really Calculated?</a></li>
 </ul>
   </nav></div>
 

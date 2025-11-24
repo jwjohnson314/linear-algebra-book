@@ -30,7 +30,7 @@ All code samples in this book use Python 3.XX and the standard scientific Python
 
 ## Errors/Typos/Omissions
 
-If you spot an error or a typo please let me know! You can send me an email at jeremiah.johnson@unh.edu or submit a pull request. Do you have a topic you'd like to see included, or see a topic whose treatment you'd like to modify? Submit a pull request and I'll consider incorporating it.
+If you spot an error or a typo please let me know! You can open an issue using the link in the dropdown menu accessed via the GitHub icon at the top of the page. Do you have a topic you'd like to see included, or see a topic whose treatment you'd like to modify? Submit a pull request and I'll consider incorporating it.
 
 ## Donations
 

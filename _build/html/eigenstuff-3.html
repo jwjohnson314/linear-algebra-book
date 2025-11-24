@@ -486,7 +486,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/94983502e065a0106e22d2e98b765c43dc1aabd829219735c6ab4a9429449e34.png" src="_images/94983502e065a0106e22d2e98b765c43dc1aabd829219735c6ab4a9429449e34.png" />
+<img alt="_images/80930b1cd438c21c8ac049311598105db42bc80f1a17fcb303f85ce9decd6a25.png" src="_images/80930b1cd438c21c8ac049311598105db42bc80f1a17fcb303f85ce9decd6a25.png" />
 </div>
 </div>
 <p>Now let’s calculate the covariance matrix of the dataset.</p>
@@ -521,7 +521,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/786759f1885d709f4cb9c8b4fc761ce0809e2cbf063206c305a58192e1432e49.png" src="_images/786759f1885d709f4cb9c8b4fc761ce0809e2cbf063206c305a58192e1432e49.png" />
+<img alt="_images/ae520a93636dd8be68ada1df141e4f83d7675df51679bad37bcc940efbc5943a.png" src="_images/ae520a93636dd8be68ada1df141e4f83d7675df51679bad37bcc940efbc5943a.png" />
 </div>
 </div>
 <p>Scikit-Learn implements PCA very efficiently, so we can take advantage of it rather than go through the construction of <span class="math notranslate nohighlight">\(Cov(X)\)</span> and the derivation of its eigenvectors and eigenvalues.</p>
@@ -959,7 +959,7 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(array([0.24585667, 0.05907516]), array([0.24585667+0.j, 0.05907516+0.j]))
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(array([0.24191147, 0.06197275]), array([0.24191147+0.j, 0.06197275+0.j]))
 </pre></div>
 </div>
 </div>
@@ -1019,7 +1019,7 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>np.int64(72)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>np.int64(71)
 </pre></div>
 </div>
 </div>
@@ -1084,7 +1084,7 @@ Downloaded from openml.org.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/b3e26151e75215b8d86a1a6cfdc15e523bcfdea087b230b1ec36c6bd52ff7df8.png" src="_images/b3e26151e75215b8d86a1a6cfdc15e523bcfdea087b230b1ec36c6bd52ff7df8.png" />
+<img alt="_images/98dc4daf46fefc92dacf28fae092399f027670da6cd6377075f18e6f71a2b29c.png" src="_images/98dc4daf46fefc92dacf28fae092399f027670da6cd6377075f18e6f71a2b29c.png" />
 </div>
 </div>
 <p>The individual pixel values are not particularly informative, but the first two principal components of the dataset are. Below, they are plotted with each point colored by label. As you can see in the plot, although there is some overlap points with the same label generally cluster together.</p>
@@ -1176,7 +1176,7 @@ Downloaded from openml.org.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.9602857142857143 0.9335714285714286
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.961 0.9342142857142857
 </pre></div>
 </div>
 </div>
@@ -1199,7 +1199,7 @@ Downloaded from openml.org.
 </ol>
 </div>
 <p>That is, at each iteration of the <span class="math notranslate nohighlight">\(QR\)</span> algorithm, we calculate the <span class="math notranslate nohighlight">\(QR\)</span> decomposition of <span class="math notranslate nohighlight">\(A\)</span>, then reverse the order of the terms and multiply to produce a ‘new’ <span class="math notranslate nohighlight">\(A\)</span>. We continue this for as many iterations as desired.</p>
-<p>This algorithm is surprisingly robust: the only condition is that the eigenvalues of our matrix have distinct magnitudes. Under that assumption, the output of this algorithm is a <em>quasi-triangular</em> matrix (defined precisely below) referred to as the <em>Schur</em> form of <span class="math notranslate nohighlight">\(A\)</span>, which in the best case will be diagonal, and because the eigenvalues of a diagonal matrix are precisely the diagonal entries we can simply read them off. If the output of the algorithm is not diagonal, it will still be in a form from which we can obtain the eigenvalues of <span class="math notranslate nohighlight">\(A\)</span> without too much trouble as described below.</p>
+<p>The output of this algorithm is a <em>quasi-triangular</em> matrix (defined precisely below) referred to as the <em>Schur</em> form of <span class="math notranslate nohighlight">\(A\)</span>, which in the best case will be diagonal, and because the eigenvalues of a diagonal matrix are precisely the diagonal entries we can simply read them off. If the output of the algorithm is not diagonal, it will still be in a form from which we can obtain the eigenvalues of <span class="math notranslate nohighlight">\(A\)</span> without too much trouble as described below. And the algorithm is surprisingly robust: the only condition is that the eigenvalues of our matrix have distinct magnitudes.</p>
 <p>Before we go further let’s illustrate with an example.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1210,7 +1210,9 @@ Downloaded from openml.org.
 <span class="nb">print</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
 
-<span class="n">A_new</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty_like</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+<span class="n">L</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">eig</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+
+<span class="n">A_new</span> <span class="o">=</span> <span class="n">A</span>
 <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
     <span class="n">Q</span><span class="p">,</span> <span class="n">R</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">qr</span><span class="p">(</span><span class="n">A_new</span><span class="p">)</span>
     <span class="n">A_new</span> <span class="o">=</span> <span class="n">R</span> <span class="o">@</span> <span class="n">Q</span>
@@ -1219,8 +1221,6 @@ Downloaded from openml.org.
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="o">*</span><span class="mi">20</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">A_new</span><span class="p">,</span> <span class="n">decimals</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-
-<span class="n">L</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">eig</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;eigenvalues of A obtained via SciPy below&#39;</span><span class="p">)</span> 
 <span class="nb">print</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
@@ -1239,11 +1239,11 @@ Downloaded from openml.org.
 
 Matrix A_{new} below
 ====================
-[[0. 0. 0. 0. 0.]
- [0. 0. 0. 0. 0.]
- [0. 0. 0. 0. 0.]
- [0. 0. 0. 0. 0.]
- [0. 0. 0. 0. 0.]]
+[[ 7.28 -0.38  0.64 -0.62  0.18]
+ [ 0.    5.2  -0.58 -0.42  0.58]
+ [ 0.    0.    4.2  -0.2   0.23]
+ [ 0.   -0.    0.    2.28 -0.29]
+ [ 0.   -0.    0.    0.    1.04]]
 
 
 eigenvalues of A obtained via SciPy below
@@ -1403,16 +1403,16 @@ eigenvalues of A obtained via SciPy below
 
 Matrix A_{new} below
 ====================
-[[ 4.70803959e+18 -4.74892463e+18 -4.42388650e+18  4.75580088e+18
-   4.79654337e+18]
- [ 4.63492763e+14  4.66142000e+18  4.39045168e+18 -4.40170949e+18
-  -4.75068381e+18]
- [-7.85451240e+10 -7.45356162e+14  4.61194433e+18  4.86678349e+18
-  -4.50146857e+18]
- [ 1.02327397e+07 -1.06991221e+11 -6.39603093e+14  4.56890366e+18
-  -4.46023849e+18]
- [ 1.03170000e+03 -1.08005899e+07 -6.45810714e+10  4.60101933e+14
-   4.52319857e+18]]
+[[ 4.61988257e+18 -4.11566719e+17  2.15939436e+18  7.43924066e+18
+   4.98530076e+18]
+ [ 0.00000000e+00  3.40813024e+18 -1.16214901e+19  3.74701359e+18
+   4.40966551e+18]
+ [ 0.00000000e+00  3.52219611e+18  9.03224175e+18 -3.33062656e+17
+   5.12111775e+18]
+ [ 0.00000000e+00 -5.32838278e+16 -6.68026867e+16  8.31815462e+18
+   2.84802436e+18]
+ [ 0.00000000e+00  0.00000000e+00  0.00000000e+00 -0.00000000e+00
+  -2.30489203e+18]]
 
 
 eigenvalues of A obtained via SciPy below
@@ -1423,16 +1423,16 @@ eigenvalues of A obtained via SciPy below
 
 estimated eigenvectors of A stored in Q_new below
 ====================
-[[ 1.89435555e-08 -3.65699289e-06 -3.21432241e-04 -2.13441772e-02
-   9.99772135e-01]
- [ 3.58883520e-06 -5.17848337e-04 -3.06338383e-02 -9.99302623e-01
-  -2.13440044e-02]
- [-3.49167370e-04  3.32338382e-02  9.98977896e-01 -3.06340008e-02
-  -3.32708108e-04]
- [ 2.15438914e-02 -9.99215251e-01  3.32339051e-02 -5.00833894e-04
-  -3.66280460e-06]
- [ 9.99767842e-01  2.15435924e-02 -3.67152449e-04  3.68110890e-06
-   2.04058624e-08]]
+[[ 1.00000000e+00  0.00000000e+00  0.00000000e+00  0.00000000e+00
+   0.00000000e+00]
+ [ 0.00000000e+00 -1.05474321e-01  6.74253650e-01 -4.23959303e-01
+  -5.95412204e-01]
+ [ 0.00000000e+00 -3.70761420e-01  1.13946592e-01  8.31622173e-01
+  -3.97437675e-01]
+ [ 0.00000000e+00  5.56975980e-01 -4.99266392e-01 -4.66970747e-04
+  -6.63709733e-01]
+ [ 0.00000000e+00  7.35655418e-01  5.32100797e-01  3.58696046e-01
+   2.16834023e-01]]
 
 
 eigenvectors of A obtained via SciPy below

@@ -486,7 +486,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/80930b1cd438c21c8ac049311598105db42bc80f1a17fcb303f85ce9decd6a25.png" src="_images/80930b1cd438c21c8ac049311598105db42bc80f1a17fcb303f85ce9decd6a25.png" />
+<img alt="_images/1dcc198f6f8bc3a30541669572e75d690f3d32dd9e494f8a6fa97d1e306ccd9d.png" src="_images/1dcc198f6f8bc3a30541669572e75d690f3d32dd9e494f8a6fa97d1e306ccd9d.png" />
 </div>
 </div>
 <p>Now let’s calculate the covariance matrix of the dataset.</p>
@@ -521,7 +521,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/ae520a93636dd8be68ada1df141e4f83d7675df51679bad37bcc940efbc5943a.png" src="_images/ae520a93636dd8be68ada1df141e4f83d7675df51679bad37bcc940efbc5943a.png" />
+<img alt="_images/232c1a6bbacabc5c5070cd17efddea56ed5920e44f458b59231a762192c2ddb0.png" src="_images/232c1a6bbacabc5c5070cd17efddea56ed5920e44f458b59231a762192c2ddb0.png" />
 </div>
 </div>
 <p>Scikit-Learn implements PCA very efficiently, so we can take advantage of it rather than go through the construction of <span class="math notranslate nohighlight">\(Cov(X)\)</span> and the derivation of its eigenvectors and eigenvalues.</p>
@@ -959,7 +959,7 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(array([0.24191147, 0.06197275]), array([0.24191147+0.j, 0.06197275+0.j]))
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(array([0.24287063, 0.06199601]), array([0.06199601+0.j, 0.24287063+0.j]))
 </pre></div>
 </div>
 </div>
@@ -1019,7 +1019,7 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>np.int64(71)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>np.int64(72)
 </pre></div>
 </div>
 </div>
@@ -1084,7 +1084,7 @@ Downloaded from openml.org.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/98dc4daf46fefc92dacf28fae092399f027670da6cd6377075f18e6f71a2b29c.png" src="_images/98dc4daf46fefc92dacf28fae092399f027670da6cd6377075f18e6f71a2b29c.png" />
+<img alt="_images/27e03d02eb153e98268c5f3e1c58647b714cf69957ce120557d25f854476fd99.png" src="_images/27e03d02eb153e98268c5f3e1c58647b714cf69957ce120557d25f854476fd99.png" />
 </div>
 </div>
 <p>The individual pixel values are not particularly informative, but the first two principal components of the dataset are. Below, they are plotted with each point colored by label. As you can see in the plot, although there is some overlap points with the same label generally cluster together.</p>
@@ -1176,7 +1176,7 @@ Downloaded from openml.org.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.961 0.9342142857142857
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.9598571428571429 0.9313571428571429
 </pre></div>
 </div>
 </div>
@@ -1360,7 +1360,9 @@ eigenvalues of A obtained via SciPy below
 <span class="nb">print</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
 
-<span class="n">A_new</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty_like</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+<span class="n">L</span><span class="p">,</span> <span class="n">V</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">eig</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+
+<span class="n">A_new</span> <span class="o">=</span> <span class="n">A</span>
 <span class="n">Q_new</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">200</span><span class="p">):</span>
     <span class="n">Q</span><span class="p">,</span> <span class="n">R</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">qr</span><span class="p">(</span><span class="n">A_new</span><span class="p">)</span>
@@ -1371,8 +1373,6 @@ eigenvalues of A obtained via SciPy below
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="o">*</span><span class="mi">20</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">A_new</span><span class="p">,</span> <span class="n">decimals</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-
-<span class="n">L</span><span class="p">,</span> <span class="n">V</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">eig</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;eigenvalues of A obtained via SciPy below&#39;</span><span class="p">)</span> 
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="o">*</span><span class="mi">20</span><span class="p">)</span>
@@ -1403,16 +1403,11 @@ eigenvalues of A obtained via SciPy below
 
 Matrix A_{new} below
 ====================
-[[ 4.61988257e+18 -4.11566719e+17  2.15939436e+18  7.43924066e+18
-   4.98530076e+18]
- [ 0.00000000e+00  3.40813024e+18 -1.16214901e+19  3.74701359e+18
-   4.40966551e+18]
- [ 0.00000000e+00  3.52219611e+18  9.03224175e+18 -3.33062656e+17
-   5.12111775e+18]
- [ 0.00000000e+00 -5.32838278e+16 -6.68026867e+16  8.31815462e+18
-   2.84802436e+18]
- [ 0.00000000e+00  0.00000000e+00  0.00000000e+00 -0.00000000e+00
-  -2.30489203e+18]]
+[[ 7.28 -0.38  0.64 -0.62  0.18]
+ [ 0.    5.2  -0.58 -0.42  0.58]
+ [ 0.    0.    4.2  -0.2   0.23]
+ [ 0.   -0.    0.    2.28 -0.29]
+ [ 0.   -0.    0.    0.    1.04]]
 
 
 eigenvalues of A obtained via SciPy below
@@ -1423,16 +1418,11 @@ eigenvalues of A obtained via SciPy below
 
 estimated eigenvectors of A stored in Q_new below
 ====================
-[[ 1.00000000e+00  0.00000000e+00  0.00000000e+00  0.00000000e+00
-   0.00000000e+00]
- [ 0.00000000e+00 -1.05474321e-01  6.74253650e-01 -4.23959303e-01
-  -5.95412204e-01]
- [ 0.00000000e+00 -3.70761420e-01  1.13946592e-01  8.31622173e-01
-  -3.97437675e-01]
- [ 0.00000000e+00  5.56975980e-01 -4.99266392e-01 -4.66970747e-04
-  -6.63709733e-01]
- [ 0.00000000e+00  7.35655418e-01  5.32100797e-01  3.58696046e-01
-   2.16834023e-01]]
+[[ 0.65053349 -0.44246486  0.50806133 -0.33227413 -0.11179723]
+ [ 0.68172539  0.02590801 -0.63623951  0.35244707 -0.07456285]
+ [ 0.2548016   0.62933016 -0.08423581 -0.60501288  0.4072879 ]
+ [ 0.15459745  0.63358629  0.41576743  0.28517443 -0.56611043]
+ [ 0.15242193  0.07788185  0.39637702  0.56392369  0.70397251]]
 
 
 eigenvectors of A obtained via SciPy below

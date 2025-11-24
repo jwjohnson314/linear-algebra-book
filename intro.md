@@ -26,7 +26,15 @@ Applications to be covered include the normal equations of linear regression, Ma
 
 ## Software
 
-All code samples in this book use Python 3.XX and the standard scientific Python stack: NumPy, SciPy, Matplotlib. Indeed, the book itself is written using the Jupyter-books package, and the source can be downloaded via GitHub.
+All code samples in this book use Python 3.XX and the standard scientific Python stack: NumPy, SciPy, Matplotlib. Indeed, the book itself is written using the Jupyter-books package, and the source can be downloaded or forked from GitHub.
+
+## Errors/Typos/Omissions
+
+If you spot an error or a typo please let me know! You can send me an email at jeremiah.johnson@unh.edu or submit a pull request. Do you have a topic you'd like to see included, or see a topic whose treatment you'd like to modify? Submit a pull request and I'll consider incorporating it.
+
+## Donations
+
+This book is liberally licensed using the MIT license so that it can be used as an open educational resource. If you benefit from it and would like to support its maintenance as well as the development of similar open educational resources, you can click the link at the bottom right of any page to make a donation. I appreciate your support!
 
 ## The Author
 

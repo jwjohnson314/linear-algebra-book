@@ -209,6 +209,7 @@
 <li class="toctree-l1"><a class="reference internal" href="eigenstuff-problem-set-2.html">Problem Set 8: Power Iteration</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Approximating Eigenvectors and Eigenvalues 2: The <span class="math notranslate nohighlight">\(QR\)</span> Algorithm</a></li>
 <li class="toctree-l1"><a class="reference internal" href="eigenstuff-problem-set-3.html">Problem Set 9: PCA and the QR Algorithm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="svd.html">The Singular Value Decomposition</a></li>
 </ul>
 
     </div>
@@ -486,7 +487,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/1dcc198f6f8bc3a30541669572e75d690f3d32dd9e494f8a6fa97d1e306ccd9d.png" src="_images/1dcc198f6f8bc3a30541669572e75d690f3d32dd9e494f8a6fa97d1e306ccd9d.png" />
+<img alt="_images/0ef674736e9cdd748887528ea1eed306b7132f5af987f8e0c9a6ec1fc7291028.png" src="_images/0ef674736e9cdd748887528ea1eed306b7132f5af987f8e0c9a6ec1fc7291028.png" />
 </div>
 </div>
 <p>Now let’s calculate the covariance matrix of the dataset.</p>
@@ -521,7 +522,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/232c1a6bbacabc5c5070cd17efddea56ed5920e44f458b59231a762192c2ddb0.png" src="_images/232c1a6bbacabc5c5070cd17efddea56ed5920e44f458b59231a762192c2ddb0.png" />
+<img alt="_images/9304c790adf0d35ff957d8844e430c4963a1bb43bc7205c142f424552f2bc5c7.png" src="_images/9304c790adf0d35ff957d8844e430c4963a1bb43bc7205c142f424552f2bc5c7.png" />
 </div>
 </div>
 <p>Scikit-Learn implements PCA very efficiently, so we can take advantage of it rather than go through the construction of <span class="math notranslate nohighlight">\(Cov(X)\)</span> and the derivation of its eigenvectors and eigenvalues.</p>
@@ -959,7 +960,7 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(array([0.24287063, 0.06199601]), array([0.06199601+0.j, 0.24287063+0.j]))
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(array([0.24982177, 0.06041814]), array([0.24982177+0.j, 0.06041814+0.j]))
 </pre></div>
 </div>
 </div>
@@ -1019,7 +1020,7 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>np.int64(72)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>np.int64(73)
 </pre></div>
 </div>
 </div>
@@ -1084,7 +1085,7 @@ Downloaded from openml.org.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/27e03d02eb153e98268c5f3e1c58647b714cf69957ce120557d25f854476fd99.png" src="_images/27e03d02eb153e98268c5f3e1c58647b714cf69957ce120557d25f854476fd99.png" />
+<img alt="_images/ba99a2f5494eb22233d2e11bf4a2766214177f3456d4e45dd296d3229b3a1d10.png" src="_images/ba99a2f5494eb22233d2e11bf4a2766214177f3456d4e45dd296d3229b3a1d10.png" />
 </div>
 </div>
 <p>The individual pixel values are not particularly informative, but the first two principal components of the dataset are. Below, they are plotted with each point colored by label. As you can see in the plot, although there is some overlap points with the same label generally cluster together.</p>
@@ -1176,7 +1177,7 @@ Downloaded from openml.org.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.9598571428571429 0.9313571428571429
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.9607857142857142 0.9325
 </pre></div>
 </div>
 </div>

@@ -1,0 +1,725 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>The Singular Value Decomposition &#8212; Applied Linear Algebra</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'svd';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Problem Set 9: PCA and the QR Algorithm" href="eigenstuff-problem-set-3.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="Applied Linear Algebra - Home"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="Applied Linear Algebra - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Applied Linear Algebra
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="vectors.html">Vectors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vectors-problem-set.html">Problem Set 1: Vectors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrices.html">Matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrices-problem-set.html">Problem Set 2: Matrix Arithmetic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="linear-systems-gaussian-elimination.html">Linear Systems and Gaussian Elimination</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gaussian-elimination-lu-problem-set.html">Problem Set 3: Gaussian Elimination and <span class="math notranslate nohighlight">\(A=LU\)</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="computation.html">Computation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bonus-faster-matrix-multiplication.html">Optional: Faster Matrix Multiplication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inverse-matrices.html">The Matrix Inverse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lu-and-computation-problem-set.html">Problem Set 4: <span class="math notranslate nohighlight">\(A=LU\)</span> and Computation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ols.html">Ordinary Least Squares and Linear Regression</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aqr.html">Projection and <span class="math notranslate nohighlight">\(A=QR\)</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="projection-qr-problem-set.html">Problem Set 5: Projections and <span class="math notranslate nohighlight">\(A=QR\)</span></a></li>
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="vector-spaces.html">Vector Spaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vector-space-problem-set.html">Problem Set 6: Vector Spaces and Bases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eigenstuff-1.html">Introduction to Eigenvalues and Eigenvectors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eigenstuff-problem-set-1.html">Problem Set 7: Eigenvalues and Eigenvectors of <span class="math notranslate nohighlight">\(2\times2\)</span> Matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eigenstuff-2.html">Approximating Eigenvalues and Eigenvectors 1 - Power Iteration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eigenstuff-problem-set-2.html">Problem Set 8: Power Iteration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eigenstuff-3.html">Approximating Eigenvectors and Eigenvalues 2: The <span class="math notranslate nohighlight">\(QR\)</span> Algorithm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eigenstuff-problem-set-3.html">Problem Set 9: PCA and the QR Algorithm</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">The Singular Value Decomposition</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/jwjohnson314/linear-algebra-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/jwjohnson314/linear-algebra-book/issues/new?title=Issue%20on%20page%20%2Fsvd.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/svd.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>The Singular Value Decomposition</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#computation-of-the-svd">Computation of the SVD</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#an-application-of-the-svd-condition-numbers">An Application of the SVD: Condition Numbers</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-real-world-example">A Real-World Example</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="the-singular-value-decomposition">
+<h1>The Singular Value Decomposition<a class="headerlink" href="#the-singular-value-decomposition" title="Link to this heading">#</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
+<p>The Singular Value Decomposition or SVD is a matrix factorization that produces similar outputs to eigenvectors and eigenvalues, but can be calculated for general <span class="math notranslate nohighlight">\(m\times n\)</span> matrices where eigenvalues and eigenvectors are only defined for square matrices. There are numerous important applications that rely on the singular value decomposition as well as a number of deep theoretical insights that it provides. First, let’s consider its structure.</p>
+<div class="admonition-the-singular-value-decomposition admonition">
+<p class="admonition-title">The Singular Value Decomposition</p>
+<p>The <em>singular value decomposition</em> or SVD of an <span class="math notranslate nohighlight">\(m\times n\)</span> real matrix <span class="math notranslate nohighlight">\(A\)</span> is a factorization</p>
+<div class="math notranslate nohighlight">
+\[
+    A = U\Sigma V^T
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(U\)</span> is an orthogonal <span class="math notranslate nohighlight">\(m\times m\)</span> matrix<span class="math notranslate nohighlight">\(, \)</span>\Sigma<span class="math notranslate nohighlight">\( is an \)</span>m\times n<span class="math notranslate nohighlight">\( diagonal matrix, and \)</span>V<span class="math notranslate nohighlight">\( is an \)</span>n\times n$ orthogonal matrix. It is in general not unique.</p>
+</div>
+<p>Proving that such a decomposition exists is relatively straightforward.</p>
+<p><strong>Proof</strong>: Suppose that <span class="math notranslate nohighlight">\(A\)</span> is an <span class="math notranslate nohighlight">\(m\times n\)</span> matrix of rank <span class="math notranslate nohighlight">\(r\)</span>. Recall that <span class="math notranslate nohighlight">\(A^TA\)</span> is an <span class="math notranslate nohighlight">\(n\times n\)</span> symmetric matrix, so (by the Spectral Theorem) it is diagonalizable and its eigenvectors are orthogonal. Moreover, it is possible to show that all of the eigenvalues of <span class="math notranslate nohighlight">\(A^TA\)</span> are greater than or equal to 0 (exercise!), so for <span class="math notranslate nohighlight">\(1\leq i\leq n\)</span>, we can set <span class="math notranslate nohighlight">\(\sigma_i = \sqrt{\lambda_i}\)</span>. Without loss of generality, assume <span class="math notranslate nohighlight">\(\sigma_1 \geq \sigma_2 \geq \cdots \geq \sigma_n\)</span>, and order the associated unit eigenvectors <span class="math notranslate nohighlight">\(\mathbf{v}_1, \mathbf{v}_2,\dots,\mathbf{v}_n\)</span> as the columns of an orthogonal matrix <span class="math notranslate nohighlight">\(V\)</span> analogously.</p>
+<p>Now for <span class="math notranslate nohighlight">\(1\leq i\leq r\)</span>, define <span class="math notranslate nohighlight">\(\mathbf{u}_i = \frac{1}{\sigma_i}A\mathbf{v}_i\)</span>. The <span class="math notranslate nohighlight">\(\mathbf{u}_i's\)</span> are orthonormal unit vectors (exercise!), and if <span class="math notranslate nohighlight">\(r \leq m\)</span>, we can use Gram-Schmidt to extend the set <span class="math notranslate nohighlight">\(\mathbf{u}_1,\dots,\mathbf{u}_r\)</span> to an orthonormal basis of <span class="math notranslate nohighlight">\(\mathbb{R}^m\)</span> and let <span class="math notranslate nohighlight">\(U\)</span> be the matrix with columns <span class="math notranslate nohighlight">\(\mathbf{u}_i\)</span>, <span class="math notranslate nohighlight">\(1\leq i\leq m\)</span>.</p>
+<p>Finally, define <span class="math notranslate nohighlight">\(\Sigma \in M_{m\times n}(\mathbb{R})\)</span> as the <span class="math notranslate nohighlight">\(m\times n\)</span> matrix with <span class="math notranslate nohighlight">\(\Sigma_{ii} = \sigma_i\)</span> for <span class="math notranslate nohighlight">\(1\leq i\leq \text{min}(m, n)\)</span>.</p>
+<p>To verify that this produces the desired decomposition, observe that by defining <span class="math notranslate nohighlight">\(\mathbf{u}_i\)</span> as above, we can write <span class="math notranslate nohighlight">\(AV = U\Sigma\)</span>, and because <span class="math notranslate nohighlight">\(V\)</span> is orthogonal, <span class="math notranslate nohighlight">\(A = U\Sigma V^T\)</span>. <span class="math notranslate nohighlight">\(\blacksquare\)</span></p>
+</section>
+<section id="computation-of-the-svd">
+<h2>Computation of the SVD<a class="headerlink" href="#computation-of-the-svd" title="Link to this heading">#</a></h2>
+<p>Computation of the full SVD is expensive. We will not do any computations by hand here; instead, we will describe the process as it is usually implemented in software. Typically, the SVD is calculated in two steps. First, the matrix under consideration is reduced to a bidiagonal matrix <span class="math notranslate nohighlight">\(B\)</span>. A bidiagonal matrix is a band matrix whose only nonzero entries are on the diagonal and either immediately above or immediately below the diagonal. Second, an eigenvalue approximation algorithm such as the <span class="math notranslate nohighlight">\(QR\)</span>-algorithm is applied to <span class="math notranslate nohighlight">\(B^TB\)</span> to obtain the eigenvalues and eigenvectors of <span class="math notranslate nohighlight">\(B^TB\)</span> which can be used to construct <span class="math notranslate nohighlight">\(V\)</span> and <span class="math notranslate nohighlight">\(\Sigma\)</span>, and from these the <span class="math notranslate nohighlight">\(\mathbf{u}_i\)</span>’s can be calculated using the formula above.</p>
+<p>Assuming <span class="math notranslate nohighlight">\(m\geq n\)</span>, the reduction of a matrix to bidiagonal form is an <span class="math notranslate nohighlight">\(\mathcal{O}(mn^2)\)</span> operation (this is just Gaussian elimination, which is <span class="math notranslate nohighlight">\(\mathcal{O}(n^3)\)</span> when the matrix is <span class="math notranslate nohighlight">\(n\times n\)</span> and <span class="math notranslate nohighlight">\(\mathcal{O}(mn^2)\)</span> when the matrix is <span class="math notranslate nohighlight">\(m\times n\)</span>), but once the matrix is in bidiagonal form, the second step is much less expensive: only <span class="math notranslate nohighlight">\(\mathcal{O}(n)\)</span>, so that the computational complexity of the decomposition overall is <span class="math notranslate nohighlight">\(\mathcal{O}(mn^2)\)</span>.</p>
+<p>In addition, in many (most?) practical applications, the full SVD is not required, and truncated or ‘thin’ singular value decompositions can be more efficiently calculated and stored. These are beyond the scope of this discussion, but are quite similar to the ‘thin’ QR decomposition previously discussed.</p>
+</section>
+<section id="an-application-of-the-svd-condition-numbers">
+<h2>An Application of the SVD: Condition Numbers<a class="headerlink" href="#an-application-of-the-svd-condition-numbers" title="Link to this heading">#</a></h2>
+<div class="admonition-the-condition-number-of-a-matrix admonition">
+<p class="admonition-title">The Condition Number of a Matrix</p>
+<p>The <em>condition number</em> of a real matrix <span class="math notranslate nohighlight">\(A\)</span> is written <span class="math notranslate nohighlight">\(\kappa(A)\)</span> and defined as</p>
+<div class="math notranslate nohighlight">
+\[
+    \kappa(A) = \frac{\sigma_{max}}{\sigma_{min}},
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\sigma_{max}\)</span> denotes the largest singular value of <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(\sigma_{min}\)</span> denotes the smallest nonzero singular value of <span class="math notranslate nohighlight">\(A\)</span>.</p>
+</div>
+<p>If we think of singular values as playing a role analogous to eigenvalues for nonsquare matrices, we can view the condition number of a matrix as the ratio between the largest and the smallest ‘stretches’ that a matrix applies when it multiplies a vector. Intuitively, a condition number near 1 indicates that these stretches are about equal, and that is a good thing, as will be demonstrated below. Such a matrix is called <em>well-conditioned</em>. A larger condition number (<em>ill-conditioned</em>) indicates a matrix that is closer to being singular than a matrix with a smaller condition number, and <span class="math notranslate nohighlight">\(\kappa(A) = \infty\)</span> if and only if <span class="math notranslate nohighlight">\(A\)</span> is singular.</p>
+<p><strong>Example:</strong></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy.linalg</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">la</span>
+
+<span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span>
+<span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mf">1.000001</span><span class="p">]])</span>
+
+<span class="c1"># calculate the singular values of A and B</span>
+<span class="n">A_vals</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">svdvals</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+<span class="n">B_vals</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">svdvals</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Singular values of A: </span><span class="si">{</span><span class="n">A_vals</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Condition Number of A: </span><span class="si">{</span><span class="n">A_vals</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">A_vals</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Singular values of B: </span><span class="si">{</span><span class="n">B_vals</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Condition Number of B: </span><span class="si">{</span><span class="n">B_vals</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">B_vals</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Singular values of A: [2. 1.]
+Condition Number of A: 2.0
+Singular values of B: [2.00000050e+00 4.99999875e-07]
+Condition Number of B: 4000002.0003309543
+</pre></div>
+</div>
+</div>
+</div>
+<p>The example above is trivial but illustrates what the condition number is measuring: <span class="math notranslate nohighlight">\(A\)</span> is a diagonal matrix with orthogonal rows/columns, and <span class="math notranslate nohighlight">\(\kappa(A) = 2\)</span>. <span class="math notranslate nohighlight">\(B\)</span>, on the other hand, has rows/columns that are <em>almost</em> parallel. They are not exactly parallel, so <span class="math notranslate nohighlight">\(B\)</span> is not singular, but it is very close to singular, and the large condition number of <span class="math notranslate nohighlight">\(4000002.0003309543\)</span> reflects this.</p>
+<p><strong>Example, continued:</strong> Suppose now we work with a vector that has some measurement error. That is, suppose the vector we should be working with is</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \mathbf{x} = \begin{bmatrix}
+                    1 \\
+                    -1
+                \end{bmatrix},
+\end{split}\]</div>
+<p>but because of some measurement error, we are actually working with</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \mathbf{x} = \begin{bmatrix}
+                    1.001 \\
+                    -0.999
+                \end{bmatrix}.
+\end{split}\]</div>
+<p>The error in measurement here is quite small; to quantify this, consider the ratio of the norm of the measured <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> to the norm of the actual <span class="math notranslate nohighlight">\(\mathbf{x}\)</span>. It is very close to 1:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">true_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
+<span class="n">measured_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.001</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.999</span><span class="p">]])</span>
+
+<span class="n">la</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">measured_x</span><span class="p">)</span> <span class="o">/</span> <span class="n">la</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">true_x</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>np.float64(1.0000004999998748)
+</pre></div>
+</div>
+</div>
+</div>
+<p>But observe now how the error propagates via multiplication with a well-conditioned matrix compared to an ill-conditioned matrix:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">la</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">A</span> <span class="o">@</span> <span class="n">measured_x</span><span class="p">)</span> <span class="o">/</span> <span class="n">la</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">A</span> <span class="o">@</span> <span class="n">true_x</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>np.float64(1.0006003198080637)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">la</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">B</span> <span class="o">@</span> <span class="n">measured_x</span><span class="p">)</span> <span class="o">/</span> <span class="n">la</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">B</span> <span class="o">@</span> <span class="n">true_x</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>np.float64(2827.7208135379897)
+</pre></div>
+</div>
+</div>
+</div>
+<p>For the well-conditioned matrix <span class="math notranslate nohighlight">\(A\)</span>, the error in the product is not much larger than the error in <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> itself, but for the ill-conditioned matrix <span class="math notranslate nohighlight">\(B\)</span>, the error in the product is dramatically larger.</p>
+<p>The condition number of the data matrix <span class="math notranslate nohighlight">\(X\)</span> is often considered when using linear regression: if <span class="math notranslate nohighlight">\(X\)</span> is ill-conditioned we expect a ‘brittle’, unstable model where the model’s predictions change dramatically with only slight changes in input, and measurement error can dramatically impact model performance. Equivalently, a high condition number is indicative of <em>multicollinearity</em> in the data; that is, data where there are correlations or linear dependencies in the data.</p>
+</section>
+<section id="a-real-world-example">
+<h2>A Real-World Example<a class="headerlink" href="#a-real-world-example" title="Link to this heading">#</a></h2>
+<p>Let’s go back to the <a class="reference external" href="https://www.kaggle.com/datasets/nikhil7280/student-performance-multiple-linear-regression">Student Performance Dataset</a> we looked at previously in the chapter on linear regression. Recall the dataset consists of 10,000 student records, with each record containing information about various predictors and a performance index.</p>
+<p>Predictor variables:</p>
+<ul class="simple">
+<li><p><strong>Hours Studied:</strong> The total number of hours spent studying by each student.</p></li>
+<li><p><strong>Previous Scores:</strong> The scores obtained by students in previous tests.</p></li>
+<li><p><strong>Extracurricular Activities:</strong> Whether the student participates in extracurricular activities (Yes or No).</p></li>
+<li><p><strong>Sleep Hours:</strong> The average number of hours of sleep the student had per day.</p></li>
+<li><p><strong>Sample Question Papers Practiced:</strong> The number of sample question papers the student practiced.</p></li>
+</ul>
+<p>Target Variable:</p>
+<ul class="simple">
+<li><p><strong>Performance Index:</strong> A measure of the overall performance of each student. The performance index represents the student’s academic performance and has been rounded to the nearest integer. The index ranges from 10 to 100, with higher values indicating better performance.</p></li>
+</ul>
+<p>Let’s look at how well-conditioned the data matrix is. First, we will preprocess the data as we did previously.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="c1"># read the data</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;./datasets/Student_Performance.csv&#39;</span><span class="p">)</span>
+
+<span class="c1"># one hot the categorical variables</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">get_dummies</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+
+<span class="c1"># add the intercept column of 1&#39;s</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;Intercept&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">10000</span><span class="p">,))</span>
+
+<span class="c1"># drop the target and the redundant Extracurricular column</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;Extracurricular Activities_No&#39;</span><span class="p">,</span> <span class="s1">&#39;Performance Index&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  
+
+<span class="c1"># convert to NumPy array</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X_vals</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">svdvals</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">X_vals</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">/</span> <span class="n">X_vals</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>451.7820193598499
+</pre></div>
+</div>
+</div>
+</div>
+<p>This is a relatively large condition number, but nowhere near our very ill-conditioned <span class="math notranslate nohighlight">\(2\times 2\)</span> example. We should expect a linear regression model here to exhibit some instability.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="eigenstuff-problem-set-3.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Problem Set 9: PCA and the QR Algorithm</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#computation-of-the-svd">Computation of the SVD</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#an-application-of-the-svd-condition-numbers">An Application of the SVD: Condition Numbers</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-real-world-example">A Real-World Example</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Jeremiah W. Johnson
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <div>
+  <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="jwjohnson314" data-description="Support me on Buy me a coffee!" data-message="Thanks for reading! If you found this useful and want to support this book project, you can Buy Me a Coffee here. Your support helps keep this book free for my students." data-color="#5F7FFF" data-position="Right" data-x_margin="18" data-y_margin="18"></script> 
+</div>
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

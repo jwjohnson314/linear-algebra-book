@@ -408,6 +408,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vector-arithmetic">Vector Arithmetic</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#linear-combinations">Linear Combinations</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-dot-product">The Dot Product</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vectors-in-python">Vectors in Python</a></li>
 </ul>
             </nav>
         </div>
@@ -421,8 +422,8 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="vectors">
 <h1>Vectors<a class="headerlink" href="#vectors" title="Link to this heading">#</a></h1>
-<div class="admonition-definition admonition">
-<p class="admonition-title">Definition</p>
+<div class="admonition-definition-vector admonition">
+<p class="admonition-title">Definition: Vector</p>
 <p>A (<em>Euclidean</em>) <em>vector</em> is a finite ordered set of real numbers.</p>
 </div>
 <p>For the time being we will only work with Euclidean vectors, so for now we will drop the term Euclidean and just refer to these objects as vectors. Later on, we will be talking about other types of vectors and then the distinction will be useful again. And yes, infinite vectors can be considered too, but that topic falls outside the scope of what will be covered here.</p>
@@ -556,7 +557,7 @@ document.write(`
     \begin{bmatrix}
         \hfill 1 \\
         \hfill 2 \\
-        -1
+        0
     \end{bmatrix} \neq
     \begin{bmatrix}
         \hfill 1 \\
@@ -1027,8 +1028,8 @@ document.write(`
 </section>
 <section id="linear-combinations">
 <h2>Linear Combinations<a class="headerlink" href="#linear-combinations" title="Link to this heading">#</a></h2>
-<div class="admonition-definition admonition">
-<p class="admonition-title">Definition</p>
+<div class="admonition-definition-linear-combination admonition">
+<p class="admonition-title">Definition: Linear Combination</p>
 <p>Given vectors <span class="math notranslate nohighlight">\(v_1, v_2,\dots,v_k\)</span> and scalars <span class="math notranslate nohighlight">\(a_1, \dots,a_k\)</span>, the expression</p>
 <div class="math notranslate nohighlight">
 \[
@@ -1113,9 +1114,9 @@ document.write(`
 </section>
 <section id="the-dot-product">
 <h2>The Dot Product<a class="headerlink" href="#the-dot-product" title="Link to this heading">#</a></h2>
-<p>Multiplying vectors is not as intuitive as the preceding operations. There are a number of different ways that one might choose to define multiplication between vectors, including simply doing the multiplication componentwise to produce a new vector, analgous to what we did previously with addition and subtraction. Unfortunately, multiplying vectors componentwise to produce another vector doesn’t have an intuitive interpretation or an obvious application, but interestingly enough, if we multiply the corresponding components of two vectors together and <em>add up</em> the resulting products, we get a scalar that has several very important uses. This operation is called the <em>dot product</em> or <em>scalar product</em> (the latter because the result of the operation is a scalar), and it is defined precisely below.</p>
-<div class="admonition-definition admonition">
-<p class="admonition-title">Definition</p>
+<p>Multiplying vectors is not as intuitive as the preceding operations. There are a number of different ways that one might choose to define multiplication between vectors, including simply doing the multiplication componentwise to produce a new vector, analgous to what we did previously with addition and subtraction. Unfortunately, multiplying vectors componentwise to produce another vector doesn’t have an intuitive interpretation or an obvious application, but interestingly enough, if we multiply the corresponding components of two vectors together and <em>add up</em> the resulting products, we get a scalar that has several very important uses. This operation is called the <em>dot product</em>, or the <em>inner product</em>, or the <em>scalar product</em> (the latter because the result of the operation is a scalar), and it is defined precisely below.</p>
+<div class="admonition-definition-the-dot-product admonition">
+<p class="admonition-title">Definition: The Dot Product</p>
 <p>Let <span class="math notranslate nohighlight">\(\mathbf{u},\mathbf{v}\)</span> be vectors with <span class="math notranslate nohighlight">\(n\)</span> components. The <em>dot product</em> of <span class="math notranslate nohighlight">\(\mathbf{u}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{b}\)</span> is the scalar value</p>
 <div class="math notranslate nohighlight">
 \[
@@ -1166,13 +1167,13 @@ document.write(`
         -1 
     \end{bmatrix} \cdot 
     \begin{bmatrix}
-        \hfill 1 \\
+        \hfill 2 \\
         -1
     \end{bmatrix} = 2\cdot 2+ (-1) \cdot (-1) = 2^2 +  (-1)^2 = 4 + 1 = 5.
 \end{split}\]</div>
 <p>This is where we find our first use for the dot product. Notice that in the previous example, the calculation is reminiscent of the Pythagorean Theorem <span class="math notranslate nohighlight">\(a^2 + b^2 = c^2\)</span>. When we calculate the dot product of a vector with itself, we are using the Pythagorean theorem to determine the squared magnitude, or length, of the vector. When can sketch this for the example above because it is two-dimensional, but the principle holds no matter how many dimensions we are working with.</p>
-<div class="admonition-definition admonition">
-<p class="admonition-title">Definition</p>
+<div class="admonition-definition-norm admonition">
+<p class="admonition-title">Definition: Norm</p>
 <p>Let <span class="math notranslate nohighlight">\(\mathbf{u}\)</span> be a vector. The <em>norm</em> of <span class="math notranslate nohighlight">\(\mathbf{u}\)</span> is written <span class="math notranslate nohighlight">\(||\mathbf{u}||\)</span> and defined as the square root of the dot product of <span class="math notranslate nohighlight">\(\mathbf{u}\)</span> with itself:</p>
 <div class="math notranslate nohighlight">
 \[
@@ -1180,8 +1181,8 @@ document.write(`
 \]</div>
 </div>
 <p>Note that strictly from the definition we can see that the norm of a vector is never negative, and could only equal zero if every component of the vector was 0. We call a vector whose components are all 0 a <em>zero vector</em> or <em>trivial vector</em> and write it as <span class="math notranslate nohighlight">\(\mathbf{0}\)</span>.</p>
-<div class="admonition-definition admonition">
-<p class="admonition-title">Definition</p>
+<div class="admonition-definition-unit-vector admonition">
+<p class="admonition-title">Definition: Unit Vector</p>
 <p>A <em>unit vector</em> is a vector with norm 1.</p>
 </div>
 <p>Given a vector <span class="math notranslate nohighlight">\(\mathbf{x}\)</span>, it is easy to produce a unit vector that points in the same direction of <span class="math notranslate nohighlight">\(\mathbf{x}\)</span>: simply calculate <span class="math notranslate nohighlight">\(||\mathbf{x}||\)</span> and multiply <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> by <span class="math notranslate nohighlight">\(1/||\mathbf{x}||\)</span>; that is, calculate</p>
@@ -1303,6 +1304,77 @@ document.write(`
 <span class="math notranslate nohighlight">\(\blacksquare\)</span></p>
 <p>With two-dimensional vectors sketched in the plane, the triangle inequality is obvious: it simply states that the length of the longest side of a triangle cannot be greater than the sum of the lengths of the other sides. It is important to keep in mind, here and going forward, that this result and the others that we’ve obtained so far hold in higher dimensions where we can’t sketch out and easily visualize the behavior of the vectors we are working with. This is part of what makes liner algebra so powerful.</p>
 </section>
+<section id="vectors-in-python">
+<h2>Vectors in Python<a class="headerlink" href="#vectors-in-python" title="Link to this heading">#</a></h2>
+<p>In Python, the Numeric Python (NumPy) library contains an array object that can be used to represent a vector. After importing NumPy (typically abbreviating it as np), we can define vectors using the array object by passing a list of components as demonstrated below:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The dimension of a vector can be obtained via the <code class="docutils literal notranslate"><span class="pre">shape</span></code> attribute:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">u</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(3,)
+</pre></div>
+</div>
+</div>
+</div>
+<p>The dot product of two vectors can be calculated two ways: using the <code class="docutils literal notranslate"><span class="pre">np.dot</span></code> function or using the shorthand <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> symbol:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dot_np</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+<span class="n">dot_at</span> <span class="o">=</span> <span class="n">u</span> <span class="o">@</span> <span class="n">v</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;The dot product of u and v with np.dot is </span><span class="si">{</span><span class="n">dot_np</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;The dot product of u and v with @ is </span><span class="si">{</span><span class="n">dot_at</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The dot product of u and v with np.dot is 32.
+The dot product of u and v with @ is 32.
+</pre></div>
+</div>
+</div>
+</div>
+<p>NumPy has a submodule <code class="docutils literal notranslate"><span class="pre">np.linalg</span></code> containing various linear algebra-specific function. For example, the norm of a vector can be calculated using the <code class="docutils literal notranslate"><span class="pre">np.linalg.norm</span></code> function:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>np.float64(3.7416573867739413)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Of course, this could also be caculated from the definition of the norm of a vector as the square root of the dot product of the vector with itself:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">u</span> <span class="o">@</span> <span class="n">u</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>np.float64(3.7416573867739413)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -1372,6 +1444,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vector-arithmetic">Vector Arithmetic</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#linear-combinations">Linear Combinations</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-dot-product">The Dot Product</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vectors-in-python">Vectors in Python</a></li>
 </ul>
   </nav></div>
 

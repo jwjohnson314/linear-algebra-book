@@ -410,6 +410,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-dot-product-revisited">The Dot Product Revisited</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#matrix-arithmetic-part-3-matrix-matrix-multiplication">Matrix Arithmetic, Part 3: Matrix-Matrix Multiplication</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#important-matrices">Important Matrices</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#matrices-in-python">Matrices in Python</a></li>
 </ul>
             </nav>
         </div>
@@ -642,10 +643,10 @@ document.write(`
 <p>Then multiplication of a matrix and a vector can be defined through this linear combination idea.</p>
 <div class="admonition-definition-column-method-of-matrix-multiplication admonition">
 <p class="admonition-title">Definition (<em>Column method</em> of matrix multiplication)</p>
-<p>Given a matrix <span class="math notranslate nohighlight">\(A\)</span> and a vector <span class="math notranslate nohighlight">\(\mathbf{v}\)</span>, the product <span class="math notranslate nohighlight">\(A\mathbf{v}\)</span> is the linear combination <span class="math notranslate nohighlight">\(v_1A_1 + \cdots + v_nA_n\)</span> (recall that <span class="math notranslate nohighlight">\(A_i\)</span> denotes the <span class="math notranslate nohighlight">\(i^{th}\)</span> column of <span class="math notranslate nohighlight">\(A\)</span>).</p>
+<p>Given a matrix <span class="math notranslate nohighlight">\(A\)</span> and a vector <span class="math notranslate nohighlight">\(\mathbf{v}\)</span>, the product <span class="math notranslate nohighlight">\(A\mathbf{v}\)</span> is the linear combination <span class="math notranslate nohighlight">\(v_1A_1 + \cdots + v_nA_n\)</span> (recall that <span class="math notranslate nohighlight">\(A_i\)</span> denotes the <span class="math notranslate nohighlight">\(i^{th}\)</span> column of <span class="math notranslate nohighlight">\(A\)</span>). This is the <em>column method</em> of matrix multiplication.</p>
 </div>
 <div class="important admonition">
-<p class="admonition-title">Dimensional considerations</p>
+<p class="admonition-title">Important: Dimensional considerations</p>
 <p>Note that the above definition only makes sense if the matrix has the same number of columns as the vector has components. Assuming that is so, the result of the multiplication will have the same number of components as the matrix has rows.</p>
 </div>
 <p>In the context of a linear system in standard form, we construct a matrix from the coefficients of the variables on the left, a vector of unknowns from the variables on the left, and the result of the matrix-vector multiplication is the vector of known quantities on the right-hand sides of the equations. This gives an equation of the form <span class="math notranslate nohighlight">\(A\mathbf{x}=\mathbf{b}\)</span>. In the current example, the left-hand side matrix multiplication looks like this:</p>
@@ -736,7 +737,7 @@ document.write(`
 \end{split}\]</div>
 <p>is undefined, because the matrix does not have the same number of columns as the vector has components, so the underlying dot product calculations themselves are undefined.</p>
 <div class="important admonition">
-<p class="admonition-title">Note</p>
+<p class="admonition-title">Important</p>
 <p>We have defined a one-sided operation so far: The discussion above tells us how to calculate <span class="math notranslate nohighlight">\(A\mathbf{x}\)</span> for an appropriately sized matrix <span class="math notranslate nohighlight">\(A\)</span> and vector <span class="math notranslate nohighlight">\(\mathbf{x}\)</span>, but it does not tell us how to calculate <span class="math notranslate nohighlight">\(\mathbf{x}A\)</span>, or even if such an operation is defined.</p>
 </div>
 </section>
@@ -767,7 +768,7 @@ document.write(`
 \]</div>
 <p>Of course, this requires that <span class="math notranslate nohighlight">\(B\)</span> have the same number of rows as <span class="math notranslate nohighlight">\(A\)</span> has columns, and results in a matrix with the same number of rows as <span class="math notranslate nohighlight">\(A\)</span> and the same number of columns as <span class="math notranslate nohighlight">\(B\)</span>. It’s most common to use the row method for computation here, and the product can be written formulaically as follows:</p>
 <div class="admonition-definition-matrix-matrix-multiplication admonition">
-<p class="admonition-title">Definition: (Matrix-matrix multiplication)</p>
+<p class="admonition-title">Definition: (matrix-matrix multiplication)</p>
 <p>Let <span class="math notranslate nohighlight">\(A\)</span> be an <span class="math notranslate nohighlight">\(m\times n\)</span> matrix and <span class="math notranslate nohighlight">\(B\)</span> an <span class="math notranslate nohighlight">\(n\times p\)</span> matrix. The product <span class="math notranslate nohighlight">\(AB\)</span> is an <span class="math notranslate nohighlight">\(m\times p\)</span> matrix <span class="math notranslate nohighlight">\(C\)</span> such that</p>
 <div class="math notranslate nohighlight">
 \[
@@ -901,6 +902,217 @@ document.write(`
 </ul>
 <p>Note that the first property above implies that <span class="math notranslate nohighlight">\(I\mathbf{v} = \mathbf{v}\)</span> for any vector <span class="math notranslate nohighlight">\(\mathbf{v}\)</span> such that the multiplication is defined. It is a worthwhile exercise to make up such a vector <span class="math notranslate nohighlight">\(\mathbf{v}\)</span> with six components and work out the multiplication with the six-dimensional <span class="math notranslate nohighlight">\(I\)</span> above to confirm this fact.</p>
 </section>
+<section id="matrices-in-python">
+<h2>Matrices in Python<a class="headerlink" href="#matrices-in-python" title="Link to this heading">#</a></h2>
+<p>As with vectors, in Python the <code class="docutils literal notranslate"><span class="pre">np.array</span></code> object can be used to work with matrices. To instantiate a matrix manually, we write a ‘list of lists’. Each of the interior lists represents a row of the matrix. For example,</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">],</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">]])</span>
+
+<span class="n">A</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[ 1,  2,  3],
+       [ 4,  5,  6],
+       [ 7,  8,  9],
+       [10, 11, 12]])
+</pre></div>
+</div>
+</div>
+</div>
+<p>NumPy follows the row-first, column-second convention, and the shape of the array corresponds to the number of rows followed by the number of columns:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">A</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(4, 3)
+</pre></div>
+</div>
+</div>
+</div>
+<p>To access individual entries in an array, we use the same square bracket syntax as introduced in the previous section, with now a row and a column position in that order. Remember that we are using 0-based indexing!</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">A</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>  <span class="c1"># row 3, column 2 (0-based indexing!!) value will be 12</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>np.int64(12)
+</pre></div>
+</div>
+</div>
+</div>
+<p>If only one entry is input for a selection, we will get back the associated row: remember the internal structure is analogous to a list of lists:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">A</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>  <span class="c1"># row 3 </span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([10, 11, 12])
+</pre></div>
+</div>
+</div>
+</div>
+<p>Subsets of arrays can be selected using Python’s slicing syntax, where <code class="docutils literal notranslate"><span class="pre">[a:b]</span></code> selects elements starting at (including) <code class="docutils literal notranslate"><span class="pre">a</span></code> and ending at (but not including) <code class="docutils literal notranslate"><span class="pre">b</span></code>. For example, to extract the upper <span class="math notranslate nohighlight">\(2\times 2\)</span> block of <span class="math notranslate nohighlight">\(A\)</span>, I could write</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">A</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> 
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[1, 2],
+       [4, 5]])
+</pre></div>
+</div>
+</div>
+</div>
+<p>When slicing, it is not necessary to include the start or the end if you are starting at the beginning or ending at the end; for example, I could have used the following syntax to obtain the same thing as above:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">A</span><span class="p">[:</span><span class="mi">2</span><span class="p">,</span> <span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[1, 2],
+       [4, 5]])
+</pre></div>
+</div>
+</div>
+</div>
+<p>The same <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> symbol is used for matrix-vector and matrix-matrix multiplication. For example,</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">]])</span>
+
+<span class="n">A</span> <span class="o">@</span> <span class="n">B</span><span class="o">.</span> <span class="c1"># matrix-matrix multiplication</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span>  <span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">line</span> <span class="mi">3</span>
+    <span class="n">A</span> <span class="o">@</span> <span class="n">B</span><span class="o">.</span> <span class="c1"># matrix-matrix multiplication</span>
+           <span class="o">^</span>
+<span class="ne">SyntaxError</span>: invalid syntax
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+
+<span class="n">A</span> <span class="o">@</span> <span class="n">v</span>  <span class="c1"># matrix-vector multiplication</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([ 57, 141, 225, 309])
+</pre></div>
+</div>
+</div>
+</div>
+<p>and Python with throw an error if dimensional considerations are violated.</p>
+<p>Be careful not to mistakenly use the <code class="docutils literal notranslate"><span class="pre">*</span></code> symbol when multiplying matrices or vectors. It will not result in an error, but it will not give you the correct result either. NumPy implements a different multiplication here that is not relevant for our purposes.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">A</span> <span class="o">*</span> <span class="n">v</span>  <span class="c1"># this is wrong!!! When defined, the product of a matrix and a vector is a vector. See correct output above</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[  1,  50,   6],
+       [  4, 125,  12],
+       [  7, 200,  18],
+       [ 10, 275,  24]])
+</pre></div>
+</div>
+</div>
+</div>
+<p>Finally, NumPy provides several shortcuts for common matrices:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">zero_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">zero_matrix</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[0., 0., 0., 0., 0.],
+       [0., 0., 0., 0., 0.],
+       [0., 0., 0., 0., 0.],
+       [0., 0., 0., 0., 0.]])
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">identity_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">identity_matrix</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[1., 0., 0., 0., 0.],
+       [0., 1., 0., 0., 0.],
+       [0., 0., 1., 0., 0.],
+       [0., 0., 0., 1., 0.],
+       [0., 0., 0., 0., 1.]])
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ones</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="n">ones</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[1., 1., 1.],
+       [1., 1., 1.],
+       [1., 1., 1.],
+       [1., 1., 1.],
+       [1., 1., 1.],
+       [1., 1., 1.],
+       [1., 1., 1.],
+       [1., 1., 1.],
+       [1., 1., 1.]])
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">like_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">zero_matrix</span><span class="p">)</span>
+<span class="n">like_matrix</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[1., 1., 1., 1., 1.],
+       [1., 1., 1., 1., 1.],
+       [1., 1., 1., 1., 1.],
+       [1., 1., 1., 1., 1.]])
+</pre></div>
+</div>
+</div>
+</div>
+<p>The latter shortcut is aptly named: you give it a matrix and it returns a matrix of 1 with the same shape as the input matrix.</p>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -972,6 +1184,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-dot-product-revisited">The Dot Product Revisited</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#matrix-arithmetic-part-3-matrix-matrix-multiplication">Matrix Arithmetic, Part 3: Matrix-Matrix Multiplication</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#important-matrices">Important Matrices</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#matrices-in-python">Matrices in Python</a></li>
 </ul>
   </nav></div>
 
